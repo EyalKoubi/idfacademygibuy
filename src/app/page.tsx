@@ -2,7 +2,7 @@
 import { LoginTexts } from "@/HebrewStrings/Texts";
 import { Metadata } from "next";
 import { loginStyles } from "../utils/styles";
-import Login from "./_components/LoginPageComponents/Login";
+import Login from "./_components/Login";
 
 export const metadata: Metadata = {
   title: "Create Next App",

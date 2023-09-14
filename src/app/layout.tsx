@@ -3,7 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Provider from "@/app/_trpc/Provider";
 import { SessionProvider } from "next-auth/react";
-import Sidebar from "./_components/Globals/SideBar";
+import Sidebar from "./home/_component/SideBar";
 
 const inter = Inter({ subsets: ["latin"] });
 

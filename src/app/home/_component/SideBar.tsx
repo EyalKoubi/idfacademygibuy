@@ -1,10 +1,14 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { SidebarText } from "../../../HebrewStrings/Texts";
 import { sidebarStyles } from "../../../utils/styles";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-const Sidebar = () => {
+interface SidebarProps {
+  setIsPopupMessagePressed: Dispatch<SetStateAction<boolean>>;
+}
+
+const Sidebar = ({ setIsPopupMessagePressed }: SidebarProps) => {
   const { data: sessionData } = useSession();
   const router = useRouter();
 
@@ -51,16 +55,21 @@ const Sidebar = () => {
           </a>
         </li>
         <li className={sidebarStyles.menuItem}>
-          <a href="/about-us" className="text-gray-300">
+          <button onClick={() => setIsPopupMessagePressed(true)}>
             <i className="fas fa-info-circle"></i> {SidebarText.aboutUs}
-          </a>
+          </button>
         </li>
         <li className={sidebarStyles.menuItem}>
-          <a href="/" className="text-gray-300">
-            <button onClick={() => signOut()}>
-              <i className="fas fa-info-circle"></i> {SidebarText.logout}
-            </button>
-          </a>
+          <button
+            className="text-gray-300"
+            onClick={() => {
+              signOut({ redirect: false }).then(() => {
+                router.push("/");
+              });
+            }}
+          >
+            <i className="fas fa-info-circle"></i> {SidebarText.logout}
+          </button>
         </li>
       </ul>
     </div>

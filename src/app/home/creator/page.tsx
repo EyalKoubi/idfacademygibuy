@@ -13,10 +13,10 @@ export default function MainCreatorPage() {
       </h1>
       <div className={adminAndUserStyles.flexcenterrow}>
         <button className={adminAndUserStyles.btn}>
-          {adminTexts.adminAddQuis}
+          {adminTexts.adminCreateQuis}
         </button>
         <button className={adminAndUserStyles.btn}>
-          {adminTexts.adminAddContent}
+          {adminTexts.adminCreateContent}
         </button>
       </div>
     </div>
