@@ -1,55 +1,18 @@
 import React from "react";
-import { SidebarText } from "../../../HebrewStrings/Texts";
-import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import useAppState from "@/app/_contexts/globalContext";
-import HomePageIcon from "./icons/HomePageIcon";
-import {
-  AboutUsIcon,
-  ContinueStudyingIcon,
-  CourseCatalogIcon,
-  CourseCreationIcon,
-  CourseManagerIcon,
-  ExitIcon,
-} from "./icons";
-import PersonalAreaIcon from "./icons/PersonalAreaIcon";
 import RowInMenu from "./RowInMenu";
 import { first_menu } from "../menus";
 
 const Sidebar = () => {
-  const { setIsPopupMessagePressed, isMenuButtonPressed } = useAppState();
-  const router = useRouter();
+  const { isMenuButtonPressed } = useAppState();
 
   const sidebarClass = isMenuButtonPressed ? "w-64" : "w-16";
 
   return (
     <div className={`bg-gray-200 p-4 flex flex-col h-screen ${sidebarClass}`}>
       <ul className="space-y-2">
-        {first_menu.map(({ rowInfo, icon }) => {
-          switch (rowInfo) {
-            case SidebarText.aboutUs:
-              return (
-                <RowInMenu
-                  rowInfo={rowInfo}
-                  icon={icon}
-                  onClick={() => setIsPopupMessagePressed(true)}
-                />
-              );
-            case SidebarText.logout:
-              return (
-                <RowInMenu
-                  rowInfo={rowInfo}
-                  icon={icon}
-                  onClick={() => {
-                    signOut({ redirect: false }).then(() => {
-                      router.push("/");
-                    });
-                  }}
-                />
-              );
-            default:
-              return <RowInMenu rowInfo={rowInfo} icon={icon} />;
-          }
+        {first_menu.map(({ id, rowInfo, icon }) => {
+          return <RowInMenu key={id} rowInfo={rowInfo} icon={icon} />;
         })}
       </ul>
       {isMenuButtonPressed && (

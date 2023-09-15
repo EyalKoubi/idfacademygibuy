@@ -1,18 +1,32 @@
+import { SidebarText } from "@/HebrewStrings/Texts";
 import useAppState from "@/app/_contexts/globalContext";
-import { Component } from "react";
+import { signOut } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface RowInMenu {
   rowInfo: string;
   icon: React.ReactNode;
-  onClick?: () => void;
 }
 
-const RowInMenu = ({ rowInfo, icon, onClick }: RowInMenu) => {
-  const { isMenuButtonPressed } = useAppState();
+const RowInMenu = ({ rowInfo, icon }: RowInMenu) => {
+  const { isMenuButtonPressed, setIsPopupMessagePressed } = useAppState();
+  const router = useRouter();
+
+  const clickHandeller = () => {
+    switch (rowInfo) {
+      case SidebarText.logout:
+        return signOut({ redirect: false }).then(() => {
+          router.push("/");
+        });
+      case SidebarText.aboutUs:
+        return setIsPopupMessagePressed(true);
+      default:
+    }
+  };
 
   return (
     <li className="bg-blue-100 p-2 rounded-md">
-      <button className="w-full text-left" onClick={onClick}>
+      <button className="w-full text-left" onClick={clickHandeller}>
         <div className="flex justify-between items-center space-x-2">
           {isMenuButtonPressed && (
             <>
