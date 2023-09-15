@@ -1,4 +1,4 @@
-import HamburgerMenu from "./HamburgerMenu";
+import HamburgerMenu from "./icons/HamburgerMenu";
 import { HomeTexts } from "@/HebrewStrings/Texts";
 import useAppState from "@/app/_contexts/globalContext";
 

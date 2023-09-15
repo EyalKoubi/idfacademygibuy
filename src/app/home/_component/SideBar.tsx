@@ -4,9 +4,17 @@ import { sidebarStyles } from "../../../utils/styles";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import useAppState from "@/app/_contexts/globalContext";
+import HomePageIcon from "./HomePageIcon";
+import PersonalAreaIcon from "./PersonalAreaIcon";
+import CourseCatalogIcon from "./icons/CourseCatalogIcon";
+import CourseManagerIcon from "./icons/CourseManagerIcon";
+import CourseCreationIcon from "./icons/CourseCreationIcon";
+import ContinueStudyingIcon from "./icons/ContinueStudyingIcon";
+import AboutUsIcon from "./icons/AboutUsIcon";
+import ExitIcon from "./icons/ExitIcon";
 
 const Sidebar = () => {
-  const { setIsPopupMessagePressed } = useAppState();
+  const { setIsPopupMessagePressed, isMenuButtonPressed } = useAppState();
   const { data: sessionData } = useSession();
   const router = useRouter();
 
@@ -22,39 +30,88 @@ const Sidebar = () => {
       </div>
       <ul>
         <li className={sidebarStyles.menuItem}>
-          <a href="/" className={sidebarStyles.menuItemText}>
-            <i className="fas fa-home"></i> {SidebarText.homePage}
-          </a>
+          <button className={sidebarStyles.menuItemText}>
+            <div className="flex">
+              {isMenuButtonPressed && (
+                <>
+                  <i className="fas fa-home"></i> {SidebarText.homePage}
+                </>
+              )}
+              <HomePageIcon />
+            </div>
+          </button>
         </li>
         <li className={sidebarStyles.menuItem}>
-          <a href="/user" className={sidebarStyles.menuItemText}>
-            <i className="fas fa-user"></i> {SidebarText.userArea}
-          </a>
+          <button className={sidebarStyles.menuItemText}>
+            <div className="flex">
+              {isMenuButtonPressed && (
+                <>
+                  <i className="fas fa-user"></i> {SidebarText.userArea}
+                </>
+              )}
+              <PersonalAreaIcon />
+            </div>
+          </button>
         </li>
         <li className={sidebarStyles.menuItem}>
-          <a href="/course-catalog" className={sidebarStyles.menuItemText}>
-            <i className="fas fa-book"></i> {SidebarText.courseCatalog}
-          </a>
+          <button className={sidebarStyles.menuItemText}>
+            <div className="flex">
+              {isMenuButtonPressed && (
+                <>
+                  <i className="fas fa-book"></i> {SidebarText.courseCatalog}
+                </>
+              )}
+              <CourseCatalogIcon />
+            </div>
+          </button>
         </li>
         <li className={sidebarStyles.menuItem}>
-          <a href="/course-manager" className={sidebarStyles.menuItemText}>
-            <i className="fas fa-cogs"></i> {SidebarText.courseManager}
-          </a>
+          <button className={sidebarStyles.menuItemText}>
+            <div className="flex">
+              {isMenuButtonPressed && (
+                <>
+                  <i className="fas fa-cogs"></i> {SidebarText.courseManager}
+                </>
+              )}
+              <CourseManagerIcon />
+            </div>
+          </button>
         </li>
         <li className={sidebarStyles.menuItem}>
-          <a href="/course-creation" className={sidebarStyles.menuItemText}>
-            <i className="fas fa-plus"></i> {SidebarText.courseCreation}
-          </a>
+          <div className="flex">
+            <button className={sidebarStyles.menuItemText}>
+              {isMenuButtonPressed && (
+                <>
+                  <i className="fas fa-plus"></i> {SidebarText.courseCreation}
+                </>
+              )}
+              <CourseCreationIcon />
+            </button>
+          </div>
         </li>
         <li className={sidebarStyles.menuItem}>
-          <a href="/continue-studying" className={sidebarStyles.menuItemText}>
-            <i className="fas fa-graduation-cap"></i>{" "}
-            {SidebarText.continueStading}
-          </a>
+          <button className={sidebarStyles.menuItemText}>
+            <div className="flex">
+              {isMenuButtonPressed && (
+                <>
+                  <i className="fas fa-graduation-cap"></i>{" "}
+                  {SidebarText.continueStading}
+                </>
+              )}
+              <ContinueStudyingIcon />
+            </div>
+          </button>
         </li>
         <li className={sidebarStyles.menuItem}>
           <button onClick={() => setIsPopupMessagePressed(true)}>
-            <i className="fas fa-info-circle"></i> {SidebarText.aboutUs}
+            <div className="fles">
+              {isMenuButtonPressed && (
+                <>
+                  <i className="fas fa-info-circle"></i> {SidebarText.aboutUs}
+                </>
+              )}
+              <AboutUsIcon />
+            </div>
           </button>
         </li>
         <li className={sidebarStyles.menuItem}>
@@ -66,7 +123,14 @@ const Sidebar = () => {
               });
             }}
           >
-            <i className="fas fa-info-circle"></i> {SidebarText.logout}
+            <div className="flex">
+              {isMenuButtonPressed && (
+                <>
+                  <i className="fas fa-info-circle"></i> {SidebarText.logout}
+                </>
+              )}
+              <ExitIcon />
+            </div>
           </button>
         </li>
       </ul>
