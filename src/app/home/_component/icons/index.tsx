@@ -5,6 +5,8 @@ import CourseCreationIcon from "./CourseCreationIcon";
 import CourseManagerIcon from "./CourseManagerIcon";
 import ExitIcon from "./ExitIcon";
 import HamburgerMenu from "./HamburgerMenu";
+import HomePageIcon from "./HomePageIcon";
+import PersonalAreaIcon from "./PersonalAreaIcon";
 
 export {
   AboutUsIcon,
@@ -14,4 +16,6 @@ export {
   CourseManagerIcon,
   ExitIcon,
   HamburgerMenu,
+  HomePageIcon,
+  PersonalAreaIcon,
 };
