@@ -11,14 +11,8 @@ interface CourseCreationIconProps {
 const CourseCreationIcon: React.FC<CourseCreationIconProps> = ({
   size = "1x",
   color = "black",
-  marginLeft = "0",
 }) => {
-  return (
-    <FontAwesomeIcon
-      icon={faPlus}
-      style={{ fontSize: size, color, marginLeft }}
-    />
-  );
+  return <FontAwesomeIcon icon={faPlus} style={{ fontSize: size, color }} />;
 };
 
 export default CourseCreationIcon;
