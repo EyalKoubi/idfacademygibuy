@@ -1,14 +1,8 @@
-import { Dispatch, SetStateAction } from "react";
+import useAppState from "@/app/_contexts/globalContext";
 
-interface HamburgerMenuProps {
-  isMenuButtonPressed: boolean;
-  setIsMenuButtonPressed: Dispatch<SetStateAction<boolean>>;
-}
+const HamburgerMenu = () => {
+  const { isMenuButtonPressed, setIsMenuButtonPressed } = useAppState();
 
-const HamburgerMenu = ({
-  isMenuButtonPressed,
-  setIsMenuButtonPressed,
-}: HamburgerMenuProps) => {
   return (
     <button
       onClick={() => {

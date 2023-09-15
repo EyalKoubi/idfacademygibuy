@@ -3,8 +3,8 @@ import "../globals.css";
 import { Inter } from "next/font/google";
 import Sidebar from "./_component/SideBar";
 import Navbar from "./_component/Navbar";
-import { SetStateAction, useState } from "react";
 import PopupWindow from "./_component/PopupWindow";
+import useAppState from "../_contexts/globalContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,27 +13,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [isMenuButtonPressed, setIsMenuButtonPressed] =
-    useState<boolean>(false);
-  const [isPopupMessagePressed, setIsPopupMessagePressed] =
-    useState<boolean>(false);
+  const { isMenuButtonPressed, isPopupMessagePressed } = useAppState();
   return (
     <html>
       <body className={inter.className}>
         {isPopupMessagePressed ? (
-          <PopupWindow setIsPopupMessagePressed={setIsPopupMessagePressed} />
+          <PopupWindow />
         ) : (
           <div>
-            <Navbar
-              isMenuButtonPressed={isMenuButtonPressed}
-              setIsMenuButtonPressed={setIsMenuButtonPressed}
-              setIsPopupMessagePressed={setIsPopupMessagePressed}
-            />
+            <Navbar />
             <div className="flex justify-end">
               {children}
-              {isMenuButtonPressed && (
-                <Sidebar setIsPopupMessagePressed={setIsPopupMessagePressed} />
-              )}
+              {isMenuButtonPressed && <Sidebar />}
             </div>
           </div>
         )}
