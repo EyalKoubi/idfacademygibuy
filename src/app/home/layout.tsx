@@ -24,7 +24,7 @@ export default function RootLayout({
             <Navbar />
             <div className="flex justify-end">
               {children}
-              {isMenuButtonPressed && <Sidebar />}
+              <Sidebar />
             </div>
           </div>
         )}
