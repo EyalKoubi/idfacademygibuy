@@ -1,14 +1,12 @@
-import React, { Dispatch, SetStateAction } from "react";
+import React from "react";
 import { SidebarText } from "../../../HebrewStrings/Texts";
 import { sidebarStyles } from "../../../utils/styles";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import useAppState from "@/app/_contexts/globalContext";
 
-interface SidebarProps {
-  setIsPopupMessagePressed: Dispatch<SetStateAction<boolean>>;
-}
-
-const Sidebar = ({ setIsPopupMessagePressed }: SidebarProps) => {
+const Sidebar = () => {
+  const { setIsPopupMessagePressed } = useAppState();
   const { data: sessionData } = useSession();
   const router = useRouter();
 

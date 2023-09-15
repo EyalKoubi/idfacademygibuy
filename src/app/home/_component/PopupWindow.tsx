@@ -1,11 +1,8 @@
 import { HomeTexts } from "@/HebrewStrings/Texts";
-import { Dispatch, SetStateAction } from "react";
+import useAppState from "@/app/_contexts/globalContext";
 
-interface PopupWindowProps {
-  setIsPopupMessagePressed: Dispatch<SetStateAction<boolean>>;
-}
-
-const PopupWindow = ({ setIsPopupMessagePressed }: PopupWindowProps) => {
+const PopupWindow = () => {
+  const { setIsPopupMessagePressed } = useAppState();
   return (
     <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg shadow-md relative">
