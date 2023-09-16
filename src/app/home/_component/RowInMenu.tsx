@@ -13,13 +13,14 @@ const RowInMenu = ({ rowInfo, icon }: RowInMenu) => {
   const router = useRouter();
 
   const clickHandeller = () => {
+    if (!isMenuButtonPressed) return;
     switch (rowInfo) {
+      case SidebarText.aboutUs:
+        return setIsPopupMessagePressed(true);
       case SidebarText.logout:
         return signOut({ redirect: false }).then(() => {
           router.push("/");
         });
-      case SidebarText.aboutUs:
-        return setIsPopupMessagePressed(true);
       default:
     }
   };

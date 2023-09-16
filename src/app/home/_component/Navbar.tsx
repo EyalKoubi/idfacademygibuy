@@ -2,14 +2,13 @@ import HamburgerMenu from "./icons/HamburgerMenu";
 import { HomeTexts } from "@/HebrewStrings/Texts";
 import useAppState from "@/app/_contexts/globalContext";
 import tikshuvPicture from "../../../assets/tikshuv.png";
+import idfLogo from "../../../assets/idf_logo.png";
+import ciberLogo from "../../../assets/ciber_logo.png";
+import academyLogo from "../../../assets/social_media.png";
 import Image from "next/image";
 
 const Navbar = () => {
-  const {
-    isMenuButtonPressed,
-    setIsMenuButtonPressed,
-    setIsPopupMessagePressed,
-  } = useAppState();
+  const { setIsPopupMessagePressed } = useAppState();
   return (
     <header className="bg-gray-600 py-4">
       <div className="container mx-auto flex justify-between items-center">
