@@ -17,9 +17,6 @@ export default function RootLayout({
   return (
     <html>
       <body className={inter.className}>
-        {isPopupMessagePressed ? (
-          <PopupWindow />
-        ) : (
           <div>
             <Navbar />
             <div className="flex justify-end">
@@ -27,7 +24,6 @@ export default function RootLayout({
               <Sidebar />
             </div>
           </div>
-        )}
       </body>
     </html>
   );
