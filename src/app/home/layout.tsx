@@ -17,17 +17,13 @@ export default function RootLayout({
   return (
     <html>
       <body className={inter.className}>
-        {isPopupMessagePressed ? (
-          <PopupWindow />
-        ) : (
-          <div>
-            <Navbar />
-            <div className="flex justify-end">
-              {children}
-              <Sidebar />
-            </div>
+        <div>
+          <Navbar />
+          <div className="flex justify-end">
+            {children}
+            <Sidebar />
           </div>
-        )}
+        </div>
       </body>
     </html>
   );
