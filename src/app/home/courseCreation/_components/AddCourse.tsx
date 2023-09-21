@@ -1,7 +1,7 @@
 "use client";
 import { adminTexts } from "@/HebrewStrings/Texts";
 import { useState } from "react";
-import Course from "./Course";
+import Course from "../../_component/Course";
 
 const AddCourse = () => {
   const [isAddPressed, setIsAddPressed] = useState<boolean>(false);

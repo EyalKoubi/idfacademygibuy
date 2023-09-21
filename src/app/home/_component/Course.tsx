@@ -1,6 +1,6 @@
 // components/Course.js
 import React, { useState } from "react";
-import Chapter from "./Chapter";
+import Chapter from "../courseCreation/_components/Chapter";
 import { AddCourseTexts, adminTexts } from "@/HebrewStrings/Texts";
 
 interface CourseDataProps {

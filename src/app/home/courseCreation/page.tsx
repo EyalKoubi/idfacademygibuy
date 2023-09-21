@@ -1,5 +1,5 @@
 "use client";
-import Course from "../_component/createCourseComponent/Course";
+import Course from "../_component/Course";
 
 const CoursePage = () => {
   return <Course />;
