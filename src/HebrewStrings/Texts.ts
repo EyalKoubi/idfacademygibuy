@@ -2,6 +2,7 @@ export const adminTexts = {
   adminWelcome: " ברוכים הבאים",
   adminAddQuis: "הוספת שאלה",
   adminAddContent: "הוספת תוכן",
+  adminAddCourse: "הוספת קורס",
   adminCreateQuis: "עריכת שאלה",
   adminCreateContent: "עריכת תוכן",
 };
@@ -33,6 +34,28 @@ export const HomeTexts = {
   welcome: "ברוכים הבאים לאתר הכי מגניב בעולם",
   mercasHadigitech: "מרכז הדיגיטק",
   aboutUs: "שלום חברים",
+};
+
+export const AddCourseTexts = {
+  courseName: "שם קורס",
+  courseSummery: "תקציר קורס",
+  courseSubmit: "הוסף קורס",
+  addChapter: "הוספת פרק",
+  chapter: {
+    chapterName: "שם פרק",
+    addSubject: "הוסף נושא",
+    subject: {
+      contentName: "שם תוכן",
+      textContent: "קובץ טקסט",
+      vidioContent: "קובץ וידיאו",
+      comments: "הערות (עד 90 תווים)",
+      addContent: "הוסף תוכן",
+    },
+  },
+};
+
+export const GeneralTexts = {
+  submit: "אישור",
 };
 
 /*

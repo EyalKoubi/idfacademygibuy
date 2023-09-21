@@ -3,10 +3,16 @@ import "../globals.css";
 import { Inter } from "next/font/google";
 import Sidebar from "./_component/SideBar";
 import Navbar from "./_component/Navbar";
-import PopupWindow from "./_component/PopupWindow";
 import useAppState from "../_contexts/globalContext";
 
 const inter = Inter({ subsets: ["latin"] });
+
+enum Users {
+  Admin = 1,
+  Editor = 2,
+  Creator = 3,
+  User = 4,
+}
 
 export default function RootLayout({
   children,
@@ -21,7 +27,7 @@ export default function RootLayout({
           <Navbar />
           <div className="flex justify-end">
             {children}
-            <Sidebar />
+            <Sidebar userType={Users.Admin} />
           </div>
         </div>
       </body>

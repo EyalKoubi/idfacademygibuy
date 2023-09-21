@@ -4,24 +4,25 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 interface RowInMenu {
+  href: string;
   rowInfo: string;
   icon: React.ReactNode;
 }
 
-const RowInMenu = ({ rowInfo, icon }: RowInMenu) => {
+const RowInMenu = ({ rowInfo, href, icon }: RowInMenu) => {
   const { isMenuButtonPressed, setIsPopupMessagePressed } = useAppState();
   const router = useRouter();
 
   const clickHandeller = () => {
     if (!isMenuButtonPressed) return;
     switch (rowInfo) {
-      case SidebarText.aboutUs:
-        return setIsPopupMessagePressed(true);
       case SidebarText.logout:
-        return signOut({ redirect: false }).then(() => {
-          router.push("/");
+        signOut({ redirect: false }).then(() => {
+          router.push(href);
         });
+        break;
       default:
+        router.push(href);
     }
   };
 

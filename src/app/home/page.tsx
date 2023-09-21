@@ -6,9 +6,7 @@ import useAppState from "../_contexts/globalContext";
 const HomePage = () => {
   const { isMenuButtonPressed, isPopupMessagePressed } = useAppState();
 
-  return isPopupMessagePressed ? (
-    <PopupWindow />
-  ) : (
+  return (
     <div>
       <h1>{HomeTexts.welcome}</h1>
     </div>

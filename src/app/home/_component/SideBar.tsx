@@ -1,18 +1,56 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import useAppState from "@/app/_contexts/globalContext";
 import RowInMenu from "./RowInMenu";
-import { first_menu } from "../menus";
+import {
+  admin_menu,
+  user_menu,
+  creator_menu,
+  editor_menu,
+  MenuRow,
+} from "../menus";
 
-const Sidebar = () => {
+enum Users {
+  Admin = 1,
+  Editor = 2,
+  Creator = 3,
+  User = 4,
+}
+
+interface SidebarProps {
+  userType: Users;
+}
+
+const Sidebar = ({ userType }: SidebarProps) => {
   const { isMenuButtonPressed } = useAppState();
+  const [menu, setMenu] = useState<MenuRow[]>([]);
 
   const sidebarClass = isMenuButtonPressed ? "w-64" : "w-16";
+
+  useEffect(() => {
+    switch (userType) {
+      case Users.Admin:
+        setMenu(admin_menu);
+        break;
+      case Users.Creator:
+        setMenu(creator_menu);
+        break;
+      case Users.Editor:
+        setMenu(editor_menu);
+        break;
+      case Users.User:
+        setMenu(user_menu);
+        break;
+      default:
+    }
+  }, []);
 
   return (
     <div className={`bg-gray-200 p-4 flex flex-col h-screen ${sidebarClass}`}>
       <ul className="space-y-2">
-        {first_menu.map(({ id, rowInfo, icon }) => {
-          return <RowInMenu key={id} rowInfo={rowInfo} icon={icon} />;
+        {menu.map(({ id, href, rowInfo, icon }) => {
+          return (
+            <RowInMenu key={id} href={href} rowInfo={rowInfo} icon={icon} />
+          );
         })}
       </ul>
       {isMenuButtonPressed && (
