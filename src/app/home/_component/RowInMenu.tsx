@@ -10,7 +10,7 @@ interface RowInMenu {
 }
 
 const RowInMenu = ({ rowInfo, href, icon }: RowInMenu) => {
-  const { isMenuButtonPressed, setIsPopupMessagePressed } = useAppState();
+  const { isMenuButtonPressed } = useAppState();
   const router = useRouter();
 
   const clickHandeller = () => {
