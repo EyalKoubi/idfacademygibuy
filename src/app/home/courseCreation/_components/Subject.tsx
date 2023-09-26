@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import Content from "./Content";
 import { AddCourseTexts } from "@/HebrewStrings/Texts";
+import axios from "axios";
+import { Request } from "express";
 
 interface SubjectProps {
   subjectData: {
@@ -17,21 +19,51 @@ interface ContentData {
 
 const Subject = ({ subjectData }: SubjectProps) => {
   const [contents, setContents] = useState<any[]>([]);
+  const [file, setFile] = useState<File | null>(null);
   const [contentData, setContentData] = useState<ContentData>({
     name: "",
     fileType: "text",
     comments: "",
   });
 
-  const handleContentAdd = () => {
-    console.log("I am micha");
+  const submitFile = async (event: FormEvent) => {
+    event?.preventDefault();
+    if (!file) return;
+    const formData = new FormData();
+    formData.append("file", file, file.name);
+    console.log(formData);
+    for (const [key, value] of formData.entries()) {
+      console.log(`Key: ${key}`);
+      console.log(value); // This will display the value, which can be a File, Blob, or other data.
+    }
+    try {
+      const response = await axios.post("/api/posts", formData, {
+        headers: { "Contant-Type": "multipart/form-data" },
+      });
+      console.log(
+        "🚀 ~ file: Subject.tsx:39 ~ submitFile ~ response.data:",
+        response.data
+      );
+    } catch (error) {
+      console.log("🚀 ~ file: Subject.tsx:38 ~ submitFile ~ error:", error);
+    }
+    // const boss = { file: content };
+    // const formData = new FormData();
+    // formData.append("file", content, content.name); // Use the same field name as in the server-side code
 
-    setContents([...contents, contentData]);
-    setContentData({
-      name: "",
-      fileType: "text",
-      comments: "",
-    });
+    // console.log(
+    //   "🚀 ~ file: Subject.tsx:33 ~ handleContentAdd ~ formData:",
+    //   formData
+    // );
+    // try {
+    //   const response = await fetch("/api/posts", {
+    //     method: "POST",
+    //     headers: { "Contant-Type": "multipart/form-data" },
+    //     body: formData,
+    //   });
+    // } catch (error) {
+    //   console.error("Error adding content:", error);
+    // }
   };
 
   return (
@@ -47,9 +79,9 @@ const Subject = ({ subjectData }: SubjectProps) => {
       />
       <select
         value={contentData.fileType}
-        onChange={(e) =>
-          setContentData({ ...contentData, fileType: e.target.value })
-        }
+        onChange={(e) => {
+          setContentData({ ...contentData, fileType: e.target.value });
+        }}
       >
         <option value="text">
           {AddCourseTexts.chapter.subject.textContent}
@@ -66,12 +98,16 @@ const Subject = ({ subjectData }: SubjectProps) => {
           setContentData({ ...contentData, comments: e.target.value })
         }
       />
-      <form
-        action="http://localhost:3000/api/posts"
-        method="post"
-        encType="multipart/form-data"
-      >
-        <input type="file" name="file" />
+      <form onSubmit={submitFile}>
+        <label htmlFor="file">nisuy</label>
+        <input
+          type="file"
+          id="file"
+          onChange={(e) => {
+            if (e.target.files && e.target.files.length > 0)
+              setFile(e.target.files[0]);
+          }}
+        />
         <button type="submit">
           {AddCourseTexts.chapter.subject.addContent}
         </button>
