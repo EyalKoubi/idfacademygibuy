@@ -1,3 +1,4 @@
+'use client'
 import React, { FormEvent, useEffect, useState } from "react";
 import Content from "./Content";
 import { AddCourseTexts } from "@/HebrewStrings/Texts";
@@ -19,7 +20,7 @@ interface ContentData {
 
 const Subject = ({ subjectData }: SubjectProps) => {
   const [contents, setContents] = useState<any[]>([]);
-  const [file, setFile] = useState<File | null>(null);
+  const [file, setFile] = useState<any | null>(null);
   const [contentData, setContentData] = useState<ContentData>({
     name: "",
     fileType: "text",
@@ -29,16 +30,15 @@ const Subject = ({ subjectData }: SubjectProps) => {
   const submitFile = async (event: FormEvent) => {
     event?.preventDefault();
     if (!file) return;
-    const formData = new FormData();
+    const formData:any = new FormData();
     formData.append("file", file, file.name);
     console.log(formData);
-    for (const [key, value] of formData.entries()) {
-      console.log(`Key: ${key}`);
-      console.log(value); // This will display the value, which can be a File, Blob, or other data.
-    }
+ 
+   
     try {
+      console.log(file)
       const response = await axios.post("/api/posts", formData, {
-        headers: { "Contant-Type": "multipart/form-data" },
+        headers: { "Content-Type": "multipart/form-data" }
       });
       console.log(
         "🚀 ~ file: Subject.tsx:39 ~ submitFile ~ response.data:",
@@ -47,23 +47,7 @@ const Subject = ({ subjectData }: SubjectProps) => {
     } catch (error) {
       console.log("🚀 ~ file: Subject.tsx:38 ~ submitFile ~ error:", error);
     }
-    // const boss = { file: content };
-    // const formData = new FormData();
-    // formData.append("file", content, content.name); // Use the same field name as in the server-side code
-
-    // console.log(
-    //   "🚀 ~ file: Subject.tsx:33 ~ handleContentAdd ~ formData:",
-    //   formData
-    // );
-    // try {
-    //   const response = await fetch("/api/posts", {
-    //     method: "POST",
-    //     headers: { "Contant-Type": "multipart/form-data" },
-    //     body: formData,
-    //   });
-    // } catch (error) {
-    //   console.error("Error adding content:", error);
-    // }
+    
   };
 
   return (
@@ -102,7 +86,7 @@ const Subject = ({ subjectData }: SubjectProps) => {
         <label htmlFor="file">nisuy</label>
         <input
           type="file"
-          id="file"
+          name="file"
           onChange={(e) => {
             if (e.target.files && e.target.files.length > 0)
               setFile(e.target.files[0]);

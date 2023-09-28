@@ -5,39 +5,19 @@ import {
 } from "next-auth";
 import auth0Provider from "next-auth/providers/auth0";
 import z from "zod";
-
+import { KyselyAdapter } from "@auth/kysely-adapter";
+import { db } from "@/db/database";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
  *
  * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
  */
-declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user: DefaultSession["user"] & {
-      id: string;
-      // ...other properties
-      // role: UserRole;
-    };
-  }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
-}
 
 export const authOptions: NextAuthOptions = {
   secret: process.env.AUTH0_SECRET,
-  callbacks: {
-    session: ({ session, token }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: token.sub,
-      },
-    }),
-  },
+  // @ts-expect-error
+  adapter: KyselyAdapter(db),
   providers: [
     auth0Provider({
       clientId: z.string().parse(process.env.AUTH0_CLIENT_ID),

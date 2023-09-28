@@ -18,7 +18,7 @@ async function migrateToLatest() {
         database: process.env.POSTGRES_DATABASE,
         host: process.env.POSTGRES_HOST,
         user: process.env.POSTGRES_USER,
-        password: process.env.POSTGRES_PASSWORD,
+        password: process.env.POSTGRES_PASSWORD ,
         port: Number.isNaN(parseInt(process.env.POSTGRES_PORT as string)) ? undefined: parseInt(process.env.POSTGRES_PORT as string),
         max: 10,
         ssl: process.env.NODE_ENV === 'production' ? true : false
