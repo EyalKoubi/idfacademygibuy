@@ -10,8 +10,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("emailVerified", "timestamptz")
     .addColumn("image", "text")
     .execute();
-}123123123
-xzcxzc
+}
 export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable("User").ifExists().execute();
 }
