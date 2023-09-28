@@ -1,7 +1,7 @@
 import { Database } from "./schema"; // this is the Database interface we defined earlier
 import { Pool } from "pg"; // this is the Pool interface we defined earlier
 import { Kysely, PostgresDialect } from "kysely";
-import {KyselyAuth} from '@auth/kysely-adapter';
+import { KyselyAuth } from "@auth/kysely-adapter";
 
 const dialect = new PostgresDialect({
   pool: new Pool({
