@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-'use client'
-=======
 "use client";
->>>>>>> 1aeaec3c3bb715148e47dd038a1470a912958c5a
 import React, { FormEvent, useEffect, useState } from "react";
 import Content from "./Content";
 import { AddCourseTexts } from "@/HebrewStrings/Texts";
@@ -34,17 +30,6 @@ const Subject = ({ subjectData }: SubjectProps) => {
   const submitFile = async (event: FormEvent) => {
     event?.preventDefault();
     if (!file) return;
-<<<<<<< HEAD
-    const formData:any = new FormData();
-    formData.append("file", file, file.name);
-    console.log(formData);
- 
-   
-    try {
-      console.log(file)
-      const response = await axios.post("/api/posts", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
-=======
     const formData: any = new FormData();
     formData.append("file", file, file.name);
     console.log(formData);
@@ -53,7 +38,6 @@ const Subject = ({ subjectData }: SubjectProps) => {
       console.log(file);
       const response = await axios.post("/api/posts", formData, {
         headers: { "Content-Type": "multipart/form-data" },
->>>>>>> 1aeaec3c3bb715148e47dd038a1470a912958c5a
       });
       console.log(
         "🚀 ~ file: Subject.tsx:39 ~ submitFile ~ response.data:",
@@ -62,10 +46,6 @@ const Subject = ({ subjectData }: SubjectProps) => {
     } catch (error) {
       console.log("🚀 ~ file: Subject.tsx:38 ~ submitFile ~ error:", error);
     }
-<<<<<<< HEAD
-    
-=======
->>>>>>> 1aeaec3c3bb715148e47dd038a1470a912958c5a
   };
 
   return (
