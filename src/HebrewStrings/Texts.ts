@@ -38,11 +38,11 @@ export const HomeTexts = {
 
 export const AddCourseTexts = {
   courseName: "שם קורס",
-  courseSummery: "תקציר קורס",
   courseSubmit: "הוסף קורס",
   addChapter: "הוספת פרק",
   chapter: {
     chapterName: "שם פרק",
+    chapterSummery: "תקציר פרק",
     addSubject: "הוסף נושא",
     subject: {
       contentName: "שם תוכן",

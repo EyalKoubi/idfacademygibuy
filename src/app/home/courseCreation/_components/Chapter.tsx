@@ -10,7 +10,7 @@ interface ChapterProps {
   };
 }
 
-const Chapter = ({ chapterData }: ChapterProps) => {
+const Chapter = () => {
   const [subjects, setSubjects] = useState<any[]>([]);
   const [subjectData, setSubjectData] = useState({
     name: "",
@@ -23,11 +23,18 @@ const Chapter = ({ chapterData }: ChapterProps) => {
 
   return (
     <div>
-      <h2>{chapterData.name}</h2>
-      <p>{chapterData.chapterSummary}</p>
+      {/* <h2>{chapterData.name}</h2>
+      <p>{chapterData.chapterSummary}</p> */}
       <input
         type="text"
         placeholder={AddCourseTexts.chapter.chapterName}
+        value={subjectData.name}
+        onChange={(e) =>
+          setSubjectData({ ...subjectData, name: e.target.value })
+        }
+      />
+      <textarea
+        placeholder={AddCourseTexts.chapter.chapterSummery}
         value={subjectData.name}
         onChange={(e) =>
           setSubjectData({ ...subjectData, name: e.target.value })

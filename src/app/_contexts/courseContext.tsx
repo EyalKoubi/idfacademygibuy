@@ -8,13 +8,13 @@ type Content = {
 
 type Chapter = {
   name: string;
+  brief: string;
   contents: Content[];
 };
 
 type Course = {
   id: string;
   name: string;
-  brief: string;
   chapters: Chapter[];
 };
 
@@ -31,7 +31,11 @@ type CoursesActions = {
     content: Content
   ) => void;
   setCourseName: (courseId: string, name: string) => void;
-  setCourseBrief: (courseId: string, brief: string) => void;
+  setChapterBrief: (
+    courseId: string,
+    chapterIndex: number,
+    brief: string
+  ) => void; // Updated to setChapterBrief
 };
 
 const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
@@ -83,14 +87,21 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       }
       return { ...state, courses: newCourses };
     }),
-  setCourseBrief: (courseId, brief) =>
+  setChapterBrief: (
+    courseId,
+    chapterIndex,
+    brief // Updated to setChapterBrief
+  ) =>
     set((state) => {
       const newCourses = [...state.courses];
       const courseIndex = newCourses.findIndex(
         (course) => course.id === courseId
       );
-      if (courseIndex !== -1) {
-        newCourses[courseIndex].brief = brief;
+      if (
+        courseIndex !== -1 &&
+        newCourses[courseIndex].chapters[chapterIndex]
+      ) {
+        newCourses[courseIndex].chapters[chapterIndex].brief = brief;
       }
       return { ...state, courses: newCourses };
     }),
