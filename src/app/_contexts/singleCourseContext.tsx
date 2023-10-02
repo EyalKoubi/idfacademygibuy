@@ -1,4 +1,4 @@
-import create from "zustand";
+import { create } from "zustand";
 
 type Content = {
   name: string;
@@ -6,10 +6,15 @@ type Content = {
   comments: string;
 };
 
+type Subject = {
+  name: string;
+  contents: Content[];
+};
+
 type Chapter = {
   name: string;
   brief: string;
-  contents: Content[];
+  subjects: Subject[];
 };
 
 type Course = {
@@ -19,49 +24,64 @@ type Course = {
 };
 
 type SingleCourseState = {
-  course: Course | null;
+  course: Course;
 };
 
 type SingleCourseActions = {
   setCourse: (course: Course) => void;
   addChapter: (chapter: Chapter) => void;
-  addContent: (chapterIndex: number, content: Content) => void;
+  addContent: (
+    chapterIndex: number,
+    subjectIndex: number,
+    content: Content
+  ) => void;
   setCourseName: (name: string) => void;
+  setCourseId: (id: string) => void;
   setChapterBrief: (chapterIndex: number, brief: string) => void;
 };
 
 const useSingleCourseStore = create<SingleCourseState & SingleCourseActions>(
   (set) => ({
-    course: null,
+    course: { id: "", name: "", chapters: [] },
     setCourse: (course) => set((state) => ({ ...state, course })),
     addChapter: (chapter) =>
+      set((state) => ({
+        ...state,
+        course: {
+          ...state.course,
+          chapters: [...state.course.chapters, chapter],
+        },
+      })),
+    addContent: (
+      chapterIndex,
+      subjectIndex,
+      content // Added subjectIndex
+    ) =>
       set((state) => {
-        if (state.course) {
-          state.course.chapters = [...state.course.chapters, chapter];
-        }
-        return { ...state };
-      }),
-    addContent: (chapterIndex, content) =>
-      set((state) => {
-        if (state.course && state.course.chapters[chapterIndex]) {
-          state.course.chapters[chapterIndex].contents = [
-            ...state.course.chapters[chapterIndex].contents,
-            content,
-          ];
+        const chapter = state.course.chapters[chapterIndex];
+        if (chapter && chapter.subjects[subjectIndex]) {
+          chapter.subjects[subjectIndex].contents.push(content);
         }
         return { ...state };
       }),
     setCourseName: (name) =>
       set((state) => {
-        if (state.course) {
-          state.course.name = name;
-        }
-        return { ...state };
+        const updatedCourse = {
+          ...state.course,
+          name: name,
+        };
+        return { ...state, course: updatedCourse };
       }),
+    setCourseId: (id) =>
+      set((state) => ({
+        ...state,
+        course: { ...state.course, id },
+      })),
     setChapterBrief: (chapterIndex, brief) =>
       set((state) => {
-        if (state.course && state.course.chapters[chapterIndex]) {
-          state.course.chapters[chapterIndex].brief = brief;
+        const chapter = state.course.chapters[chapterIndex];
+        if (chapter) {
+          chapter.brief = brief;
         }
         return { ...state };
       }),

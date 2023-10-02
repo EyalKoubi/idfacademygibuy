@@ -8,7 +8,11 @@ interface CourseRequest extends NextRequest {
 
 export async function POST(req: CourseRequest, res: NextApiResponse) {
   const data = await req.formData();
-  const name: string | null = data.get("name") as unknown as string;
+  if (!data.get("course"))
+    return NextResponse.json({ message: "There is no course input!" });
+  const course = JSON.parse(data.get("course") as string);
+  console.log("🚀 ~ file: route.ts:12 ~ course ~ course:", course);
+  const name: string = course.name;
   console.log("🚀 ~ file: route.ts:12 ~ POST ~ name:", name);
   console.log("🚀 ~ file: route.ts:11 ~ POST ~ data:", data);
   // console.log("🚀 ~ file: route.ts:7 ~ POST ~ name:", name);
@@ -17,14 +21,13 @@ export async function POST(req: CourseRequest, res: NextApiResponse) {
     const newCourse = await db
       .insertInto("Course")
       .values({
-        name: name,
+        name,
       })
-      .execute();
-    NextResponse.json(newCourse);
+      .returning(["id", "name"])
+      .executeTakeFirstOrThrow();
+    return NextResponse.json(newCourse);
   } catch (error) {
     console.error("Error inserting course:", error);
-    NextResponse.json({ message: "Error inserting course" });
+    return NextResponse.json({ message: "Error inserting course" });
   }
-
-  return NextResponse.json({ message: "added successfully" });
 }

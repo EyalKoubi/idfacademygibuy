@@ -1,45 +1,41 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddCourseTexts, adminTexts } from "@/HebrewStrings/Texts";
-import Chapter from "./_components/Chapter";
 import { CourseData } from "./types";
 import axios from "axios";
-import useSingleCourseStore from "@/app/_contexts/singleCourseContext";
 import useCoursesStore from "@/app/_contexts/courseContext";
+import { useRouter } from "next/navigation";
 
-const CoursePage = () => {
-  const [chaptersCounter, setChaptersCounter] = useState<number>(0);
-  const { course } = useSingleCourseStore();
-  const { courses } = useCoursesStore();
+const AddCoursePage = () => {
+  const { addCourse, courses } = useCoursesStore();
   const [courseData, setCourseData] = useState<CourseData>({
-    id: 0,
     name: "",
     chapters: [],
   });
-  const [courseApproved, setCourseApproved] = useState<boolean>(false);
+  const router = useRouter();
 
-  const handleChapterAdd = () => {
-    setChaptersCounter(chaptersCounter + 1);
-    setCourseData({ id: 0, name: "", chapters: [] });
+  const handleAddChapters = () => {
+    handleSubmit();
   };
 
-  const handleApproveCourse = async () => {
+  const handleSubmit = async () => {
     try {
-      const formData: any = new FormData();
-      formData.append("name", courseData.name);
+      const formData = new FormData();
+
+      formData.append("course", JSON.stringify(courseData));
+
       const response = await axios.post("/api/courseAdd", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      const jsonData = await response.json();
-      // if (response.json()) {
-      //   throw new Error("Failed to approve course");
-      // }
-
-      console.log("Course approved and added to DB:", response);
-      setCourseApproved(true);
+      
+      console.log(
+        "🚀 ~ file: page.tsx:47 ~ handleApproveCourse ~ response:",
+        response
+      );
+      const courseId = response.data.id;
+      router.push(`/home/courseCreation/${courseId}/Chapters`);
     } catch (error) {
       console.error("Error:", error);
-      // Handle error (set some state to show an error message to the user, for example)
     }
   };
 
@@ -52,19 +48,9 @@ const CoursePage = () => {
         value={courseData.name}
         onChange={(e) => setCourseData({ ...courseData, name: e.target.value })}
       />
-      <button onClick={handleChapterAdd}>{AddCourseTexts.addChapter}</button>
-      {courseApproved ? (
-        <p>Course Approved!</p>
-      ) : (
-        <button onClick={handleApproveCourse}>
-          {AddCourseTexts.courseSubmit}
-        </button>
-      )}
-      {new Array(chaptersCounter).map((element, index) => {
-        return <Chapter key={index} />;
-      })}
+      <button onClick={handleAddChapters}>{adminTexts.adminAddCourse}</button>
     </div>
   );
 };
 
-export default CoursePage;
+export default AddCoursePage;
