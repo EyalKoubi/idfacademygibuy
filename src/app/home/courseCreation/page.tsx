@@ -33,7 +33,7 @@ const AddCoursePage = () => {
         response
       );
       const courseId = response.data.id;
-      router.push(`/home/courseCreation/${courseId}/Chapters`);
+      router.push(`/home/courseManager/${courseId}/Chapters`);
     } catch (error) {
       console.error("Error:", error);
     }

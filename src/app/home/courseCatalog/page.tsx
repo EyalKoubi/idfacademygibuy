@@ -1,5 +1,5 @@
 const courseCatalog = () => {
-  return <></>;
+  return <>asdasdasd</>;
 };
 
 export default courseCatalog;
