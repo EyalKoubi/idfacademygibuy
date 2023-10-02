@@ -1,8 +1,9 @@
+
 import { ChapterData } from "../../courseCreation/types";
 
 export type CourseData = {
+    id:string;
     name: string;
-    image: string; // Added this line to include an image URL
     chapters: ChapterData[];
   };
 interface CourseCardProps {
@@ -11,7 +12,7 @@ interface CourseCardProps {
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     return (
       <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white m-4">
-        <img className="w-full" src={course.image} alt={course.name} />
+        {/* <img className="w-full" src={course.image} alt={course.name} /> */}
         <div className="px-6 py-4">
           <div className="font-bold text-xl mb-2">{course.name}</div>
           <div className="text-gray-700 text-base">

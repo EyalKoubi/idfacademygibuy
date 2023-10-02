@@ -1,8 +1,9 @@
 import { create } from "zustand";
+import { ChapterData } from "../types/types";
 
 type Content = {
   name: string;
-  fileName: string;
+  file_name: string;
   comments: string;
 };
 
@@ -47,6 +48,7 @@ type CoursesActions = {
     chapterIndex: number,
     brief: string
   ) => void;
+  setCourses:(courses:Course[])=>void;
 };
 
 const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
@@ -115,6 +117,11 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       }
       return { ...state };
     }),
+    setCourses: (courses) =>
+    set((state) => ({
+      ...state,
+      courses: courses,
+    })),
 }));
 
 export default useCoursesStore;

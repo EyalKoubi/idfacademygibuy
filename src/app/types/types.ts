@@ -25,3 +25,7 @@ export type CourseData = {
   name: string;
   chapters: ChapterData[];
 };
+
+
+
+
