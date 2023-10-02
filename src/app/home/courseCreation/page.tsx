@@ -30,7 +30,7 @@ const CoursePage = () => {
       const response = await axios.post("/api/courseAdd", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-
+      const jsonData = await response.json();
       // if (response.json()) {
       //   throw new Error("Failed to approve course");
       // }
