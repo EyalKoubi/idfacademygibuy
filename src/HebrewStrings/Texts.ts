@@ -45,6 +45,7 @@ export const AddCourseTexts = {
     chapterSummery: "תקציר פרק",
     addSubject: "הוסף נושא",
     approveChapter: "הוספת הפרקים",
+    back: "חזור ליצירת קורסים",
     subject: {
       contentName: "שם תוכן",
       textContent: "קובץ טקסט",

@@ -14,10 +14,6 @@ const AddCoursePage = () => {
   });
   const router = useRouter();
 
-  const handleAddChapters = () => {
-    handleSubmit();
-  };
-
   const handleSubmit = async () => {
     try {
       const formData = new FormData();
@@ -27,11 +23,11 @@ const AddCoursePage = () => {
       const response = await axios.post("/api/courseAdd", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      
-      console.log(
-        "🚀 ~ file: page.tsx:47 ~ handleApproveCourse ~ response:",
-        response
-      );
+      addCourse({
+        id: response.data?.id,
+        name: response.data?.name,
+        chapters: [],
+      });
       const courseId = response.data.id;
       router.push(`/home/courseManager/${courseId}/Chapters`);
     } catch (error) {
@@ -48,7 +44,7 @@ const AddCoursePage = () => {
         value={courseData.name}
         onChange={(e) => setCourseData({ ...courseData, name: e.target.value })}
       />
-      <button onClick={handleAddChapters}>{adminTexts.adminAddCourse}</button>
+      <button onClick={handleSubmit}>{adminTexts.adminAddCourse}</button>
     </div>
   );
 };

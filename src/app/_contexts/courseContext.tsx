@@ -34,7 +34,7 @@ type CoursesActions = {
     courseId: string,
     chapterIndex: number,
     subject: Subject
-  ) => void; // Added action to add a subject
+  ) => void;
   addContent: (
     courseId: string,
     chapterIndex: number,
@@ -62,7 +62,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
     set((state) => {
       const course = state.courses.find((c) => c.id === courseId);
       if (course) {
-        course.chapters.push({ ...chapter, subjects: [] }); // ensure subjects is initialized
+        course.chapters.push(chapter);
       }
       return { ...state };
     }),
