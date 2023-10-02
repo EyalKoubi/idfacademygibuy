@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { AddCourseTexts } from "@/HebrewStrings/Texts";
+import { AddCourseTexts, adminTexts } from "@/HebrewStrings/Texts";
 import { usePathname } from "next/navigation";
 import useCoursesStore from "@/app/_contexts/courseContext";
 import Link from "next/link";
@@ -19,7 +19,7 @@ interface AddChaptersPageProps {
 
 const AddChaptersPage = (props: AddChaptersPageProps) => {
   const courseId =
-    usePathname().split("/")[usePathname().split("/").length - 2];
+    usePathname().split("/")[usePathname().split("/").length - 1];
   const [chapterData, setChapterData] = useState<ChapterData>({
     name: "",
     brief: "",
@@ -27,15 +27,21 @@ const AddChaptersPage = (props: AddChaptersPageProps) => {
   });
   const [courseName, setCourseName] = useState("");
   const [chapters, setChapters] = useState<ChapterData[]>([]);
+  const [subjectAdding, setSubjectAdding] = useState(false);
+  const [subjects, setSubjects] = useState<{ name: string; contents: any[] }[]>(
+    []
+  );
   const [subjectName, setSubjectName] = useState("");
-  const [selectedChapterIndex, setSelectedChapterIndex] = useState<
-    number | null
-  >(null);
-
   const { addChapter, courses } = useCoursesStore();
   const handleAddChapter = () => {
     setChapters([...chapters, chapterData]);
     setChapterData({ name: "", brief: "", subjects: [] });
+  };
+
+  const handleAddSubject = () => {
+    chapterData.subjects.push({ name: subjectName, contents: [] });
+    setSubjectName("");
+    setSubjectAdding(false);
   };
 
   useEffect(() => {
@@ -46,6 +52,10 @@ const AddChaptersPage = (props: AddChaptersPageProps) => {
       }
     }
   }, []);
+
+  useEffect(() => {
+    console.log("🚀 ~ file: page.tsx:57 ~ AddChaptersPage ~ courses:", courses);
+  }, [courses]);
 
   const handleSubmitChapters = async () => {
     try {
@@ -68,14 +78,6 @@ const AddChaptersPage = (props: AddChaptersPageProps) => {
     }
   };
 
-  const handleAddSubject = (index: number) => {
-    const updatedChapters = [...chapters];
-    updatedChapters[index].subjects.push({ name: subjectName, contents: [] });
-    setChapters(updatedChapters);
-    setSubjectName("");
-    setSelectedChapterIndex(null);
-  };
-
   return (
     <div>
       <h1>{courseName}</h1>
@@ -83,40 +85,43 @@ const AddChaptersPage = (props: AddChaptersPageProps) => {
         {AddCourseTexts.chapter.back}
       </Link>
       <h2>{AddCourseTexts.addChapter}</h2>
-      <div style={{ display: "flex", alignItems: "center" }}>
-        <input
-          type="text"
-          placeholder={AddCourseTexts.chapter.chapterName}
-          value={chapterData.name}
-          onChange={(e) =>
-            setChapterData({ ...chapterData, name: e.target.value })
-          }
-        />
-        <input
-          type="text"
-          placeholder={AddCourseTexts.chapter.chapterSummery}
-          value={chapterData.brief}
-          onChange={(e) =>
-            setChapterData({ ...chapterData, brief: e.target.value })
-          }
-        />
-        <button onClick={handleAddChapter}>{AddCourseTexts.addChapter}</button>
-
-        {/* Here, we have added the add subject button and input field in the same row */}
-        <button onClick={() => setSelectedChapterIndex(chapters.length)}>
-          {AddCourseTexts.chapter.addSubject}
-        </button>
-
-        {selectedChapterIndex === chapters.length && (
+      <div>
+        {subjectAdding ? (
+          <div>
+            <button onClick={() => setSubjectAdding(false)}>X</button>
+            <input
+              type="text"
+              placeholder={AddCourseTexts.chapter.subject.subjectName}
+              value={subjectName}
+              onChange={(e) => setSubjectName(e.target.value)}
+            />
+            <button onClick={handleAddSubject}>
+              {AddCourseTexts.chapter.subject.addSubject}
+            </button>
+          </div>
+        ) : (
           <div style={{ display: "flex", alignItems: "center" }}>
             <input
               type="text"
-              value={subjectName}
-              onChange={(e) => setSubjectName(e.target.value)}
-              placeholder="Subject Name"
+              placeholder={AddCourseTexts.chapter.chapterName}
+              value={chapterData.name}
+              onChange={(e) =>
+                setChapterData({ ...chapterData, name: e.target.value })
+              }
             />
-            <button onClick={() => handleAddSubject(chapters.length - 1)}>
-              Submit
+            <input
+              type="text"
+              placeholder={AddCourseTexts.chapter.chapterSummery}
+              value={chapterData.brief}
+              onChange={(e) =>
+                setChapterData({ ...chapterData, brief: e.target.value })
+              }
+            />
+            <button onClick={() => setSubjectAdding(true)}>
+              {AddCourseTexts.chapter.addSubject}
+            </button>
+            <button onClick={handleAddChapter}>
+              {AddCourseTexts.addChapter}
             </button>
           </div>
         )}
@@ -133,7 +138,6 @@ const AddChaptersPage = (props: AddChaptersPageProps) => {
           </li>
         ))}
       </ul>
-      {/* Modifications end here */}
 
       {chapters.length > 0 && (
         <button onClick={handleSubmitChapters}>

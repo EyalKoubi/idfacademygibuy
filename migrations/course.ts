@@ -18,7 +18,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     )
     .addColumn("name", "text")
     .addColumn("brief", "text")
-    // ask Amirs
+    // ask Amir
     // .addColumn("courseId", "uuid", (col) =>
     //   col.references("Course.id").onDelete("cascade").notNull()
     // )

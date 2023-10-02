@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 interface ChaptersRequest extends NextRequest {
   courseId?: string;
-  chapters?: { name: string; brief: string }[];
+  chapters?: { name: string; brief: string; subjects: any[] }[];
 }
 
 export async function POST(req: ChaptersRequest, res: NextApiResponse) {
@@ -33,6 +33,22 @@ export async function POST(req: ChaptersRequest, res: NextApiResponse) {
           chapterId: newChapter.id,
         })
         .execute();
+      for (let subject of chapter.subjects) {
+        const newSubject = await db
+          .insertInto("Subject")
+          .values({
+            name: subject.name,
+          })
+          .returning(["id"])
+          .executeTakeFirstOrThrow();
+        await db
+          .insertInto("SubjectChapter")
+          .values({
+            chapterId: newChapter.id,
+            subjectId: newSubject.id,
+          })
+          .execute();
+      }
     }
     return NextResponse.json({ message: "course data added successfully!" });
   } catch (error) {

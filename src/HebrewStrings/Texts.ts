@@ -43,15 +43,19 @@ export const AddCourseTexts = {
   chapter: {
     chapterName: "שם פרק",
     chapterSummery: "תקציר פרק",
-    addSubject: "הוסף נושא",
+    addSubject: "הוספת נושא",
     approveChapter: "הוספת הפרקים",
     back: "חזור ליצירת קורסים",
     subject: {
-      contentName: "שם תוכן",
-      textContent: "קובץ טקסט",
-      vidioContent: "קובץ וידיאו",
-      comments: "הערות (עד 90 תווים)",
-      addContent: "הוסף תוכן",
+      subjectName: "שם הנושא",
+      addSubject: "הוסף נושא",
+      content: {
+        contentName: "שם תוכן",
+        textContent: "קובץ טקסט",
+        vidioContent: "קובץ וידיאו",
+        comments: "הערות (עד 90 תווים)",
+        addContent: "הוסף תוכן",
+      },
     },
   },
 };
