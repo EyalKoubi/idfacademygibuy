@@ -5,6 +5,7 @@ export type ContentData = {
 };
 
 export type SubjectData = {
+  id: string;
   name: string;
   contents: ContentData[];
 };

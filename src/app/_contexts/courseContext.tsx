@@ -7,6 +7,7 @@ type Content = {
 };
 
 type Subject = {
+  id: string;
   name: string;
   contents: Content[];
 };
@@ -43,7 +44,19 @@ type CoursesActions = {
     content: Content
   ) => void;
   deleteCourse: (course: Course) => void;
+  deletChapter: (chapter: Chapter, courseId: string) => void;
+  deleteSubject: (
+    subject: Subject,
+    chapterId: string,
+    courseId: string
+  ) => void;
   renameCourse: (course: Course) => void;
+  updateChapter: (chapter: Chapter, courseId: string) => void;
+  updateSubject: (
+    subject: Subject,
+    chapterId: string,
+    courseId: string
+  ) => void;
   setCourseName: (courseId: string, name: string) => void;
   setChapterBrief: (
     courseId: string,
@@ -71,18 +84,14 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       return { ...state };
     }),
 
-  addSubject: (
-    courseId,
-    chapterIndex,
-    subject // New method to add a subject
-  ) =>
+  addSubject: (courseId, chapterIndex, subject) =>
     set((state) => {
       const course = state.courses.find((c) => c.id === courseId);
       if (course && course.chapters[chapterIndex]) {
         course.chapters[chapterIndex].subjects.push({
           ...subject,
           contents: [],
-        }); // ensure contents is initialized
+        });
       }
       return { ...state };
     }),
@@ -110,6 +119,53 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       return { ...state };
     }),
 
+  deletChapter: (chapter: Chapter, courseId: string) =>
+    set((state) => {
+      state.courses = state.courses.map((curCourse) => {
+        if (courseId === curCourse.id) {
+          const updatedChapter = curCourse.chapters.filter(
+            (curChapter) => chapter.id !== curChapter.id
+          );
+          return {
+            id: curCourse.id,
+            name: curCourse.name,
+            chapters: updatedChapter,
+          };
+        }
+        return curCourse;
+      });
+      return { ...state };
+    }),
+
+  deleteSubject: (subject: Subject, chapterId: string, courseId: string) =>
+    set((state) => {
+      state.courses = state.courses.map((curCourse) => {
+        if (courseId === curCourse.id) {
+          const updatedChapters = curCourse.chapters.map((curChapter) => {
+            if (chapterId === curChapter.id) {
+              const updatedSubjects = curChapter.subjects.filter(
+                (curSubject) => subject.id !== curSubject.id
+              );
+              return {
+                id: curCourse.id,
+                name: curCourse.name,
+                brief: curChapter.brief,
+                subjects: updatedSubjects,
+              };
+            }
+            return curChapter;
+          });
+          return {
+            id: curCourse.id,
+            name: curCourse.name,
+            chapters: updatedChapters,
+          };
+        }
+        return curCourse;
+      });
+      return { ...state };
+    }),
+
   renameCourse: (course: Course) =>
     set((state) => {
       state.courses = state.courses.map((curCourse) => {
@@ -119,6 +175,67 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             name: course.name,
             chapters: curCourse.chapters,
           };
+        return curCourse;
+      });
+      return { ...state };
+    }),
+
+  updateChapter: (chapter: Chapter, courseId: string) =>
+    set((state) => {
+      state.courses = state.courses.map((curCourse) => {
+        if (courseId === curCourse.id) {
+          const updatedChapter = curCourse.chapters.map((curChapter) => {
+            if (chapter.id === curChapter.id) {
+              return {
+                id: curChapter.id,
+                name: chapter.name,
+                brief: chapter.brief,
+                subjects: curChapter.subjects,
+              };
+            }
+            return curChapter;
+          });
+          return {
+            id: curCourse.id,
+            name: curCourse.name,
+            chapters: updatedChapter,
+          };
+        }
+        return curCourse;
+      });
+      return { ...state };
+    }),
+  updateSubject: (subject: Subject, chapterId: string, courseId: string) =>
+    set((state) => {
+      state.courses = state.courses.map((curCourse) => {
+        if (courseId === curCourse.id) {
+          const updatedChapters = curCourse.chapters.map((curChapter) => {
+            if (chapterId === curChapter.id) {
+              const updatedSubjects = curChapter.subjects.map((curSubject) => {
+                if (subject.id === curSubject.id) {
+                  return {
+                    id: curSubject.id,
+                    name: subject.name,
+                    contents: curSubject.contents,
+                  };
+                }
+                return curSubject;
+              });
+              return {
+                id: curCourse.id,
+                name: curCourse.name,
+                brief: curChapter.brief,
+                subjects: updatedSubjects,
+              };
+            }
+            return curChapter;
+          });
+          return {
+            id: curCourse.id,
+            name: curCourse.name,
+            chapters: updatedChapters,
+          };
+        }
         return curCourse;
       });
       return { ...state };

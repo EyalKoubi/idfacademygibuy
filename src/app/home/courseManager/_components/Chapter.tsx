@@ -1,33 +1,49 @@
+"use client";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
 import { ChapterData, SubjectData } from "../../courseCreation/types";
 import { useState } from "react";
 import axios from "axios";
+import useCoursesStore from "@/app/_contexts/courseContext";
+import Subject from "./Subject";
 
 interface ChapterProps {
   chapter: ChapterData;
+  courseId: string;
 }
 
-const Chapter = ({ chapter }: ChapterProps) => {
+const Chapter = ({ chapter, courseId }: ChapterProps) => {
+  const { updateChapter, deletChapter } = useCoursesStore();
   const [isUpdateChapter, setIsUpdateChapter] = useState(false);
   const [chapterName, setChapterName] = useState(chapter.name);
   const [chapterBrief, setChapterBrief] = useState(chapter.brief);
-  const [selectedChapter, setSelectedChapter] = useState<ChapterData | null>(
-    null
-  );
+  const [isSelectedChapter, setIsSelectedChapter] = useState(false);
   const [selectedSubject, setSelectedSubject] = useState<SubjectData | null>(
     null
   );
 
   const handleUpdateChapter = async () => {
     const formData = new FormData();
-    // formData.append(
-    //   "updateChapter",
-    //   JSON.stringify({ id: course.id, name: courseName })
-    // );
+    const updatedChapter = {
+      id: chapter.id,
+      name: chapterName,
+      brief: chapterBrief,
+      subjects: chapter.subjects,
+    };
+    formData.append("updateChapterProps", JSON.stringify(updatedChapter));
     await axios.post("/api/updateChapter", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+    updateChapter(updatedChapter, courseId);
     setIsUpdateChapter(false);
+  };
+
+  const handleDeleteChapter = async () => {
+    const formData = new FormData();
+    formData.append("chapterId", chapter.id);
+    await axios.post("/api/deleteChapter", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    deletChapter(chapter, courseId);
   };
 
   return (
@@ -62,32 +78,22 @@ const Chapter = ({ chapter }: ChapterProps) => {
           {editTexts.updateChapter}
         </button>
       )}
-      <button onClick={() => setSelectedChapter(chapter)}>
+      <button onClick={handleDeleteChapter}>{editTexts.deleteChapter}</button>
+      <button onClick={() => setIsSelectedChapter(true)}>
         {editTexts.showSubjects}
       </button>
 
-      {selectedChapter === chapter && (
+      {isSelectedChapter && (
         <div>
           <h3>{editTexts.subjects}</h3>
           {chapter.subjects &&
             chapter.subjects?.map((subject) => (
-              <div key={subject.name}>
-                <span>{subject.name}</span>
-                <button onClick={() => setSelectedSubject(subject)}>
-                  {editTexts.contents}
-                </button>
-
-                {selectedSubject === subject && (
-                  <div>
-                    <h4>{editTexts.contents}</h4>
-                    {subject.contents.map((content) => (
-                      <div key={content.name}>
-                        <span>{content.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <Subject
+                key={subject.id}
+                subject={subject}
+                chapterId={chapter.id}
+                courseId={courseId}
+              />
             ))}
         </div>
       )}

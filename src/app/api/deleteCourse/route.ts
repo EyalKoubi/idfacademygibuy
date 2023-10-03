@@ -1,5 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { db } from "../../../db/database"; // adjust the import according to your actual db import
+import { NextApiResponse } from "next";
+import { db } from "../../../db/database";
 import { NextRequest, NextResponse } from "next/server";
 
 interface CourseRequest extends NextRequest {
