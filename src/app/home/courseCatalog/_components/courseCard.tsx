@@ -1,4 +1,4 @@
-import { ChapterData, CourseData } from "../../courseCreation/types";
+import { CourseData } from "../../courseCreation/types";
 
 interface CourseCardProps {
   course: CourseData;

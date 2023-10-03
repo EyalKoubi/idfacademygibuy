@@ -84,6 +84,13 @@ export const editTexts = {
   deleteChapter: "מחק פרק",
   deleteSubject: "מחק נושא",
   deleteContent: "מחק תוכן",
+
+  courseName: "שם קורס",
+  chapterName: "שם פרק",
+  subjectName: "שם נושא",
+  contentName: "שם תוכן",
+
+  chapterBrief: "תקציר פרק",
 };
 
 export const GeneralTexts = {

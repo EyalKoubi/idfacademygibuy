@@ -10,6 +10,7 @@ export type SubjectData = {
 };
 
 export type ChapterData = {
+  id: string;
   name: string;
   brief: string;
   subjects: SubjectData[];

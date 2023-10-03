@@ -12,6 +12,7 @@ type Subject = {
 };
 
 type Chapter = {
+  id: string;
   name: string;
   brief: string;
   subjects: Subject[];
@@ -42,6 +43,7 @@ type CoursesActions = {
     content: Content
   ) => void;
   deleteCourse: (course: Course) => void;
+  renameCourse: (course: Course) => void;
   setCourseName: (courseId: string, name: string) => void;
   setChapterBrief: (
     courseId: string,
@@ -105,6 +107,20 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       state.courses = state.courses.filter(
         (curCourse) => course.id !== curCourse.id
       );
+      return { ...state };
+    }),
+
+  renameCourse: (course: Course) =>
+    set((state) => {
+      state.courses = state.courses.map((curCourse) => {
+        if (course.id === curCourse.id)
+          return {
+            id: curCourse.id,
+            name: course.name,
+            chapters: curCourse.chapters,
+          };
+        return curCourse;
+      });
       return { ...state };
     }),
 

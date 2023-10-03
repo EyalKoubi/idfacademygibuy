@@ -1,6 +1,6 @@
 export type CourseDataCard = {
   name: string;
-  image: string; // Added this line to include an image URL
+  image: string;
   chapters: ChapterData[];
 };
 export type ContentData = {
@@ -15,6 +15,7 @@ export type SubjectData = {
 };
 
 export type ChapterData = {
+  id: string;
   name: string;
   brief: string;
   subjects: SubjectData[];
@@ -25,7 +26,3 @@ export type CourseData = {
   name: string;
   chapters: ChapterData[];
 };
-
-
-
-

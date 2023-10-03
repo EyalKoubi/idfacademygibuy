@@ -29,6 +29,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
         chapters.push({
           id: chapterWithOutSubjects.id,
           name: chapterWithOutSubjects.name,
+          brief: chapterWithOutSubjects.brief,
           subjects: subjects,
         });
       }
