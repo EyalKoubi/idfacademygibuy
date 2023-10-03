@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 const AddCoursePage = () => {
   const { addCourse, courses } = useCoursesStore();
   const [courseData, setCourseData] = useState<CourseData>({
+    id: "",
     name: "",
     chapters: [],
   });

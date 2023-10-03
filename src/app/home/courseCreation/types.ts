@@ -16,7 +16,7 @@ export type ChapterData = {
 };
 
 export type CourseData = {
-  // id: number;
+  id: string;
   name: string;
   chapters: ChapterData[];
 };

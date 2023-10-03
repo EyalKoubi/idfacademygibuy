@@ -60,6 +60,32 @@ export const AddCourseTexts = {
   },
 };
 
+export const editTexts = {
+  rename: "שנה שם",
+
+  courses: "קורסים",
+  chapters: "פרקים",
+  subjects: "נושאים",
+  contents: "תכנים",
+
+  addChapter: "הוסף פרק",
+  addSubject: "הוסף נושא",
+  addContent: "הוסף תוכן",
+
+  showChapters: "הצג פרקים",
+  showSubjects: "הצג נושאים",
+  showContents: "הצג תכנים",
+
+  updateChapter: "ערוך פרק",
+  updateSubject: "ערוך נושא",
+  updateContent: "ערוך תוכן",
+
+  deleteCourse: "מחק קורס",
+  deleteChapter: "מחק פרק",
+  deleteSubject: "מחק נושא",
+  deleteContent: "מחק תוכן",
+};
+
 export const GeneralTexts = {
   submit: "אישור",
 };

@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { ChapterData } from "../types/types";
 
 type Content = {
   name: string;
@@ -42,13 +41,14 @@ type CoursesActions = {
     subjectIndex: number,
     content: Content
   ) => void;
+  deleteCourse: (course: Course) => void;
   setCourseName: (courseId: string, name: string) => void;
   setChapterBrief: (
     courseId: string,
     chapterIndex: number,
     brief: string
   ) => void;
-  setCourses:(courses:Course[])=>void;
+  setCourses: (courses: Course[]) => void;
 };
 
 const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
@@ -100,6 +100,14 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       return { ...state };
     }),
 
+  deleteCourse: (course: Course) =>
+    set((state) => {
+      state.courses = state.courses.filter(
+        (curCourse) => course.id !== curCourse.id
+      );
+      return { ...state };
+    }),
+
   setCourseName: (courseId, name) =>
     set((state) => {
       const course = state.courses.find((c) => c.id === courseId);
@@ -117,7 +125,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       }
       return { ...state };
     }),
-    setCourses: (courses) =>
+  setCourses: (courses) =>
     set((state) => ({
       ...state,
       courses: courses,
