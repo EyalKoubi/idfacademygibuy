@@ -41,7 +41,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("id", "uuid", (col) =>
       col.primaryKey().defaultTo(sql`gen_random_uuid()`)
     )
-    .addColumn("name", "text")
     .addColumn("file_name", "text")
     .addColumn("comments", "text")
     // ask Amir

@@ -41,8 +41,33 @@ const Course = ({ course }: CourseProps) => {
     setIsRenameCourse(false);
   };
   return (
-    <div key={course.id}>
-      <span>{course.name}</span>
+    <div key={course.id} className="p-4 bg-white rounded shadow-lg">
+      <div className="flex-col">
+        <span className="text-lg font-bold">{course.name}</span>
+        <div className="flex flex-row">
+          <button
+            onClick={() => {
+              setIsRenameCourse(true);
+              setCourseName(course.name);
+            }}
+            className="p-2 ml-4 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+          >
+            {editTexts.rename}
+          </button>
+          <button
+            onClick={() => handleDeleteCourse(course)}
+            className="p-2 ml-2 bg-red-500 text-white rounded hover:bg-red-700"
+          >
+            {editTexts.deleteCourse}
+          </button>
+          <button
+            onClick={() => setIsSelectedCourse(true)}
+            className="p-2 ml-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+          >
+            {editTexts.showChapters}
+          </button>
+        </div>
+      </div>
       {isRenameCourse ? (
         <>
           <input
@@ -52,40 +77,33 @@ const Course = ({ course }: CourseProps) => {
             onChange={(e) => {
               setCourseName(e.target.value);
             }}
+            className="p-2 ml-4 border rounded"
           />
-          <button onClick={() => handleRenameCourse(course)}>
+          <button
+            onClick={() => handleRenameCourse(course)}
+            className="p-2 ml-2 bg-green-500 text-white rounded hover:bg-green-700"
+          >
             {GeneralTexts.submit}
           </button>
         </>
       ) : (
-        <button
-          onClick={() => {
-            setIsRenameCourse(true);
-            setCourseName(course.name);
-          }}
-        >
-          {editTexts.rename}
-        </button>
+        <></>
       )}
-      <button onClick={() => handleDeleteCourse(course)}>
-        {editTexts.deleteCourse}
-      </button>
-      <button onClick={() => setIsSelectedCourse(true)}>
-        {editTexts.showChapters}
-      </button>
 
       {isSelectedCourse && (
-        <div>
-          <h2>{editTexts.chapters}</h2>
-          {course.chapters.map((chapter) => {
-            return (
-              <Chapter
-                key={chapter.id}
-                chapter={chapter}
-                courseId={course.id}
-              />
-            );
-          })}
+        <div className="mt-4">
+          <h2 className="text-2xl mb-4">{editTexts.chapters}</h2>
+          <div className="flex-row gap-4">
+            {course.chapters.map((chapter) => {
+              return (
+                <Chapter
+                  key={chapter.id}
+                  chapter={chapter}
+                  courseId={course.id}
+                />
+              );
+            })}
+          </div>
         </div>
       )}
     </div>

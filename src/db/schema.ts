@@ -44,8 +44,7 @@ export interface VerificationToken {
 }
 
 export interface ContentTable {
-  id: GeneratedAlways<string>; // Assuming gen_random_uuid() generates a string UUID
-  name: string;
+  id: GeneratedAlways<string>;
   file_name: string;
   comments: string;
 }

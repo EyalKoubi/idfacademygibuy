@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import * as Minio from "minio";
 import multer from "multer";
 import { NextApiRequest, NextApiResponse } from "next";
-import { Client } from "minio";
+import { db } from "../../../db/database";
 
 interface MulterRequest extends NextRequest {
   files?: Express.Multer.File[];
@@ -20,7 +20,7 @@ async function ensureBucketExists(bucket: string) {
   try {
     const exists = await s3Client.bucketExists(bucket);
     if (!exists) {
-      await s3Client.makeBucket(bucket, "us-east-1"); // Replace 'us-east-1' with your preferred region
+      await s3Client.makeBucket(bucket, "us-east-1");
       console.log(`Bucket ${bucket} created successfully.`);
     }
   } catch (error) {
@@ -28,8 +28,6 @@ async function ensureBucketExists(bucket: string) {
     throw error;
   }
 }
-
-const bucket = "bucket2";
 const s3Client = new Minio.Client(s3Config);
 
 export const config = {
@@ -41,8 +39,19 @@ export const config = {
 export async function POST(req: MulterRequest, res: NextApiResponse) {
   try {
     const data = await req.formData();
-    const file: File | null = data.get("file") as unknown as File;
+    const file = data.get("file") as unknown as File;
+    const comments = data.get("comments") as string;
+    console.log("🚀 ~ file: route.ts:46 ~ POST ~ file.type:", file.type);
 
+    const newContent = await db
+      .insertInto("Content")
+      .values({
+        file_name: file.name,
+        comments: comments,
+      })
+      .returning(["id", "file_name", "comments"])
+      .executeTakeFirstOrThrow();
+    const bucket = newContent.id;
     if (!file) {
       return NextResponse.json({ success: false });
     }
@@ -50,7 +59,6 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     await ensureBucketExists(bucket);
-    await uploadFileToS3Service(file, buffer);
     console.log("Files are being processed");
     console.log(buffer);
     console.log(file.name);
@@ -62,21 +70,25 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
         console.error("Error uploading files:", err);
       }
       if (file) {
-        await uploadFileToS3Service(file, buffer);
+        await uploadFileToS3Service(file, buffer, bucket);
         console.log("Files are being processed");
       } else {
         console.log("File or file buffer is missing.");
       }
-      return NextResponse.json({ message: "gsldfsdfdr" });
+      return NextResponse.json(newContent);
     });
-    return NextResponse.json({ message: "finish" });
+    return NextResponse.json(newContent);
   } catch (error) {
     console.error("Error in file upload handler:", error);
     return NextResponse.json({ message: "Internal Server Error" });
   }
 }
 
-async function uploadFileToS3Service(file: File | null, buffer: Buffer) {
+async function uploadFileToS3Service(
+  file: File | null,
+  buffer: Buffer,
+  bucket: string
+) {
   const objectName: any = file?.name;
   const objectSize = file?.size;
 

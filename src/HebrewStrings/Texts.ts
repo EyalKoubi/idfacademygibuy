@@ -91,10 +91,13 @@ export const editTexts = {
   contentName: "שם תוכן",
 
   chapterBrief: "תקציר פרק",
+
+  comments: "הערות",
 };
 
 export const GeneralTexts = {
   submit: "אישור",
+  back: "חזור",
 };
 
 /*

@@ -37,15 +37,23 @@ const AddCoursePage = () => {
   };
 
   return (
-    <div>
-      <h1>{adminTexts.adminAddCourse}</h1>
+    <div className="bg-gray-50 p-6 rounded-xl shadow-lg max-w-md mx-auto mt-10">
+      <h1 className="text-3xl text-gray-800 mb-6">
+        {adminTexts.adminAddCourse}
+      </h1>
       <input
         type="text"
         placeholder={AddCourseTexts.courseName}
         value={courseData.name}
         onChange={(e) => setCourseData({ ...courseData, name: e.target.value })}
+        className="p-2 w-full border rounded-md shadow-sm mb-4"
       />
-      <button onClick={handleSubmit}>{adminTexts.adminAddCourse}</button>
+      <button
+        onClick={handleSubmit}
+        className="p-2 w-full bg-blue-600 text-white rounded-md hover:bg-blue-800 shadow-sm"
+      >
+        {adminTexts.adminAddCourse}
+      </button>
     </div>
   );
 };

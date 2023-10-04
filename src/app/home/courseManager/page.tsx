@@ -27,10 +27,14 @@ const CourseManager = () => {
 
   return (
     <div>
-      <h1>{editTexts.courses}</h1>
-      {courses.map((course) => (
-        <Course key={course.id} course={course} />
-      ))}
+      <h1 className="text-4xl mb-6">{editTexts.courses}</h1>
+      <div className="bg-gray-100 min-h-screen p-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {courses.map((course) => (
+            <Course key={course.id} course={course} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

@@ -47,8 +47,8 @@ const Chapter = ({ chapter, courseId }: ChapterProps) => {
   };
 
   return (
-    <div>
-      <span>{chapter.name}</span>
+    <div className="p-4 bg-gray-200 rounded shadow mb-4">
+      <span className="text-lg font-bold">{chapter.name}</span>
       {isUpdateChapter ? (
         <>
           <input
@@ -58,6 +58,7 @@ const Chapter = ({ chapter, courseId }: ChapterProps) => {
             onChange={(e) => {
               setChapterName(e.target.value);
             }}
+            className="p-2 ml-4 border rounded"
           />
           <input
             type="text"
@@ -66,35 +67,54 @@ const Chapter = ({ chapter, courseId }: ChapterProps) => {
             onChange={(e) => {
               setChapterBrief(e.target.value);
             }}
+            className="p-2 ml-2 border rounded"
           />
-          <button onClick={handleUpdateChapter}>{GeneralTexts.submit}</button>
+          <button
+            onClick={handleUpdateChapter}
+            className="p-2 ml-2 bg-green-500 text-white rounded hover:bg-green-700"
+          >
+            {GeneralTexts.submit}
+          </button>
         </>
       ) : (
-        <button
-          onClick={() => {
-            setIsUpdateChapter(true);
-          }}
-        >
-          {editTexts.updateChapter}
-        </button>
+        <div className="flex flex-row">
+          <button
+            onClick={() => {
+              setIsUpdateChapter(true);
+            }}
+            className="p-2 ml-4 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+          >
+            {editTexts.updateChapter}
+          </button>
+          <button
+            onClick={handleDeleteChapter}
+            className="p-2 ml-2 bg-red-500 text-white rounded hover:bg-red-700"
+          >
+            {editTexts.deleteChapter}
+          </button>
+          <button
+            onClick={() => setIsSelectedChapter(true)}
+            className="p-2 ml-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+          >
+            {editTexts.showSubjects}
+          </button>
+        </div>
       )}
-      <button onClick={handleDeleteChapter}>{editTexts.deleteChapter}</button>
-      <button onClick={() => setIsSelectedChapter(true)}>
-        {editTexts.showSubjects}
-      </button>
 
       {isSelectedChapter && (
-        <div>
-          <h3>{editTexts.subjects}</h3>
-          {chapter.subjects &&
-            chapter.subjects?.map((subject) => (
-              <Subject
-                key={subject.id}
-                subject={subject}
-                chapterId={chapter.id}
-                courseId={courseId}
-              />
-            ))}
+        <div className="mt-4 p-4 bg-white rounded shadow">
+          <h3 className="text-xl mb-4">{editTexts.subjects}</h3>
+          <div className="space-y-2">
+            {chapter.subjects &&
+              chapter.subjects?.map((subject) => (
+                <Subject
+                  key={subject.id}
+                  subject={subject}
+                  chapterId={chapter.id}
+                  courseId={courseId}
+                />
+              ))}
+          </div>
         </div>
       )}
     </div>

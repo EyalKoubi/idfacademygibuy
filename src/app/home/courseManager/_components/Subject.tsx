@@ -45,37 +45,58 @@ const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
   };
 
   return (
-    <div key={subject.name}>
-      <span>{subject.name}</span>
-      <button onClick={handleDeleteSubject}>{editTexts.deleteSubject}</button>
-      <button onClick={handleRenameSubject}></button>
+    <div key={subject.name} className="p-4 bg-gray-300 rounded shadow mb-3">
+      <span className="text-lg font-medium">{subject.name}</span>
+
       {isRenameSubject ? (
-        <div>
+        <div className="flex items-center ml-1">
           <input
             type="text"
             placeholder={editTexts.subjectName}
             value={subjectName}
             onChange={(e) => setSubjectName(e.target.value)}
+            className="p-2 border rounded"
           />
-          <button onClick={handleRenameSubject}>{GeneralTexts.submit}</button>
+          <button
+            onClick={handleRenameSubject}
+            className="p-2 ml-2 bg-green-500 text-white rounded hover:bg-green-700"
+          >
+            {GeneralTexts.submit}
+          </button>
         </div>
       ) : (
-        <button onClick={() => setIsRenameSubject(true)}>
-          {editTexts.rename}
-        </button>
+        <div className="flex fles-row">
+          <button
+            onClick={handleDeleteSubject}
+            className="p-2 ml-1 bg-red-500 text-white rounded hover:bg-red-700"
+          >
+            {editTexts.deleteSubject}
+          </button>
+          <button
+            onClick={() => setIsRenameSubject(true)}
+            className="p-2 ml-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+          >
+            {editTexts.rename}
+          </button>
+          <button
+            onClick={() => setIsSelectedSubject(true)}
+            className="p-2 ml-1 bg-blue-500 text-white rounded hover:bg-blue-700"
+          >
+            {editTexts.contents}
+          </button>
+        </div>
       )}
-      <button onClick={() => setIsSelectedSubject(true)}>
-        {editTexts.contents}
-      </button>
 
       {isSelectedSubject && (
-        <div>
-          <h4>{editTexts.contents}</h4>
-          {subject.contents.map((content) => (
-            <div key={content.name}>
-              <span>{content.name}</span>
-            </div>
-          ))}
+        <div className="mt-4 p-4 bg-white rounded shadow">
+          <h4 className="text-lg mb-4">{editTexts.contents}</h4>
+          <div className="space-y-2">
+            {subject.contents.map((content) => (
+              <div key={content.name} className="p-2 bg-gray-100 rounded">
+                <span className="text-md">{content.name}</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </div>
