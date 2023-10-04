@@ -91,9 +91,15 @@ const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
         <div className="mt-4 p-4 bg-white rounded shadow">
           <h4 className="text-lg mb-4">{editTexts.contents}</h4>
           <div className="space-y-2">
-            {subject.contents.map((content) => (
-              <div key={content.name} className="p-2 bg-gray-100 rounded">
-                <span className="text-md">{content.name}</span>
+            {subject.contents?.map((content) => (
+              <div
+                key={content.name}
+                className="p-2 bg-gray-100 rounded flex flex-col"
+              >
+                <span className="text-md">{content.file_name}</span>
+                <span>
+                  {editTexts.comments} : {content.comments}
+                </span>
               </div>
             ))}
           </div>

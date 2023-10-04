@@ -34,10 +34,6 @@ export async function POST(req: ChaptersRequest, res: NextApiResponse) {
         })
         .execute();
       for (let subject of chapter.subjects) {
-        // for (let contents of subject.contents) {
-        //   await db
-        //   .insertInto("ContentSubject")
-        // }
         const newSubject = await db
           .insertInto("Subject")
           .values({
@@ -45,6 +41,15 @@ export async function POST(req: ChaptersRequest, res: NextApiResponse) {
           })
           .returning(["id"])
           .executeTakeFirstOrThrow();
+        for (let content of subject.contents) {
+          await db
+            .insertInto("ContentSubject")
+            .values({
+              subjectId: subject.id,
+              contentId: content.id,
+            })
+            .execute();
+        }
         await db
           .insertInto("SubjectChapter")
           .values({

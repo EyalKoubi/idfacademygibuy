@@ -26,20 +26,22 @@ const NewSubject = ({
   });
 
   const handleAddSubject = () => {
-    setSubjectData({
+    const newSubjects = chapterData.subjects;
+    newSubjects.push({
       id: "",
       name: subjectName,
       contents: subjectData.contents,
     });
-    const newSubjects = chapterData.subjects;
-    newSubjects.push(subjectData);
     setChapterData({
       id: chapterData.id,
       name: chapterData.name,
       brief: chapterData.brief,
       subjects: newSubjects,
     });
-    setSubjectName("");
+    console.log(
+      "🚀 ~ file: NewSubject.tsx:43 ~ handleAddSubject ~ chapterData:",
+      chapterData
+    );
     setSubjectAdding(false);
   };
 
@@ -77,7 +79,7 @@ const NewSubject = ({
                 onClick={handleAddSubject}
                 className="p-2 bg-green-600 text-white rounded-md hover:bg-green-800 shadow-sm mb-4"
               >
-                {AddCourseTexts.chapter.subject.addSubject}
+                {GeneralTexts.submit}
               </button>
               <button
                 onClick={() => setContentAdding(true)}

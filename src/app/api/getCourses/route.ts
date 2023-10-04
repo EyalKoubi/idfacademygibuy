@@ -19,13 +19,26 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
         .execute();
       const chapters = [];
       for (let chapterWithOutSubjects of chaptersWithOutSubjects) {
-        const subjects = await db
+        const subjectsWithOutContents = await db
           .selectFrom("SubjectChapter")
           .innerJoin("Subject", "Subject.id", "SubjectChapter.subjectId")
           .where("SubjectChapter.chapterId", "=", chapterWithOutSubjects.id)
           .select(["Subject.id", "Subject.name"])
           .execute();
-
+        const subjects = [];
+        for (let subjectWithOutContents of subjectsWithOutContents) {
+          const contents = await db
+            .selectFrom("ContentSubject")
+            .innerJoin("Content", "Content.id", "ContentSubject.contentId")
+            .where("ContentSubject.subjectId", "=", subjectWithOutContents.id)
+            .select(["Content.id", "Content.file_name"])
+            .execute();
+          subjects.push({
+            id: subjectWithOutContents.id,
+            name: subjectWithOutContents.name,
+            contents: contents,
+          });
+        }
         chapters.push({
           id: chapterWithOutSubjects.id,
           name: chapterWithOutSubjects.name,

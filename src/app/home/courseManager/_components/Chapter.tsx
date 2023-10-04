@@ -17,9 +17,6 @@ const Chapter = ({ chapter, courseId }: ChapterProps) => {
   const [chapterName, setChapterName] = useState(chapter.name);
   const [chapterBrief, setChapterBrief] = useState(chapter.brief);
   const [isSelectedChapter, setIsSelectedChapter] = useState(false);
-  const [selectedSubject, setSelectedSubject] = useState<SubjectData | null>(
-    null
-  );
 
   const handleUpdateChapter = async () => {
     const formData = new FormData();

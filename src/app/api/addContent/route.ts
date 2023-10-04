@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as Minio from "minio";
 import multer from "multer";
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import { db } from "../../../db/database";
 
 interface MulterRequest extends NextRequest {
