@@ -41,7 +41,8 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
     const data = await req.formData();
     const file = data.get("file") as unknown as File;
     const comments = data.get("comments") as string;
-    console.log("🚀 ~ file: route.ts:46 ~ POST ~ file.type:", file.type);
+    const subjectId = data.get("subjectId") as string;
+    console.log("🚀 ~ file: route.ts:45 ~ POST ~ subjectId:", subjectId);
 
     const newContent = await db
       .insertInto("Content")
@@ -51,6 +52,18 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
       })
       .returning(["id", "file_name", "comments"])
       .executeTakeFirstOrThrow();
+
+    console.log(
+      "🚀 ~ file: route.ts:57 ~ POST ~ newContent.id:",
+      newContent.id
+    );
+    await db
+      .insertInto("ContentSubject")
+      .values({
+        contentId: newContent.id,
+        subjectId: subjectId,
+      })
+      .execute();
     const bucket = newContent.id;
     if (!file) {
       return NextResponse.json({ success: false });

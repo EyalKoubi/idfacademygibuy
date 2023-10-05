@@ -25,26 +25,26 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
           .where("SubjectChapter.chapterId", "=", chapterWithOutSubjects.id)
           .select(["Subject.id", "Subject.name"])
           .execute();
-        // const subjects = [];
-        // const subjects = [];
-        // for (let subjectWithOutContents of subjectsWithOutContents) {
-        //   const contents = await db
-        //     .selectFrom("ContentSubject")
-        //     .innerJoin("Content", "Content.id", "ContentSubject.contentId")
-        //     .where("ContentSubject.subjectId", "=", subjectWithOutContents.id)
-        //     .select(["Content.id", "Content.file_name"])
-        //     .execute();
-        //   subjects.push({
-        //     id: subjectWithOutContents.id,
-        //     name: subjectWithOutContents.name,
-        //     contents: contents,
-        //   });
-        // }
+        const subjects = [];
+        for (let subjectWithOutContents of subjectsWithOutContents) {
+          const contents = await db
+            .selectFrom("ContentSubject")
+            .innerJoin("Content", "Content.id", "ContentSubject.contentId")
+            .where("ContentSubject.subjectId", "=", subjectWithOutContents.id)
+            .select(["Content.id", "Content.file_name", "Content.comments"])
+            .execute();
+          console.log("🚀 ~ file: route.ts:36 ~ GET ~ contents:", contents);
+          subjects.push({
+            id: subjectWithOutContents.id,
+            name: subjectWithOutContents.name,
+            contents: contents,
+          });
+        }
         chapters.push({
           id: chapterWithOutSubjects.id,
           name: chapterWithOutSubjects.name,
           brief: chapterWithOutSubjects.brief,
-          subjects: subjectsWithOutContents,
+          subjects: subjects,
         });
       }
       result.push({

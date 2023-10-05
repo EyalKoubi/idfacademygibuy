@@ -14,18 +14,18 @@ export async function POST(req: SubjectRequest, res: NextApiResponse) {
   console.log("🚀 ~ file: route.ts:14 ~ POST ~ subjectId:", subjectId);
 
   try {
-    // const contents = await db
-    //   .selectFrom("ContentSubject")
-    //   .innerJoin("Content", "Content.id", "ContentSubject.contentId")
-    //   .where("ContentSubject.subjectId", "=", subjectId)
-    //   .select(["Content.id", "Content.file_name"])
-    //   .execute();
-    // for (let content of contents) {
-    //   await db
-    //     .deleteFrom("Content")
-    //     .where("Content.id", "=", content.id)
-    //     .executeTakeFirst();
-    // }
+    const contents = await db
+      .selectFrom("ContentSubject")
+      .innerJoin("Content", "Content.id", "ContentSubject.contentId")
+      .where("ContentSubject.subjectId", "=", subjectId)
+      .select(["Content.id", "Content.file_name"])
+      .execute();
+    for (let content of contents) {
+      await db
+        .deleteFrom("Content")
+        .where("Content.id", "=", content.id)
+        .executeTakeFirst();
+    }
 
     await db
       .deleteFrom("Subject")

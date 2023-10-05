@@ -51,7 +51,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 
   await db.schema
     .createTable("ContentSubject")
-    .addColumn("contetntId", "uuid", (col) =>
+    .addColumn("contentId", "uuid", (col) =>
       col.references("Content.id").onDelete("cascade").notNull().unique()
     )
     .addColumn("subjectId", "uuid", (col) =>

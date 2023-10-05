@@ -64,7 +64,7 @@ const Course = ({ course }: CourseProps) => {
     setIsAddChapterPressed(false);
   };
   return (
-    <div key={course.id} className="p-4 bg-white rounded shadow-lg">
+    <div className="p-4 bg-white rounded shadow-lg">
       <div className="flex-col">
         <span className="text-lg font-bold">{course.name}</span>
         <div className="flex flex-row">

@@ -5,7 +5,6 @@ export type CourseDataCard = {
 };
 export type ContentData = {
   id: string;
-  name: string;
   file_name: string;
   comments: string;
 };

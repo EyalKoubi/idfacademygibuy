@@ -1,6 +1,6 @@
 "use client";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
-import { ChapterData, SubjectData } from "../../courseCreation/types";
+import { ChapterData, SubjectData } from "../../../types/types";
 import { useState } from "react";
 import axios from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";
@@ -13,7 +13,8 @@ interface ChapterProps {
 }
 
 const Chapter = ({ chapter, chapterIndex, courseId }: ChapterProps) => {
-  const { updateChapter, deletChapter, addSubject } = useCoursesStore();
+  const { updateChapter, deletChapter, addSubject, courses } =
+    useCoursesStore();
   const [isUpdateChapter, setIsUpdateChapter] = useState(false);
   const [chapterName, setChapterName] = useState(chapter.name);
   const [chapterBrief, setChapterBrief] = useState(chapter.brief);
@@ -59,6 +60,10 @@ const Chapter = ({ chapter, chapterIndex, courseId }: ChapterProps) => {
       contents: [],
     };
     addSubject(courseId, chapterIndex, newSubFromBd);
+    console.log(
+      "🚀 ~ file: Chapter.tsx:68 ~ handleAddSubject ~ courses:",
+      courses
+    );
     setIsAddingSubject(false);
   };
 
@@ -122,12 +127,12 @@ const Chapter = ({ chapter, chapterIndex, courseId }: ChapterProps) => {
           <h3 className="text-xl mb-4">{editTexts.subjects}</h3>
           <div className="space-y-2">
             {chapter.subjects &&
-              chapter.subjects?.map((subject) => (
+              chapter.subjects?.map((subject, index) => (
                 <Subject
                   key={subject.id}
-                  subject={subject}
                   chapterId={chapter.id}
                   courseId={courseId}
+                  subject={subject}
                 />
               ))}
             {isAddingSubject ? (
