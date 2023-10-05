@@ -11,20 +11,22 @@ export async function POST(req: SubjectRequest, res: NextApiResponse) {
   if (!data.get("subjectId"))
     return NextResponse.json({ message: "There is no subject data!" });
   const subjectId = data.get("subjectId") as string;
+  console.log("🚀 ~ file: route.ts:14 ~ POST ~ subjectId:", subjectId);
 
   try {
-    const contents = await db
-      .selectFrom("ContentSubject")
-      .innerJoin("Content", "Content.id", "ContentSubject.contentId")
-      .where("ContentSubject.subjectId", "=", subjectId)
-      .select(["Content.id", "Content.file_name"])
-      .execute();
-    for (let content of contents) {
-      await db
-        .deleteFrom("Content")
-        .where("Content.id", "=", content.id)
-        .executeTakeFirst();
-    }
+    // const contents = await db
+    //   .selectFrom("ContentSubject")
+    //   .innerJoin("Content", "Content.id", "ContentSubject.contentId")
+    //   .where("ContentSubject.subjectId", "=", subjectId)
+    //   .select(["Content.id", "Content.file_name"])
+    //   .execute();
+    // for (let content of contents) {
+    //   await db
+    //     .deleteFrom("Content")
+    //     .where("Content.id", "=", content.id)
+    //     .executeTakeFirst();
+    // }
+
     await db
       .deleteFrom("Subject")
       .where("Subject.id", "=", subjectId)

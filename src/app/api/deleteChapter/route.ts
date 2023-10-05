@@ -21,18 +21,18 @@ export async function POST(req: ChapterRequest, res: NextApiResponse) {
       .execute();
 
     for (let subject of subjects) {
-      const contents = await db
-        .selectFrom("ContentSubject")
-        .innerJoin("Content", "Content.id", "ContentSubject.contentId")
-        .where("ContentSubject.subjectId", "=", subject.id)
-        .select(["Content.id", "Content.file_name"])
-        .execute();
-      for (let content of contents) {
-        await db
-          .deleteFrom("Content")
-          .where("Content.id", "=", content.id)
-          .executeTakeFirst();
-      }
+      // const contents = await db
+      //   .selectFrom("ContentSubject")
+      //   .innerJoin("Content", "Content.id", "ContentSubject.contentId")
+      //   .where("ContentSubject.subjectId", "=", subject.id)
+      //   .select(["Content.id", "Content.file_name"])
+      //   .execute();
+      // for (let content of contents) {
+      //   await db
+      //     .deleteFrom("Content")
+      //     .where("Content.id", "=", content.id)
+      //     .executeTakeFirst();
+      // }
       await db
         .deleteFrom("Subject")
         .where("Subject.id", "=", subject.id)

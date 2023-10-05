@@ -20,9 +20,13 @@ const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
   const handleDeleteSubject = async () => {
     const formData = new FormData();
     formData.append("subjectId", subject.id);
-    await axios.post("/api/deleteSubject", formData, {
+    const response = await axios.post("/api/deleteSubject", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+    console.log(
+      "🚀 ~ file: Chapter.tsx:56 ~ handleAddSubject ~ response.data:",
+      response.data
+    );
     deleteSubject(subject, chapterId, courseId);
   };
 

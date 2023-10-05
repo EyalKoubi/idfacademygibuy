@@ -8,15 +8,18 @@ import Subject from "./Subject";
 
 interface ChapterProps {
   chapter: ChapterData;
+  chapterIndex: number;
   courseId: string;
 }
 
-const Chapter = ({ chapter, courseId }: ChapterProps) => {
-  const { updateChapter, deletChapter } = useCoursesStore();
+const Chapter = ({ chapter, chapterIndex, courseId }: ChapterProps) => {
+  const { updateChapter, deletChapter, addSubject } = useCoursesStore();
   const [isUpdateChapter, setIsUpdateChapter] = useState(false);
   const [chapterName, setChapterName] = useState(chapter.name);
   const [chapterBrief, setChapterBrief] = useState(chapter.brief);
   const [isSelectedChapter, setIsSelectedChapter] = useState(false);
+  const [isAddingSubject, setIsAddingSubject] = useState(false);
+  const [newSubjectName, setNewSubjectName] = useState("");
 
   const handleUpdateChapter = async () => {
     const formData = new FormData();
@@ -41,6 +44,22 @@ const Chapter = ({ chapter, courseId }: ChapterProps) => {
       headers: { "Content-Type": "multipart/form-data" },
     });
     deletChapter(chapter, courseId);
+  };
+
+  const handleAddSubject = async () => {
+    const formData = new FormData();
+    const addSubjectProps = { name: newSubjectName, chapterId: chapter.id };
+    formData.append("addSubjectProps", JSON.stringify(addSubjectProps));
+    const response = await axios.post("/api/addSubject", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    const newSubFromBd: SubjectData = {
+      id: response.data.id,
+      name: response.data.name,
+      contents: [],
+    };
+    addSubject(courseId, chapterIndex, newSubFromBd);
+    setIsAddingSubject(false);
   };
 
   return (
@@ -111,6 +130,50 @@ const Chapter = ({ chapter, courseId }: ChapterProps) => {
                   courseId={courseId}
                 />
               ))}
+            {isAddingSubject ? (
+              <div className="bg-white p-6 rounded shadow max-w-md mx-auto mt-10 flex flex-col space-y-4">
+                <input
+                  type="text"
+                  placeholder={editTexts.subjectName}
+                  value={newSubjectName}
+                  onChange={(e) => setNewSubjectName(e.target.value)}
+                  className="p-2 border rounded shadow-sm focus:outline-none focus:border-blue-500"
+                />
+                <button
+                  onClick={handleAddSubject}
+                  className="bg-green-500 text-white p-2 rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
+                >
+                  {GeneralTexts.submit}
+                </button>
+                <button
+                  onClick={() => setIsAddingSubject(false)}
+                  className="bg-red-500 text-white p-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50"
+                >
+                  {GeneralTexts.back}
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setIsAddingSubject(true)}
+                className="bg-purple-500 text-white w-12 h-12 rounded-full hover:bg-purple-700 active:scale-90 transition transform"
+                aria-label="Add"
+              >
+                <svg
+                  className="w-6 h-6 mx-auto my-0"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                  ></path>
+                </svg>
+              </button>
+            )}
           </div>
         </div>
       )}

@@ -11,19 +11,6 @@ const CourseManager = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("api/getCourses");
-        setCourses(response.data);
-      } catch (error) {
-        console.error("An error occurred:", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     console.log("🚀 ~ file: page.tsx:34 ~ CourseManager ~ courses:", courses);
   }, [courses]);
 

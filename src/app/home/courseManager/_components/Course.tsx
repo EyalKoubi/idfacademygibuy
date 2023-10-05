@@ -117,12 +117,13 @@ const Course = ({ course }: CourseProps) => {
         <div className="mt-4">
           <h2 className="text-2xl mb-4">{editTexts.chapters}</h2>
           <div className="flex-row gap-4">
-            {course.chapters.map((chapter) => {
+            {course.chapters.map((chapter, index) => {
               return (
                 <Chapter
                   key={chapter.id}
                   chapter={chapter}
                   courseId={course.id}
+                  chapterIndex={index}
                 />
               );
             })}

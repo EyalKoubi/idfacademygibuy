@@ -1,11 +1,10 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiResponse } from "next";
 import { db } from "../../../db/database";
 import { NextRequest, NextResponse } from "next/server";
 
 interface SubjectRequest extends NextRequest {
-  courseId?: string;
-  chapterId?: string;
-  subjectName?: string;
+  name?: string;
+  chapterId: string;
 }
 
 export async function POST(req: SubjectRequest, res: NextApiResponse) {
@@ -14,32 +13,25 @@ export async function POST(req: SubjectRequest, res: NextApiResponse) {
     return NextResponse.json({ message: "There is no subject data!" });
   const addSubjectProps = JSON.parse(data.get("addSubjectProps") as string);
 
-  const courseId = addSubjectProps.courseId;
+  const name = addSubjectProps.name;
   const chapterId = addSubjectProps.chapterId;
-  const subjectName = addSubjectProps.subjectName;
 
   try {
     const newSubject = await db
       .insertInto("Subject")
-      .values({
-        name: subjectName,
-      })
+      .values({ name: name })
       .returning(["id", "name"])
       .executeTakeFirstOrThrow();
 
     await db
       .insertInto("SubjectChapter")
       .values({
-        chapterId: chapterId,
         subjectId: newSubject.id,
+        chapterId: chapterId,
       })
       .execute();
 
-    return NextResponse.json({
-      id: newSubject.id,
-      name: newSubject.name,
-      contents: [],
-    });
+    return NextResponse.json(newSubject);
   } catch (error) {
     console.error("Error inserting subject:", error);
     return NextResponse.json({ message: "Error inserting subject" });
