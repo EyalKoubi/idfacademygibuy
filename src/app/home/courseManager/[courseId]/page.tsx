@@ -6,6 +6,7 @@ import { CourseData } from "../../courseCreation/types";
 import Course from "../_components/Course";
 import { useRouter } from "next/navigation";
 import { GeneralTexts } from "@/HebrewStrings/Texts";
+import axios from "axios";
 
 const SingleCourseUpdate = () => {
   const courseId =
@@ -15,17 +16,35 @@ const SingleCourseUpdate = () => {
     name: "",
     chapters: [],
   });
-  const { courses } = useCoursesStore();
+  const { courses, setCourses } = useCoursesStore();
   const router = useRouter();
 
   useEffect(() => {
-    for (const course of courses) {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("api/getCourses");
+        setCourses(response.data);
+      } catch (error) {
+        console.error("An error occurred:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    console.log("🚀 ~ file: page.tsx:34 ~ CourseManager ~ courses:", courses);
+  }, [courses]);
+
+  useEffect(() => {
+    for (let course of courses) {
       if (course.id === courseId) {
         setCurCourse(course);
         break;
       }
     }
   }, []);
+
   return (
     <div className="bg-gray-50 min-h-screen p-5 flex flex-col items-center justify-center">
       <button
@@ -34,9 +53,8 @@ const SingleCourseUpdate = () => {
       >
         {GeneralTexts.back}
       </button>
-      <div className="w-full max-w-2xl">
-        <Course course={curCourse} />
-      </div>
+      <Course course={curCourse} />
+      {/* <div className="w-full max-w-2xl">בב</div> */}
     </div>
   );
 };

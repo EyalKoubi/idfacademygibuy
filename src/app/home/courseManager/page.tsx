@@ -37,15 +37,18 @@ const CourseManager = () => {
         {editTexts.courses}
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-        {courses.map((course) => (
-          <button
-            key={course.id}
-            onClick={() => courseChoiceHandle(course.id)}
-            className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
-          >
-            {course.name}
-          </button>
-        ))}
+        {courses.map((course) => {
+          {
+            /* <button
+              key={course.id}
+              onClick={() => courseChoiceHandle(course.id)}
+              className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-opacity-50"
+            >
+              {course.name}
+            </button> */
+          }
+          return <Course key={course.id} course={course} />;
+        })}
       </div>
     </div>
   );
