@@ -3,7 +3,7 @@ import * as Minio from "minio";
 import multer from "multer";
 import { NextApiResponse } from "next";
 import { db } from "../../../db/database";
-import {s3Config,s3Client,uploadFileToS3Service} from "../../_minio/minio"
+import {s3Config,s3Client,uploadFileToS3Service,bucket} from "../../_minio/minio"
 interface MulterRequest extends NextRequest {
   files?: Express.Multer.File[];
 }
@@ -27,7 +27,7 @@ export const config = {
     bodyParser: false,
   },
 };
-const bucket = "idfacademy";// need to change 
+// const bucket = "idfacademy";// need to change 
 export async function POST(req: MulterRequest, res: NextApiResponse) {
   try {
     const data = await req.formData();
@@ -56,7 +56,7 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
         subjectId: subjectId,
       })
       .execute();
-    //const bucket = "bucket1";// need to change 
+    
     if (!file) {
       return NextResponse.json({ success: false });
     }

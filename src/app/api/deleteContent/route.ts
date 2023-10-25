@@ -1,7 +1,7 @@
 import { NextApiResponse } from "next";
 import { db } from "../../../db/database";
 import { NextRequest, NextResponse } from "next/server";
-import {s3Config,s3Client} from "../../_minio/minio"
+import {s3Config,s3Client,bucket} from "../../_minio/minio"
 interface ContentRequest extends NextRequest {
   contentId?: string;
 }
@@ -17,9 +17,7 @@ export async function POST(req: ContentRequest, res: NextApiResponse) {
       .deleteFrom("Content")
       .where("Content.id", "=", contentId)
       .executeTakeFirst();
-    //#add delete from minio !!
-    const bucket = "IdfAcademy";
-
+   
     await deleteContentFromMinio(bucket);
     return NextResponse.json({ message: "content deleted successfully!" });
   } catch (error) {
