@@ -3,18 +3,11 @@ import * as Minio from "minio";
 import multer from "multer";
 import { NextApiResponse } from "next";
 import { db } from "../../../db/database";
-
+import {s3Config,s3Client,uploadFileToS3Service} from "../../_minio/minio"
 interface MulterRequest extends NextRequest {
   files?: Express.Multer.File[];
 }
 
-const s3Config = {
-  endPoint: "127.0.0.1",
-  port: 9000,
-  accessKey: "AKIAIOSFODNN7EXAMPLE",
-  secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-  useSSL: false,
-};
 
 async function ensureBucketExists(bucket: string) {
   try {
@@ -28,14 +21,13 @@ async function ensureBucketExists(bucket: string) {
     throw error;
   }
 }
-const s3Client = new Minio.Client(s3Config);
 
 export const config = {
   api: {
     bodyParser: false,
   },
 };
-
+const bucket = "idfacademy";// need to change 
 export async function POST(req: MulterRequest, res: NextApiResponse) {
   try {
     const data = await req.formData();
@@ -64,7 +56,7 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
         subjectId: subjectId,
       })
       .execute();
-    const bucket = newContent.id;
+    //const bucket = "bucket1";// need to change 
     if (!file) {
       return NextResponse.json({ success: false });
     }
@@ -72,7 +64,7 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     await ensureBucketExists(bucket);
-    console.log("Files are being processed");
+    //console.log("Files are being processed");
     console.log(buffer);
     console.log(file.name);
 
@@ -97,28 +89,4 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
   }
 }
 
-async function uploadFileToS3Service(
-  file: File | null,
-  buffer: Buffer,
-  bucket: string
-) {
-  const objectName: any = file?.name;
-  const objectSize = file?.size;
 
-  await new Promise((resolve, reject) => {
-    s3Client.putObject(
-      bucket,
-      objectName,
-      buffer,
-      objectSize,
-      (err: any, etag: unknown) => {
-        if (err) {
-          console.error("Error uploading to Minio:", err);
-          reject(err);
-        } else {
-          resolve(etag);
-        }
-      }
-    );
-  });
-}

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "migrate": "npx ts-node  -r dotenv/config  migrate.ts",
-    "dev": "npm run migrate && next dev",
+    "dev": "npm run migrate && concurrently \"next dev\" \"docker-compose up\"",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -55,6 +55,7 @@
     "@types/pg": "^8.10.2",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
+    "concurrently": "^8.2.2",
     "daisyui": "^3.6.3",
     "express": "^4.18.2",
     "knex": "^2.5.1",
