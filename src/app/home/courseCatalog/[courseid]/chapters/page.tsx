@@ -1,30 +1,31 @@
 "use client"
 import React from 'react';
-import { useRouter } from "next/navigation";
 import useCoursesStore from '@/app/_contexts/courseContext';
 import { ChapterData, CourseData } from '@/app/types/types';
+// import { useRouter } from 'next/navigation';
+import { usePathname } from "next/navigation";
+import Chapter from '../../_components/chapter';
 
-const ParagraphListComponent: React.FC = () => {
-  // const router =  useRouter();
-  // const { courseid } = router.query;
+const ChapterList: React.FC = () => {
   const { courses } = useCoursesStore();
-  const courseToPresent = courses.find(course => course.id === "6d018ae2-e67e-4167-8926-4f216c7679e0");
+  // const router = useRouter();
+  const courseid =
+    usePathname().split("/")[usePathname().split("/").length - 2];
+  console.log(courseid);
+
+  // Now, you can use the `courseid` in your logic to find the course
+  const courseToPresent = courses.find((course) => course.id === courseid);
 
   const chaptersToPresent = courseToPresent ? courseToPresent.chapters : [];
 
 
-  const navigateToSubjects = (chapterId: string) => {
-  };
-
   return (
     <div>
       {chaptersToPresent.map((chapter: ChapterData) => (
-        <p key={chapter.id} onClick={() => navigateToSubjects(chapter.id)} style={{ cursor: 'pointer' }}>
-          {chapter.name}
-        </p>
+      <Chapter chapter={chapter} courseid={courseid}/>
       ))}
     </div>
   );
 };
 
-export default ParagraphListComponent;
+export default ChapterList;
