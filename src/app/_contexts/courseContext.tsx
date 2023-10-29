@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { ContentData } from "../types/types";
 
 type Content = {
   id: string;
@@ -9,7 +10,7 @@ type Content = {
 type Subject = {
   id: string;
   name: string;
-  contents: Content[];
+  contents: ContentData[];
 };
 
 type Chapter = {

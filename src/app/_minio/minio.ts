@@ -6,14 +6,16 @@ export const s3Config = {
     secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
     useSSL: false,
   };
+ export const bucket: string = "bucket1"; // Specify the name of your MinIO bucket
 export const s3Client = new Minio.Client(s3Config);
 
 export async function uploadFileToS3Service(
     file: File | null,
     buffer: Buffer,
-    bucket: string
+    bucket: string,
+    fileid:string
   ) {
-    const objectName: any = file?.name;
+    const objectName: any = fileid;
     const objectSize = file?.size;
   
     await new Promise((resolve, reject) => {
@@ -32,4 +34,22 @@ export async function uploadFileToS3Service(
         }
       );
     });
+  }
+export async function getFileFromS3Service(bucket: string, fileName: string): Promise<Buffer> {
+  try {
+    const stream = await s3Client.getObject(bucket, fileName);
+    const chunks: Buffer[] = [];
+
+    return new Promise((resolve, reject) => {
+      stream.on('data', (chunk: Buffer) => chunks.push(chunk));
+      stream.on('end', () => resolve(Buffer.concat(chunks)));
+      stream.on('error', reject);
+    });
+  } catch (error) {
+    console.error('Error fetching file from S3:', error);
+    throw error; // rethrow the error for further handling
+  }
 }
+
+    
+    

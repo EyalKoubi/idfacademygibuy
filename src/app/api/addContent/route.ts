@@ -68,6 +68,7 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
     console.log(buffer);
     console.log(file.name);
 
+
     const storage = multer.memoryStorage();
     const upload = multer({ storage });
     upload.array("files")(req as any, res as any, async (err: any) => {
@@ -75,7 +76,7 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
         console.error("Error uploading files:", err);
       }
       if (file) {
-        await uploadFileToS3Service(file, buffer, bucket);
+        await uploadFileToS3Service(file, buffer, bucket,newContent.id);
         console.log("Files are being processed");
       } else {
         console.log("File or file buffer is missing.");

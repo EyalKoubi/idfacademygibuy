@@ -1,53 +1,65 @@
-// // import React from 'react';
-// // import VideoPlayer from './_components/VideoPlayer';
-// // import ImageGallery from './_components/gallery';
+"use client"
+import React, { useState } from 'react';
+import MediaViewer from './_components/mediaViewer';
+import VideoLinkList from './_components/videoLinkList';
+import { ContentData } from '@/app/types/types';
+import useCoursesStore from '@/app/_contexts/courseContext';
+import { usePathname } from 'next/navigation';
+import axios from 'axios';
 
-// // const videos = [
-// //   {
-// //     url: 'https://www.example.com/video1.mp4',
-// //   },
-// //   // Add more video objects as needed
-// // ];
+const Contents: React.FC = () => {
+   
+    const { courses } = useCoursesStore();
+    const subjectId= usePathname().split("/")[usePathname().split("/").length - 2];
+    const chapterId = usePathname().split("/")[usePathname().split("/").length - 4];
+    const courseId = usePathname().split("/")[usePathname().split("/").length - 6];
+    console.log(courseId);
+    // Find the course with the specified ID
+    const courseToPresent = courses.find((course) => course.id === courseId);
+  
+    // Get the subjects for the selected course, or an empty array if the course is not found
+    const contentsToPresent = courseToPresent?.chapters?.find((chapter)=>chapter.id===chapterId)?.subjects.find((subject)=>subject.id===subjectId)?.contents;
+    const [currentVideo, setCurrentVideo] = useState(
+        `http://localhost:3000/api/getFile?fileName=${contentsToPresent?.[0]?.id || ''}`
+      );
+      const [currContent, setCurrContent] = useState(
+       contentsToPresent?.[0]
+      );  
+      const handleVideoUpdate = async (content:ContentData) => {
+        const formData = new FormData();
+        formData.append("fileName",content.id);
 
-// // const images = [
-// //   {
-// //     original: 'https://www.example.com/image1.jpg',
-// //     thumbnail: 'https://www.example.com/thumb1.jpg',
-// //   },
-// //   // Add more image objects as needed
-// // ];
+        try {
+            const response = await axios.post("/api/getFile", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+            // Handle the response as needed
+        } catch (error) {
+            console.error("Error in API call:", error);
+        }
+    };
 
-// // const HomePage: React.FC = () => {
-// //   return (
-// //     <div>
-// //       <h1>Video Player</h1>
-// //       <VideoPlayer videoUrl={videos[0].url} />
-      
-// //       <h1>Image Gallery</h1>
-// //       <ImageGallery images={images} />
-// //     </div>
-// //   );
-// // };
+    const onVideoSelect = (url:string, content:ContentData) => {
+        setCurrentVideo(url);
+        setCurrContent(content);
+        handleVideoUpdate(content); // Call the API with the content data
+    };
 
-// // export default HomePage;
-// import Nav from './Nav.js'
-// import NavItem from './NavItem.js'
-// import List from './List.js'
-// import ListItem from './ListItem.js'
+    return (
+        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div style={{ flex: 1 }}>
+                <MediaViewer content={currContent} fileUrl={currentVideo} />
+            </div>
+            <div style={{ flex: 1 }}>
+                <VideoLinkList contents={contentsToPresent} onVideoSelect={onVideoSelect} />
+            </div>
+        </div>
+    );
+};
 
-// export default function Movies({ movies }) {
-//   return (
-//     <div className="divide-y divide-slate-100">
-//       <Nav>
-//         <NavItem href="/new" isActive>New Releases</NavItem>
-//         <NavItem href="/top">Top Rated</NavItem>
-//         <NavItem href="/picks">Vincent’s Picks</NavItem>
-//       </Nav>
-//       <List>
-//         {movies.map((movie) => (
-//           <ListItem key={movie.id} movie={movie} />
-//         ))}
-//       </List>
-//     </div>
-//   )
-// }
+
+
+
+
+
+export default Contents;
