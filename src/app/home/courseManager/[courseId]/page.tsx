@@ -37,9 +37,9 @@ const SingleCourseUpdate = () => {
       >
         {GeneralTexts.back}
       </button>
-      {courses.map((current) => {
-        if (current.id === curCourse.id)
-          return <Course key={current.id} course={current} />;
+      {courses.map((course) => {
+        if (course.id === curCourse.id)
+          return <Course key={course.id} course={course} />;
       })}
     </div>
   );

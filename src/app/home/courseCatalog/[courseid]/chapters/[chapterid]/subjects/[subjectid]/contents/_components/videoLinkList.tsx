@@ -1,21 +1,21 @@
-import { ContentData } from '@/app/types/types';
 import React from 'react';
+import { ContentData } from '@/app/types/types';
 
 type VideoLinkListProps = {
-  contents: ContentData[]|undefined;
-  onVideoSelect: (url: string,content:ContentData) => void;
+    contents: ContentData[] | undefined;
+    onVideoSelect: (content: ContentData) => void;
 };
 
-const VideoLinkList: React.FC<VideoLinkListProps> = ({ contents, onVideoSelect }) => {
-  return (
-    <div>
-      {contents?.map((content, index) => (
-        <p key={index} onClick={() => onVideoSelect(`http://localhost:3000/api/getFile?fileName=${content.id}`,content)} style={{ cursor: 'pointer' }}>
-          Video {index + 1}
-        </p>
-      ))}
-    </div>
-  );
+const videoLinkList: React.FC<VideoLinkListProps> = ({ contents, onVideoSelect }) => {
+    return (
+        <div>
+            {contents?.map((content, index) => (
+                <p key={index} onClick={() => onVideoSelect(content)} style={{ cursor: 'pointer' }}>
+                    Video {index + 1}
+                </p>
+            ))}
+        </div>
+    );
 };
 
-export default VideoLinkList;
+export default videoLinkList;

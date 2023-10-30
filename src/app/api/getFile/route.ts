@@ -12,18 +12,14 @@ export async function GET(req: FileRequest, res: NextApiResponse) {
     const data = await req.formData();
     const fileName = data.get("fileName") as unknown as string;
 
-    // Use the MinIO client to get the file
-    s3Client.getObject(bucket, fileName, (err, dataStream) => {
+    const response=s3Client.getObject(bucket, fileName, (err, dataStream) => {
         if (err) {
             console.error("Error getting file:", err);
             return res.status(500).send("Error getting the file.");
         }
-
-        // Set appropriate headers for the response
         res.setHeader("Content-Type", "application/octet-stream");
         res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
-
-        // Pipe the data stream to the response
         dataStream.pipe(res);
+        NextResponse.json(response);
     });
 }
