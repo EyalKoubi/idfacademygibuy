@@ -6,7 +6,7 @@ export const s3Config = {
     secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
     useSSL: false,
   };
- export const bucket: string = "bucket1"; // Specify the name of your MinIO bucket
+export const bucket: string = "bucket1"; // Specify the name of your MinIO bucket
 export const s3Client = new Minio.Client(s3Config);
 
 export async function uploadFileToS3Service(

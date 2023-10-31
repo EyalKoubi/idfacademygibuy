@@ -7,6 +7,7 @@ interface ContentRequest extends NextRequest {
 }
 
 export async function POST(req: ContentRequest, res: NextApiResponse) {
+  //need to fix its not delete the content
   const data = await req.formData();
   if (!data.get("contentId"))
     return NextResponse.json({ message: "There is no content data!" });

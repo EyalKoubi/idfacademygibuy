@@ -23,20 +23,20 @@ export default function RootLayout({
 }) {
   const { setCourses, courses } = useCoursesStore();
   useEffect(()=>{
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("api/getCourses");
-        console.log(
-          "🚀 ~ file: page.tsx:17 ~ fetchData ~ response.data:",
-          response.data
-        );
-        setCourses(response.data);
-      } catch (error) {
-        console.error("An error occurred:", error);
-      }
-    };
+    // const fetchData = async () => {
+    //   try {
+    //     const response = await axios.get("api/getCourses");
+    //     console.log(
+    //       "🚀 ~ file: page.tsx:17 ~ fetchData ~ response.data:",
+    //       response.data
+    //     );
+    //     setCourses(response.data);
+    //   } catch (error) {
+    //     console.error("An error occurred:", error);
+    //   }
+    // };
 
-    fetchData();
+    // fetchData();
   },[])
   return (
     <html>
