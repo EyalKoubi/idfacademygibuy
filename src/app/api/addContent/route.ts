@@ -76,7 +76,7 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
         console.error("Error uploading files:", err);
       }
       if (file) {
-        await uploadFileToS3Service(file, buffer, bucket,newContent.file_name);
+        await uploadFileToS3Service(file, buffer, bucket,newContent.id);
         console.log("Files are being processed");
       } else {
         console.log("File or file buffer is missing.");

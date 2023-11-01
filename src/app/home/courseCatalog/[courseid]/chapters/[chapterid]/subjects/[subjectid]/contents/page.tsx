@@ -20,24 +20,8 @@ const Contents: React.FC = () => {
 
     const [currContent, setCurrContent] = useState<ContentData | undefined>(contentsToPresent?.[0]);
 
-    useEffect(() => {
-        const fetchMedia = async () => {
-          try {
-            // const response = await axios.get(`/api/getFile`);
-            // console.log(response.data)
-        //     const url = URL.createObjectURL(response.data);
-        //     setMediaSrc(url);
-        //     setLoading(false);
-         } catch (error) {
-        //     console.error('Error fetching media:', error);
-        //     setError('Failed to load media.');
-        //     setLoading(false);
-          }
-        };
-    
-        fetchMedia();
-      }, []);
     const onVideoSelect = (content: ContentData) => {
+        console.log('Selected Content:', content);
         setCurrContent(content);
     };
 

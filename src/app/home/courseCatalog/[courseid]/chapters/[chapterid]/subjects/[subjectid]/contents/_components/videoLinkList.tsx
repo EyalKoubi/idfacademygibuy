@@ -12,7 +12,7 @@ const videoLinkList: React.FC<VideoLinkListProps> = ({ contents, onVideoSelect }
         <div>
             {contents?.map((content, index) => (
                 <p key={index} onClick={() => onVideoSelect(content)} style={{ cursor: 'pointer' }}>
-                    Video {index + 1}
+                    {content.file_name}
                 </p>
             ))}
         </div>
