@@ -7,31 +7,35 @@ import { s3Client ,bucket, getFileFromS3Service} from "@/app/_minio/minio";
 interface FileRequest extends NextRequest {
     fileName?: string;
   }
-
-  export async function GET(req: FileRequest, res: NextApiResponse) {
-    const fileName = "87237182-74ca-4ab9-970d-9df118ea798d"; // Your static file name
+  function convertToBase64(data: Buffer) {
+    if (data instanceof Buffer) {
+        return data.toString('base64');
+    } else {
+        console.error("Provided data is not a Buffer");
+        // Handle the error or convert `data` to a Buffer, depending on your scenario
+    }
+}
+export async function GET(req: FileRequest, res: NextApiResponse) {
+    const fileName = "first.mp4"; // Your static file name
     console.log(fileName);
-        s3Client.getObject(bucket, fileName, (err, dataStream) => {
-            if (err) {
-                console.error("Error getting file:", err);
-                NextResponse.json({ message: "Error getting the file" });
-                return;
-            }
+       
+    try {
+        // This should return the base64 encoded data
+        const base64Data = await getFileFromS3Service(bucket, fileName);
 
-            // Set headers for file download
-            // res.setHeader("Content-Type", "application/octet-stream");
-            // res.setHeader("Content-Disposition", `attachment; filename="${fileName}"`);
+        // Create a new headers object
+        const newHeaders = new Headers();
+        newHeaders.set("Content-Type", "application/octet-stream");
+        newHeaders.set("Content-Disposition", `attachment; filename="${fileName}"`);
 
-            // Pipe the data stream to the response
-            dataStream.pipe(res);
+        // Return a NextResponse with base64 encoded data
+        return NextResponse.json({ file: base64Data }, {
+            headers: newHeaders,
         });
-        const buffer=await getFileFromS3Service(bucket,fileName)
-        console.log(buffer)
-        return  NextResponse.json({ data:buffer})
-    // } catch (error) {
-    //     console.error('Error in API route:', error);
-    //     NextResponse.json({ message: "Internal server error" });
-    // }
+    } catch (err) {
+        console.error("Error getting file:", err);
+        return NextResponse.json({ message: "Error getting the file" }, { status: 500 });
+    }
 }
 
   

@@ -35,21 +35,26 @@ export async function uploadFileToS3Service(
       );
     });
   }
-export async function getFileFromS3Service(bucket: string, fileName: string): Promise<Buffer> {
-  try {
-    const stream = await s3Client.getObject(bucket, fileName);
-    const chunks: Buffer[] = [];
-
-    return new Promise((resolve, reject) => {
-      stream.on('data', (chunk: Buffer) => chunks.push(chunk));
-      stream.on('end', () => resolve(Buffer.concat(chunks)));
-      stream.on('error', reject);
-    });
-  } catch (error) {
-    console.error('Error fetching file from S3:', error);
-    throw error; // rethrow the error for further handling
+  export async function getFileFromS3Service(bucket: string, fileName: string): Promise<string> {
+    try {
+      const stream = await s3Client.getObject(bucket, fileName);
+      const chunks: Buffer[] = [];
+  
+      return new Promise((resolve, reject) => {
+        stream.on('data', (chunk: Buffer) => chunks.push(chunk));
+        stream.on('end', () => {
+          const buffer = Buffer.concat(chunks);
+          const base64 = buffer.toString('base64');
+          resolve(base64);
+        });
+        stream.on('error', reject);
+      });
+    } catch (error) {
+      console.error('Error fetching file from S3:', error);
+      console.log("fail in the getObject func")
+      throw error;
+    }
   }
-}
 
     
     

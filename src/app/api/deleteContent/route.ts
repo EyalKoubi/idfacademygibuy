@@ -19,7 +19,7 @@ export async function POST(req: ContentRequest, res: NextApiResponse) {
       .where("Content.id", "=", contentId)
       .executeTakeFirst();
    
-    await deleteContentFromMinio(bucket);
+    await deleteByNameContentFromMinio(bucket,contentId);
     return NextResponse.json({ message: "content deleted successfully!" });
   } catch (error) {
     return NextResponse.json({ message: "Error delete content" });
@@ -60,4 +60,17 @@ async function deleteContentFromMinio(bucket: string) {
       });
   });
 }
+async function deleteByNameContentFromMinio(bucket:string, objectName:string) {
+  return new Promise((resolve, reject) => {
+    s3Client.removeObject(bucket, objectName, (err) => {
+      if (err) {
+        console.error("Error deleting object:", err);
+        reject(err);
+      } else {
+        resolve(true);
+      }
+    });
+  });
+}
+
 
