@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+/minio-data
 /.pnp
 .pnp.js
 pnpm-lock.yaml

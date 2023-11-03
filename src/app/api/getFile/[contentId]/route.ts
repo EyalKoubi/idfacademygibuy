@@ -1,13 +1,18 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../../db/database"; // adjust the import according to your actual db import
 import { NextRequest, NextResponse } from "next/server";
-import { s3Client ,bucket, getFileFromS3Service} from "@/app/_minio/minio";
+import { s3Client ,bucket, getFileFromS3Service, getFileChunkedBase64, getPresignedUrlFromS3Service} from "@/app/_minio/minio";
 
 
 interface FileRequest extends NextRequest {
     fileName?: string;
   }
-  function convertToBase64(data: Buffer) {
+interface getFileProps{
+    params:{
+        contentId:string
+    }
+} 
+function convertToBase64(data: Buffer) {
     if (data instanceof Buffer) {
         return data.toString('base64');
     } else {
@@ -15,32 +20,43 @@ interface FileRequest extends NextRequest {
         // Handle the error or convert `data` to a Buffer, depending on your scenario
     }
 }
-export async function GET(req: FileRequest,context:{params:{contentId:string}}) {
-    console.log("reach to get file")
-    const fileName = context.params.contentId; // Your static file name
-    console.log(fileName);
-       
+// export async function GET(req:FileRequest,context:getFileProps) {
+//     const { contentId } = context.params;
+
+//     try {
+//         // Retrieve the base64 encoded file data
+//         const fileData = await getFileChunkedBase64(bucket, contentId);
+
+//         // Convert the base64 string to a buffer
+//         const fileBuffer = Buffer.from(fileData, 'base64');
+
+//         // Create a new headers object
+//         const newHeaders = new Headers();
+//         newHeaders.set("Content-Type", "application/octet-stream");
+//         newHeaders.set("Content-Disposition", `attachment; filename="${contentId}"`);
+
+//         // Encode the buffer as a base64 string and return it in the response
+//         return new Response(fileBuffer, {
+//             headers: newHeaders,
+//             status: 200
+//         });
+//     } catch (err) {
+//         console.error("Error getting file:", err);
+//         return new Response(JSON.stringify({ message: "Error getting the file" }), { status: 500 });
+//     }
+// }
+  
+export async function GET(req: FileRequest, context: getFileProps) {
+    const { contentId } = context.params;
+
     try {
-        // This should return the base64 encoded data
-        const base64Data = await getFileFromS3Service(bucket, fileName);
+        const presignedUrl = await getPresignedUrlFromS3Service(bucket, contentId);
 
-        // Create a new headers object
-        const newHeaders = new Headers();
-        newHeaders.set("Content-Type", "application/octet-stream");
-        newHeaders.set("Content-Disposition", `attachment; filename="${fileName}"`);
+        // Redirect the client to the presigned URL or send the URL in the response
+        return NextResponse.redirect(presignedUrl);
 
-        // Return a NextResponse with base64 encoded data
-        return NextResponse.json({ file: base64Data }, {
-            headers: newHeaders,
-        });
     } catch (err) {
-        console.error("Error getting file:", err);
-        return NextResponse.json({ message: "Error getting the file" }, { status: 500 });
+        console.error("Error generating pre-signed URL:", err);
+        return new Response(JSON.stringify({ message: "Error getting the file" }), { status: 500 });
     }
 }
-
-  
-  
-  
-  
-  

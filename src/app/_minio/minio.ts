@@ -1,4 +1,6 @@
 import * as Minio from "minio";
+import { Stream } from "stream";
+
 export const s3Config = {
     endPoint: "127.0.0.1",
     port: 9000,
@@ -35,26 +37,82 @@ export async function uploadFileToS3Service(
       );
     });
   }
-  export async function getFileFromS3Service(bucket: string, fileName: string): Promise<string> {
+  export async function getFileFromS3Service(bucket: string, fileName: string): Promise<Stream> {
     try {
-      const stream = await s3Client.getObject(bucket, fileName);
-      const chunks: Buffer[] = [];
+        return await s3Client.getObject(bucket, fileName);
+    } catch (error) {
+        console.error('Error fetching file from S3:', error);
+        throw error;
+    }
+}
+export async function getPresignedUrlFromS3Service(bucket: string, fileName: string): Promise<string> {
+  try {
+      const presignedUrl = await s3Client.presignedGetObject(bucket, fileName, 24 * 60 * 60); // The URL will be valid for 24 hours
+      return presignedUrl;
+  } catch (error) {
+      console.error('Error fetching presigned URL from S3:', error);
+      throw error;
+  }
+}
+  // export async function getFileFromS3Service(bucket: string, fileName: string): Promise<string> {
+  //   try {
+  //     const stream = await s3Client.getObject(bucket, fileName);
+  //     const chunks: Buffer[] = [];
   
-      return new Promise((resolve, reject) => {
-        stream.on('data', (chunk: Buffer) => chunks.push(chunk));
+  //     return new Promise((resolve, reject) => {
+  //       stream.on('data', (chunk: Buffer) => chunks.push(chunk));
+  //       stream.on('end', () => {
+  //         const buffer = Buffer.concat(chunks);
+  //         const base64 = buffer.toString('base64');
+  //         resolve(base64);
+  //       });
+  //       stream.on('error', reject);
+  //     });
+  //   } catch (error) {
+  //     console.error('Error fetching file from S3:', error);
+  //     console.log("fail in the getObject func")
+  //     throw error;
+  //   }
+  // }
+// ... (rest of your imports)
+
+import { createReadStream } from 'fs';
+import { PassThrough } from 'stream';
+
+// Helper function to convert a stream to base64
+function streamToBase64(stream: NodeJS.ReadableStream): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const chunks: Buffer[] = [];
+        stream.on('data', (chunk: Buffer) => {
+            chunks.push(chunk);
+        });
         stream.on('end', () => {
-          const buffer = Buffer.concat(chunks);
-          const base64 = buffer.toString('base64');
-          resolve(base64);
+            resolve(Buffer.concat(chunks).toString('base64'));
         });
         stream.on('error', reject);
-      });
+    });
+}
+
+export async function getFileChunkedBase64(bucket: string, fileName: string): Promise<PassThrough> {
+    try {
+        const dataStream = await s3Client.getObject(bucket, fileName);
+        const passThrough = new PassThrough();
+
+        dataStream.on('data', async (chunk) => {
+            // Convert chunk to base64 and write to the passThrough stream
+            passThrough.write(Buffer.from(chunk).toString('base64'));
+        });
+
+        dataStream.on('end', () => {
+            passThrough.end();
+        });
+
+        return passThrough;
     } catch (error) {
-      console.error('Error fetching file from S3:', error);
-      console.log("fail in the getObject func")
-      throw error;
+        console.error('Error fetching file from S3:', error);
+        throw error;
     }
-  }
+}
 
     
     

@@ -6,12 +6,18 @@ import { ChapterData, CourseData, SubjectData } from '@/app/types/types';
 import { usePathname } from 'next/navigation';
 import Subject from '@/app/home/courseCatalog/_components/subject';
 
-const SubjectListComponent: React.FC = () => {
+interface SubjectListProps{
+  params:{
+    courseid:string;
+    chapterid:string;
+  }
+}
+const SubjectList: React.FC<SubjectListProps>= (props:SubjectListProps) => {
   // const router = useRouter(); // Initialize the router
 
   const { courses } = useCoursesStore();
-  const chapterId = usePathname().split("/")[usePathname().split("/").length - 2];
-  const courseId = usePathname().split("/")[usePathname().split("/").length - 4];
+  const chapterId = props.params.chapterid;
+  const courseId = props.params.courseid;
   console.log(courseId);
   // Find the course with the specified ID
   const courseToPresent = courses.find((course) => course.id === courseId);
@@ -33,5 +39,5 @@ const SubjectListComponent: React.FC = () => {
   );
 };
 
-export default SubjectListComponent;
+export default SubjectList;
 

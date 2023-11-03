@@ -1,40 +1,53 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import MediaViewer from './_components/mediaViewer';
 import VideoLinkList from './_components/videoLinkList';
 import useCoursesStore from '@/app/_contexts/courseContext';
 import { usePathname } from 'next/navigation';
 import { ContentData } from '@/app/types/types';
-import axios from 'axios';
 
-const Contents: React.FC = () => {
-    const { courses } = useCoursesStore();
-    const pathname = usePathname();
-    const pathSegments = pathname.split("/");
-    const subjectId = pathSegments[pathSegments.length - 2];
-    const chapterId = pathSegments[pathSegments.length - 4];
-    const courseId = pathSegments[pathSegments.length - 6];
+interface ContentListProps {
+  params: {
+    courseid: string;
+    chapterid: string;
+    subjectid: string;
+  };
+}
 
-    const courseToPresent = courses.find(course => course.id === courseId);
-    const contentsToPresent = courseToPresent?.chapters?.find(chapter => chapter.id === chapterId)?.subjects.find(subject => subject.id === subjectId)?.contents;
+const ContentList: React.FC<ContentListProps> = ({ params }) => {
+  const { courses } = useCoursesStore();
+  const subjectId = params.subjectid;
+  const chapterId = params.chapterid;
+  const courseId = params.courseid;
 
-    const [currContent, setCurrContent] = useState<ContentData | undefined>(contentsToPresent?.[0]);
+  const courseToPresent = courses.find(course => course.id === courseId);
+  const contentsToPresent = courseToPresent?.chapters?.find(chapter => chapter.id === chapterId)?.subjects.find(subject => subject.id === subjectId)?.contents;
 
-    const onVideoSelect = (content: ContentData) => {
-        console.log('Selected Content:', content);
-        setCurrContent(content);
-    };
+  const [currContent, setCurrContent] = useState<ContentData | undefined>(contentsToPresent?.[0]);
 
-    return (
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div style={{ flex: 1 }}>
-                {currContent && <MediaViewer content={currContent} />}
-            </div>
-            <div style={{ flex: 1 }}>
-                <VideoLinkList contents={contentsToPresent} onVideoSelect={onVideoSelect} />
-            </div>
-        </div>
-    );
+  const onVideoSelect = (content: ContentData) => {
+    console.log('Selected Content:', content);
+    setCurrContent(content);
+  };
+
+  return (
+    <div className="flex justify-between items-center h-screen">
+      <div className="flex-1 flex justify-center items-center bg-black">
+        {currContent ? (
+          <div className="max-w-4xl max-h-[90vh] w-full h-full flex justify-center items-center">
+            <MediaViewer content={currContent} />
+          </div>
+        ) : (
+          <div className="text-white">
+            No content selected or available
+          </div>
+        )}
+      </div>
+      <div className="flex-1 hidden md:block">
+        <VideoLinkList contents={contentsToPresent} onVideoSelect={onVideoSelect} />
+      </div>
+    </div>
+  );
 };
 
-export default Contents;
+export default ContentList;

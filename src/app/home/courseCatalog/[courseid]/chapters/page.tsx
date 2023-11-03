@@ -5,17 +5,16 @@ import { ChapterData, CourseData } from '@/app/types/types';
 // import { useRouter } from 'next/navigation';
 import { usePathname } from "next/navigation";
 import Chapter from '../../_components/chapter';
-
-const ChapterList: React.FC = () => {
+interface ChapterListProps{
+  params:{
+    courseid:string;
+  }
+}
+const ChapterList: React.FC<ChapterListProps> = (props:ChapterListProps) => {
   const { courses } = useCoursesStore();
-  // const router = useRouter();
-  const courseid =
-    usePathname().split("/")[usePathname().split("/").length - 2];
-  console.log(courseid);
-
-  // Now, you can use the `courseid` in your logic to find the course
+  const courseid =props.params.courseid;
+   //need to fix to zostan
   const courseToPresent = courses.find((course) => course.id === courseid);
-
   const chaptersToPresent = courseToPresent ? courseToPresent.chapters : [];
 
 

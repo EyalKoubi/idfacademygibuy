@@ -25,7 +25,7 @@ const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
     comments: "",
   });
   const [file, setFile] = useState<any | null>(null);
-
+  const [loading,setLoading]=useState<boolean>(false);
   const handleDeleteSubject = async () => {
     const formData = new FormData();
     formData.append("subjectId", subject.id);
@@ -54,6 +54,7 @@ const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
   };
 
   const submitFile = async (event: FormEvent) => {
+    setLoading(true)
     event?.preventDefault();
     if (!file) return;
     const formData: any = new FormData();
@@ -72,11 +73,11 @@ const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
       setIsAddingContent(false);
 
       addContent(courseId, chapterId, subject.id, newCont);
+      setLoading(false)
     } catch (error) {
       console.log("🚀 ~ file: Subject.tsx:38 ~ submitFile ~ error:", error);
     }
   };
-
   return (
     <div key={subject.name} className="p-4 bg-gray-300 rounded shadow mb-3">
       <span className="text-lg font-medium">{subject.name}</span>
@@ -133,57 +134,61 @@ const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
                 courseId={courseId}
               />
             ))}
-            {isAddingContent ? (
-              <div>
-                <input
-                  type="text"
-                  placeholder={editTexts.comments}
-                  value={contentData.comments}
-                  onChange={(e) =>
-                    setContentData({ ...contentData, comments: e.target.value })
+        {isAddingContent ? (
+          <div>
+            <input
+              type="text"
+              placeholder={editTexts.comments}
+              value={contentData.comments}
+              onChange={(e) =>
+                setContentData({ ...contentData, comments: e.target.value })
+              }
+              className="p-2 w-full border rounded-md shadow-sm mb-4"
+            />
+
+            <form onSubmit={submitFile} className="flex flex-col space-y-4">
+              <input
+                type="file"
+                name="file"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files.length > 0) {
+                    setFile(e.target.files[0]);
                   }
-                  className="p-2 w-full border rounded-md shadow-sm mb-4"
-                />
-                <form onSubmit={submitFile} className="flex flex-col space-y-4">
-                  <input
-                    type="file"
-                    name="file"
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files.length > 0)
-                        setFile(e.target.files[0]);
-                    }}
-                    className="p-2 border rounded-md shadow-sm"
-                  />
-                  <button
-                    type="submit"
-                    className="p-2 bg-green-600 text-white rounded-md hover:bg-green-800 shadow-sm"
-                  >
-                    {GeneralTexts.submit}
-                  </button>
-                </form>
-              </div>
-            ) : (
+                }}
+                className="p-2 border rounded-md shadow-sm"
+              />
               <button
-                onClick={() => setIsAddingContent(true)}
-                className="bg-purple-500 text-white w-12 h-12 rounded-full hover:bg-purple-700 active:scale-90 transition transform"
-                aria-label="Add"
+                type="submit"
+                disabled={loading}
+                className={`p-2 ${loading ? 'bg-gray-600' : 'bg-green-600'} text-white rounded-md hover:bg-green-800 shadow-sm`}
               >
-                <svg
-                  className="w-6 h-6 mx-auto my-0"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  ></path>
-                </svg>
+                {loading ? 'Loading...' : GeneralTexts.submit}
               </button>
-            )}
+            </form>
+          </div>
+        ) : (
+          <button
+            onClick={() => setIsAddingContent(true)}
+            className="bg-purple-500 text-white w-12 h-12 rounded-full hover:bg-purple-700 active:scale-90 transition transform"
+            aria-label="Add"
+          >
+            <svg
+              className="w-6 h-6 mx-auto my-0"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+              ></path>
+            </svg>
+          </button>
+        )}
+
           </div>
         </div>
       )}

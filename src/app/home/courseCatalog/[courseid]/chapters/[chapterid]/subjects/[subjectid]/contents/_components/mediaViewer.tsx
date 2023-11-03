@@ -35,22 +35,15 @@ const MediaViewer: React.FC<{ content: ContentData }> = ({ content }) => {
         if (content) {
             const fetchMedia = async () => {
                 try {
-                    const response = await axios.get(`/api/getFile/${content.id}`);
-                    const base64 = response.data.file;
-
-                    const byteCharacters = atob(base64);
-                    const byteNumbers = new Array(byteCharacters.length);
-                    for (let i = 0; i < byteCharacters.length; i++) {
-                        byteNumbers[i] = byteCharacters.charCodeAt(i);
-                    }
-                    const byteArray = new Uint8Array(byteNumbers);
+                    // Fetch the pre-signed URL from the API
+                    const response = await axios.get(`/api/getPresignedUrl/${content.id}`);
+                    const presignedUrl = response.data.url; // Assuming the API sends back an object with the url
+                    
                     const fileExtension = content.file_name.split('.').pop();
                     const mimeType = getMimeType(fileExtension);
 
-                    const blob = new Blob([byteArray], { type: mimeType });
-                    const url = URL.createObjectURL(blob);
-
-                    setMediaSrc(url);
+                    // Directly use the pre-signed URL, no need for conversion
+                    setMediaSrc(presignedUrl);
                     setMediaType(mimeType);
                     setLoading(false);
                 } catch (error) {
@@ -61,27 +54,43 @@ const MediaViewer: React.FC<{ content: ContentData }> = ({ content }) => {
             };
             fetchMedia();
         }
-        return cleanup;
     }, [content]);
 
+   
+    
     const renderMedia = () => {
-        if (mediaType.startsWith('image')) {
-            return <img src={mediaSrc} alt={content.file_name} />;
-        } else if (mediaType.startsWith('video')) {
-            return <video controls><source src={mediaSrc} type={mediaType} /></video>;
-        } else if (mediaType.startsWith('audio')) {
-            return <audio controls><source src={mediaSrc} type={mediaType} /></audio>;
-        } else if (mediaType === 'text/plain') {
-            return <a href={mediaSrc} download>Download Text File</a>;
-        } else {
-            return <a href={mediaSrc} download>Download File</a>;
+        switch (true) {
+            case mediaType.startsWith('image'):
+                return <img className="max-w-full max-h-full object-contain mx-auto" src={mediaSrc} alt={content.file_name} />;
+            case mediaType.startsWith('video'):
+                return (
+                    <video className="max-w-full max-h-full object-contain mx-auto" controls>
+                        <source src={mediaSrc} type={mediaType} />
+                    </video>
+                );
+            case mediaType.startsWith('audio'):
+                return (
+                    <audio className="w-full" controls>
+                        <source src={mediaSrc} type={mediaType} />
+                    </audio>
+                );
+            case mediaType === 'text/plain':
+                return <a className="text-white" href={mediaSrc} download>Download Text File</a>;
+            default:
+                return <a className="text-white" href={mediaSrc} download>Download File</a>;
         }
     };
-
-    if (loading) return <p>Loading...</p>;
-    if (error) return <p>Error: {error}</p>;
-
-    return renderMedia();
+    const renderMediaWithBackground = () => {
+        return (
+          <div className="bg-red-500 flex justify-center items-center w-full h-full">
+            <div className="max-w-full max-h-full">
+              {renderMedia()}
+            </div>
+          </div>
+        );
+      };
+    return renderMediaWithBackground ();
 };
-
 export default MediaViewer;
+
+
