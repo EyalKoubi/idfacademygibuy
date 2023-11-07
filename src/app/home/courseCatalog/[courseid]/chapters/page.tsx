@@ -2,8 +2,7 @@
 import React from 'react';
 import useCoursesStore from '@/app/_contexts/courseContext';
 import { ChapterData, CourseData } from '@/app/types/types';
-// import { useRouter } from 'next/navigation';
-import { usePathname } from "next/navigation";
+
 import Chapter from '../../_components/chapter';
 interface ChapterListProps{
   params:{

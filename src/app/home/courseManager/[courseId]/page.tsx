@@ -7,10 +7,14 @@ import Course from "../_components/Course";
 import { useRouter } from "next/navigation";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
 import axios from "axios";
-
-const SingleCourseUpdate = () => {
-  const courseId =
-    usePathname().split("/")[usePathname().split("/").length - 1];
+interface singleCoureUpdateProps{
+  params:{
+    courseId:string
+  }
+}
+const SingleCourseUpdate = (props:singleCoureUpdateProps) => {
+  const courseId =props.params.courseId
+   
   const [curCourse, setCurCourse] = useState<CourseData>({
     id: "",
     name: "",

@@ -18,6 +18,8 @@ const Course = ({ course }: CourseProps) => {
   const [isAddChapterPressed, setIsAddChapterPressed] = useState(false);
   const [newChapterName, setNewChapterName] = useState("");
   const [newChapterBrief, setNewChapterBrief] = useState("");
+
+  const [addChapterError, setAddChapterError] = useState('');
   const handleDeleteCourse = async (course: CourseData) => {
     const formData = new FormData();
     formData.append("courseId", course.id);
@@ -46,23 +48,36 @@ const Course = ({ course }: CourseProps) => {
 
   const handleAddChapter = async () => {
     const formData = new FormData();
-    const addChapterProps = {
-      courseId: course.id,
-      chapterName: newChapterName,
-      chapterBrief: newChapterBrief,
-    };
-    formData.append("courseAddChapter", JSON.stringify(addChapterProps));
+  const addChapterProps = {
+    id: course.id,
+    name: newChapterName,
+    brief: newChapterBrief,
+  };
+  formData.append("courseAddChapter", JSON.stringify(addChapterProps));
+
+  try {
     const response = await axios.post("/api/addChapter", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    addChapter(course.id, {
-      id: response.data.id,
-      name: response.data.name,
-      brief: response.data.brief,
-      subjects: [],
-    });
-    setIsAddChapterPressed(false);
-  };
+
+    if (response.data?.message) {
+      // Handle the case where the API does return a response but with an error field
+      setAddChapterError(response.data.message);
+    } else {
+      addChapter(course.id, {
+        id: response.data.id,
+        name: response.data.name,
+        brief: response.data.brief,
+        subjects: [],
+      });
+      setAddChapterError('');
+      setIsAddChapterPressed(false);
+    }
+  } catch (error) {
+    // Handle the case where the API call itself fails
+    setAddChapterError('An error occurred while adding the chapter in server side.');
+  }
+};
   return (
     <div className="p-4 bg-white rounded shadow-lg">
       <div className="flex-col">
@@ -117,7 +132,7 @@ const Course = ({ course }: CourseProps) => {
         <div className="mt-4">
           <h2 className="text-2xl mb-4">{editTexts.chapters}</h2>
           <div className="flex-row gap-4">
-            {course.chapters.map((chapter, index) => {
+            {course.chapters?.map((chapter, index) => {
               return (
                 <Chapter
                   key={chapter.id}
@@ -155,7 +170,13 @@ const Course = ({ course }: CourseProps) => {
                 >
                   {GeneralTexts.back}
                 </button>
+                {addChapterError && (
+                  <div className="text-red-500">
+                   {addChapterError}
+                  </div>
+                )}
               </div>
+              
             ) : (
               <button
                 onClick={() => setIsAddChapterPressed(true)}

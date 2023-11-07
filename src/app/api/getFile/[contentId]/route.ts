@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../../db/database"; // adjust the import according to your actual db import
 import { NextRequest, NextResponse } from "next/server";
 import { s3Client ,bucket, getFileFromS3Service, getFileChunkedBase64, getPresignedUrlFromS3Service} from "@/app/_minio/minio";
+import { json } from "stream/consumers";
 
 
 interface FileRequest extends NextRequest {
@@ -51,9 +52,16 @@ export async function GET(req: FileRequest, context: getFileProps) {
 
     try {
         const presignedUrl = await getPresignedUrlFromS3Service(bucket, contentId);
-
+        const newHeaders = new Headers();
+                newHeaders.set("Content-Type", "application/octet-stream");
+                newHeaders.set("Content-Disposition", `attachment; filename="${contentId}"`);
         // Redirect the client to the presigned URL or send the URL in the response
-        return NextResponse.redirect(presignedUrl);
+        return new NextResponse(JSON.stringify({ url: presignedUrl }), {
+            status: 200,
+            headers: {
+                'Content-Type': 'application/json'
+    
+        }});
 
     } catch (err) {
         console.error("Error generating pre-signed URL:", err);

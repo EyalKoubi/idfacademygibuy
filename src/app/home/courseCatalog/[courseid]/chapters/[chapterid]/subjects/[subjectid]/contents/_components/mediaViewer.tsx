@@ -36,7 +36,7 @@ const MediaViewer: React.FC<{ content: ContentData }> = ({ content }) => {
             const fetchMedia = async () => {
                 try {
                     // Fetch the pre-signed URL from the API
-                    const response = await axios.get(`/api/getPresignedUrl/${content.id}`);
+                    const response = await axios.get(`/api/getFile/${content.id}`);
                     const presignedUrl = response.data.url; // Assuming the API sends back an object with the url
                     
                     const fileExtension = content.file_name.split('.').pop();
@@ -53,44 +53,55 @@ const MediaViewer: React.FC<{ content: ContentData }> = ({ content }) => {
                 }
             };
             fetchMedia();
+            return () => {
+                cleanup();
+            };
         }
     }, [content]);
 
    
+    const renderLoading = () => (
+        <div className="text-center text-white">Loading...</div>
+      );
     
-    const renderMedia = () => {
+      const renderError = () => (
+        <div className="text-center text-red-500">{error}</div>
+      );
+    
+      const renderMedia = () => {
+        if (loading) return renderLoading();
+        if (error) return renderError();
+    
         switch (true) {
-            case mediaType.startsWith('image'):
-                return <img className="max-w-full max-h-full object-contain mx-auto" src={mediaSrc} alt={content.file_name} />;
-            case mediaType.startsWith('video'):
-                return (
-                    <video className="max-w-full max-h-full object-contain mx-auto" controls>
-                        <source src={mediaSrc} type={mediaType} />
-                    </video>
-                );
-            case mediaType.startsWith('audio'):
-                return (
-                    <audio className="w-full" controls>
-                        <source src={mediaSrc} type={mediaType} />
-                    </audio>
-                );
-            case mediaType === 'text/plain':
-                return <a className="text-white" href={mediaSrc} download>Download Text File</a>;
-            default:
-                return <a className="text-white" href={mediaSrc} download>Download File</a>;
+          case mediaType.startsWith('image'):
+            return <img className="max-w-full max-h-full object-contain" src={mediaSrc} alt={content.file_name} />;
+          case mediaType.startsWith('video'):
+            return (
+              <video className="max-w-full max-h-full object-contain" controls>
+                <source src={mediaSrc} type={mediaType} />
+                Your browser does not support the video tag.
+              </video>
+            );
+          case mediaType.startsWith('audio'):
+            return (
+              <audio className="w-full" controls>
+                <source src={mediaSrc} type={mediaType} />
+                Your browser does not support the audio element.
+              </audio>
+            );
+          case mediaType === 'text/plain':
+            return <a className="text-white bg-black" href={mediaSrc} download>{`Download Text File ${content.file_name}`}</a>;
+          default:
+            return <a className="text-white bg-black" href={mediaSrc} download>{`Download File ${content.file_name}`}|</a>;
         }
-    };
-    const renderMediaWithBackground = () => {
-        return (
-          <div className="bg-red-500 flex justify-center items-center w-full h-full">
-            <div className="max-w-full max-h-full">
-              {renderMedia()}
-            </div>
-          </div>
-        );
       };
-    return renderMediaWithBackground ();
-};
-export default MediaViewer;
-
+    
+      return (
+        <div className="w-[500px] h-[500px] overflow-hidden flex justify-center items-center">
+          {renderMedia()}
+        </div>
+      );
+    };
+    
+    export default MediaViewer;
 

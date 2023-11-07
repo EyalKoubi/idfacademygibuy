@@ -15,8 +15,7 @@ interface AddChaptersPageProps {
 }
 
 const AddChaptersPage = (props: AddChaptersPageProps) => {
-  const courseId =
-    usePathname().split("/")[usePathname().split("/").length - 1];
+  const courseId =props.params.courseId
   const [chapterData, setChapterData] = useState<ChapterData>({
     id: "",
     name: "",

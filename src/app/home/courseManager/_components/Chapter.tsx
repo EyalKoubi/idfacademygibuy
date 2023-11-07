@@ -7,12 +7,13 @@ import useCoursesStore from "@/app/_contexts/courseContext";
 import Subject from "./Subject";
 
 interface ChapterProps {
+  key:string;
   chapter: ChapterData;
   chapterIndex: number;
   courseId: string;
 }
 
-const Chapter = ({ chapter, chapterIndex, courseId }: ChapterProps) => {
+const Chapter = ({key, chapter, chapterIndex, courseId }: ChapterProps) => {
   const { updateChapter, deletChapter, addSubject, courses } =
     useCoursesStore();
   const [isUpdateChapter, setIsUpdateChapter] = useState(false);
