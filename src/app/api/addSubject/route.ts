@@ -1,6 +1,7 @@
 import { NextApiResponse } from "next";
 import { db } from "../../../db/database";
 import { NextRequest, NextResponse } from "next/server";
+import { SubjectSchema, handleError} from "@/utils/validation";
 
 interface SubjectRequest extends NextRequest {
   name?: string;
@@ -8,15 +9,19 @@ interface SubjectRequest extends NextRequest {
 }
 
 export async function POST(req: SubjectRequest, res: NextApiResponse) {
+  //console.log("asdasdas")
   const data = await req.formData();
   if (!data.get("addSubjectProps"))
     return NextResponse.json({ message: "There is no subject data!" });
   const addSubjectProps = JSON.parse(data.get("addSubjectProps") as string);
-
+  //console.log(addSubjectProps)
   const name = addSubjectProps.name;
   const chapterId = addSubjectProps.chapterId;
-
+ // console.log("asdasdas")
   try {
+    console.log("asdasdas")
+  SubjectSchema.parse({name});
+   //await  console.log("sdfsdfsdfsdfds")
     const newSubject = await db
       .insertInto("Subject")
       .values({ name: name })
@@ -30,10 +35,9 @@ export async function POST(req: SubjectRequest, res: NextApiResponse) {
         chapterId: chapterId,
       })
       .execute();
-
     return NextResponse.json(newSubject);
   } catch (error) {
-    console.error("Error inserting subject:", error);
-    return NextResponse.json({ message: "Error inserting subject" });
+    console.log(error)
+     return handleError(error)
   }
 }

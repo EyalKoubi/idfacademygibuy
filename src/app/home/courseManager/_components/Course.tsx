@@ -20,6 +20,10 @@ const Course = ({ course }: CourseProps) => {
   const [newChapterBrief, setNewChapterBrief] = useState("");
 
   const [addChapterError, setAddChapterError] = useState('');
+  const [renameCourseError, setRenameCourseError] = useState('');
+
+
+  // need to fix -add useEffect to clear the errors
   const handleDeleteCourse = async (course: CourseData) => {
     const formData = new FormData();
     formData.append("courseId", course.id);
@@ -34,9 +38,13 @@ const Course = ({ course }: CourseProps) => {
       "courseRename",
       JSON.stringify({ id: course.id, name: courseName })
     );
-    await axios.post("/api/renameCourse", formData, {
+    const response =await axios.post("/api/renameCourse", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+    if (response.data?.message) {
+      setRenameCourseError(response.data?.message)
+    }
+    else{
     const renamedCourse = {
       id: course.id,
       name: courseName,
@@ -44,8 +52,8 @@ const Course = ({ course }: CourseProps) => {
     };
     renameCourse(renamedCourse);
     setIsRenameCourse(false);
-  };
-
+  }
+  }
   const handleAddChapter = async () => {
     const formData = new FormData();
   const addChapterProps = {
@@ -54,14 +62,11 @@ const Course = ({ course }: CourseProps) => {
     brief: newChapterBrief,
   };
   formData.append("courseAddChapter", JSON.stringify(addChapterProps));
-
   try {
     const response = await axios.post("/api/addChapter", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-
     if (response.data?.message) {
-      // Handle the case where the API does return a response but with an error field
       setAddChapterError(response.data.message);
     } else {
       addChapter(course.id, {
@@ -123,6 +128,11 @@ const Course = ({ course }: CourseProps) => {
           >
             {GeneralTexts.submit}
           </button>
+          {renameCourseError && (
+                  <div className="text-red-500">
+                     {renameCourseError}
+                  </div>
+                )}
         </>
       ) : (
         <></>
@@ -172,7 +182,7 @@ const Course = ({ course }: CourseProps) => {
                 </button>
                 {addChapterError && (
                   <div className="text-red-500">
-                   {addChapterError}
+                    Error: {addChapterError}
                   </div>
                 )}
               </div>

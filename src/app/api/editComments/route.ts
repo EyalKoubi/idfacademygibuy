@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db/database";
 import { NextRequest, NextResponse } from "next/server";
+import { ContentSchema, EditContentSchema, handleError } from "@/utils/validation";
 
 interface ContentRequest extends NextRequest {
   contentId?: string;
@@ -20,8 +21,9 @@ export async function POST(req: ContentRequest, res: NextApiResponse) {
     editCommentsProps
   );
 
-  try {
-    const updatedCourse = await db
+  try { 
+    EditContentSchema.parse(editCommentsProps)
+    const updatedContent = await db
       .updateTable("Content")
       .set({
         comments: editCommentsProps.comments,
@@ -29,10 +31,9 @@ export async function POST(req: ContentRequest, res: NextApiResponse) {
       .where("id", "=", editCommentsProps.contentId)
       .returning(["comments"])
       .executeTakeFirstOrThrow();
-    return NextResponse.json({
-      message: `Content updated successfully!`,
-    });
+    return NextResponse.json(updatedContent);
   } catch (error) {
-    return NextResponse.json({ message: "Error updating content" });
+    console.log(error)
+     return handleError(error)
   }
 }

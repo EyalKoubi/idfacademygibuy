@@ -26,6 +26,8 @@ const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
   });
   const [file, setFile] = useState<any | null>(null);
   const [loading,setLoading]=useState<boolean>(false);
+  const [addContentError, setAddContentError] = useState('');
+  const [renameSubjectError, setRenameSubjectError] = useState('');
   const handleDeleteSubject = async () => {
     const formData = new FormData();
     formData.append("subjectId", subject.id);
@@ -41,9 +43,13 @@ const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
       "subjectRename",
       JSON.stringify({ id: subject.id, name: subjectName })
     );
-    await axios.post("/api/renameSubject", formData, {
+    const response=await axios.post("/api/renameSubject", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+    if(response.data?.message){
+      setRenameSubjectError(response.data?.message)
+    }
+    else{
     const renamedSubject = {
       id: subject.id,
       name: subjectName,
@@ -51,6 +57,7 @@ const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
     };
     updateSubject(renamedSubject, chapterId, courseId);
     setIsRenameSubject(false);
+  }
   };
 
   const submitFile = async (event: FormEvent) => {
@@ -69,10 +76,14 @@ const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
       const response = await axios.post("/api/addContent", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      if (response.data?.message) {
+          setAddContentError(response.data?.message)
+      }
+      else{
       const newCont = response.data;
       setIsAddingContent(false);
-
       addContent(courseId, chapterId, subject.id, newCont);
+      }
       setLoading(false)
     } catch (error) {
       console.log("🚀 ~ file: Subject.tsx:38 ~ submitFile ~ error:", error);
@@ -97,6 +108,11 @@ const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
           >
             {GeneralTexts.submit}
           </button>
+          {renameSubjectError && (
+                  <div className="text-red-500">
+                    {renameSubjectError}
+                  </div>
+                )}
         </div>
       ) : (
         <div className="flex fles-row">
@@ -165,6 +181,11 @@ const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
                 {loading ? 'Loading...' : GeneralTexts.submit}
               </button>
             </form>
+            {addContentError && (
+                  <div className="text-red-500">
+                    {addContentError}
+                  </div>
+                )}
           </div>
         ) : (
           <button

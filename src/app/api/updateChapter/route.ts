@@ -1,6 +1,8 @@
 import { NextApiResponse } from "next";
 import { db } from "../../../db/database"; // adjust the import according to your actual db import
 import { NextRequest, NextResponse } from "next/server";
+import Chapter from "@/app/home/courseCatalog/_components/chapter";
+import { ChapterSchema, handleError } from "@/utils/validation";
 
 interface ChapterUpdateRequest extends NextRequest {
   name?: string;
@@ -19,6 +21,7 @@ export async function POST(req: ChapterUpdateRequest, res: NextApiResponse) {
   );
 
   try {
+    ChapterSchema.parse(updateChapterProps)
     const updatedChapter = await db
       .updateTable("Chapter")
       .set({
@@ -32,10 +35,9 @@ export async function POST(req: ChapterUpdateRequest, res: NextApiResponse) {
       "🚀 ~ file: route.ts:29 ~ POST ~ updatedChapter:",
       updatedChapter
     );
-    return NextResponse.json({
-      message: `Updated successfully`,
-    });
-  } catch (error) {
-    return NextResponse.json({ message: "Error inserting course" });
+    return NextResponse.json(updatedChapter);
+  }  catch (error) {
+    console.log(error)
+     return handleError(error)
   }
 }

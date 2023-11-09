@@ -7,13 +7,13 @@ import useCoursesStore from "@/app/_contexts/courseContext";
 import Subject from "./Subject";
 
 interface ChapterProps {
-  key:string;
-  chapter: ChapterData;
+  key:string,
+  chapter: ChapterData,
+  courseId: string,
   chapterIndex: number;
-  courseId: string;
 }
 
-const Chapter = ({key, chapter, chapterIndex, courseId }: ChapterProps) => {
+const Chapter= ({key, chapter, chapterIndex, courseId }: ChapterProps) => {
   const { updateChapter, deletChapter, addSubject, courses } =
     useCoursesStore();
   const [isUpdateChapter, setIsUpdateChapter] = useState(false);
@@ -22,7 +22,8 @@ const Chapter = ({key, chapter, chapterIndex, courseId }: ChapterProps) => {
   const [isSelectedChapter, setIsSelectedChapter] = useState(false);
   const [isAddingSubject, setIsAddingSubject] = useState(false);
   const [newSubjectName, setNewSubjectName] = useState("");
-
+  const [addSubjectError,setAddSubjectError]=useState('');
+  const [renameChapterError,setRenameChapterError]=useState('');
   const handleUpdateChapter = async () => {
     const formData = new FormData();
     const updatedChapter = {
@@ -32,11 +33,16 @@ const Chapter = ({key, chapter, chapterIndex, courseId }: ChapterProps) => {
       subjects: chapter.subjects,
     };
     formData.append("updateChapterProps", JSON.stringify(updatedChapter));
-    await axios.post("/api/updateChapter", formData, {
+    const response =await axios.post("/api/updateChapter", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    updateChapter(updatedChapter, courseId);
-    setIsUpdateChapter(false);
+    if(response.data?.message){
+      setRenameChapterError(response.data?.message)
+    }
+    else{
+      updateChapter(updatedChapter, courseId);
+      setIsUpdateChapter(false);
+    }
   };
 
   const handleDeleteChapter = async () => {
@@ -54,19 +60,25 @@ const Chapter = ({key, chapter, chapterIndex, courseId }: ChapterProps) => {
     formData.append("addSubjectProps", JSON.stringify(addSubjectProps));
     const response = await axios.post("/api/addSubject", formData, {
       headers: { "Content-Type": "multipart/form-data" },
-    });
-    const newSubFromBd: SubjectData = {
-      id: response.data.id,
-      name: response.data.name,
-      contents: [],
-    };
+    })
+    if (response.data?.message) {
+      setAddSubjectError(response.data.message);
+     // console.log(Res)
+    }
+    else{
+      const newSubFromBd: SubjectData = {
+        id: response.data.id,
+        name: response.data.name,
+        contents: [],
+      }
     addSubject(courseId, chapterIndex, newSubFromBd);
     console.log(
       "🚀 ~ file: Chapter.tsx:68 ~ handleAddSubject ~ courses:",
       courses
     );
     setIsAddingSubject(false);
-  };
+    };
+    }
 
   return (
     <div className="p-4 bg-gray-200 rounded shadow mb-4">
@@ -97,6 +109,11 @@ const Chapter = ({key, chapter, chapterIndex, courseId }: ChapterProps) => {
           >
             {GeneralTexts.submit}
           </button>
+          {renameChapterError&& (
+                  <div className="text-red-500">
+                 {renameChapterError}
+                  </div>
+                )}
         </>
       ) : (
         <div className="flex flex-row">
@@ -157,6 +174,11 @@ const Chapter = ({key, chapter, chapterIndex, courseId }: ChapterProps) => {
                 >
                   {GeneralTexts.back}
                 </button>
+                {addSubjectError && (
+                  <div className="text-red-500">
+                    {addSubjectError}
+                  </div>
+                )}
               </div>
             ) : (
               <button

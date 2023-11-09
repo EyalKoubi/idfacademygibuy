@@ -4,6 +4,7 @@ import multer from "multer";
 import { NextApiResponse } from "next";
 import { db } from "../../../db/database";
 import {s3Config,s3Client,uploadFileToS3Service,bucket} from "../../_minio/minio"
+import { ContentSchema, handleError } from "@/utils/validation";
 interface MulterRequest extends NextRequest {
   files?: Express.Multer.File[];
 }
@@ -35,7 +36,12 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
     const comments = data.get("comments") as string;
     const subjectId = data.get("subjectId") as string;
     console.log("🚀 ~ file: route.ts:45 ~ POST ~ subjectId:", subjectId);
-
+    console.log(file.size)
+    const contentData = {
+      file_size: file.size, // Get the file size from the 'file' object
+      comments: comments,
+    };
+    ContentSchema.parse(contentData)
     const newContent = await db
       .insertInto("Content")
       .values({
@@ -44,11 +50,6 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
       })
       .returning(["id", "file_name", "comments"])
       .executeTakeFirstOrThrow();
-
-    console.log(
-      "🚀 ~ file: route.ts:57 ~ POST ~ newContent.id:",
-      newContent.id
-    );
     await db
       .insertInto("ContentSubject")
       .values({
@@ -56,19 +57,12 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
         subjectId: subjectId,
       })
       .execute();
-    
     if (!file) {
       return NextResponse.json({ success: false });
     }
-
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
     await ensureBucketExists(bucket);
-    //console.log("Files are being processed");
-    console.log(buffer);
-    console.log(file.name);
-
-
     const storage = multer.memoryStorage();
     const upload = multer({ storage });
     upload.array("files")(req as any, res as any, async (err: any) => {
@@ -85,8 +79,8 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
     });
     return NextResponse.json(newContent);
   } catch (error) {
-    console.error("Error in file upload handler:", error);
-    return NextResponse.json({ message: "Internal Server Error" });
+    console.log(error)
+     return handleError(error)
   }
 }
 

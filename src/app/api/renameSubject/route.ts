@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db/database";
 import { NextRequest, NextResponse } from "next/server";
+import { SubjectSchema, handleError } from "@/utils/validation";
 
 interface SubjectRequest extends NextRequest {
   name?: string;
@@ -15,6 +16,7 @@ export async function POST(req: SubjectRequest, res: NextApiResponse) {
   );
 
   try {
+    SubjectSchema.parse(subjectRenameProps)
     const updatedSubject = await db
       .updateTable("Subject")
       .set({
@@ -23,10 +25,9 @@ export async function POST(req: SubjectRequest, res: NextApiResponse) {
       .where("id", "=", subjectRenameProps.id)
       .returning(["name"])
       .executeTakeFirstOrThrow();
-    return NextResponse.json({
-      message: `Subject ${subjectRenameProps.name} changed to ${updatedSubject.name} successfully`,
-    });
-  } catch (error) {
-    return NextResponse.json({ message: "Error inserting course" });
+    return NextResponse.json(updatedSubject);
+  }  catch (error) {
+    console.log(error)
+     return handleError(error)
   }
 }

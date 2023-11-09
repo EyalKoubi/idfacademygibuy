@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ContentData } from "../types/types";
+import { ContentData,CourseData } from "@/app/types/types";
 
 type Content = {
   id: string;

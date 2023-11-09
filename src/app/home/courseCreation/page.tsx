@@ -25,7 +25,7 @@ const AddCoursePage: React.FC = () => {
       const formData = new FormData();
       formData.append("course", JSON.stringify(courseData));
   
-      const response = await axios.post("/api/courseAdd", formData, {
+      const response = await axios.post("/api/addCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
   

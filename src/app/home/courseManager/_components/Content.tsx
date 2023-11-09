@@ -13,9 +13,10 @@ interface ContentProps {
 
 const Content = ({ content, chapterId, subjectId, courseId }: ContentProps) => {
   const { deleteContent, updateComments } = useCoursesStore();
-  const [isChngeCommentsContentPressed, setIsChngeCommentsContentPressed] =
+  const [isChangeCommentsContentPressed, setIsChangeCommentsContentPressed] =
     useState(false);
-  const [comments, setComments] = useState("");
+  const [comments, setComments] = useState(content.comments);
+  const [renameContentError,setRenameContentError]=useState("")
 
   const handleDeleteContent = async () => {
     const formData: any = new FormData();
@@ -30,20 +31,26 @@ const Content = ({ content, chapterId, subjectId, courseId }: ContentProps) => {
     const formData: any = new FormData();
     const editCommentsProps = { contentId: content.id, comments: comments };
     formData.append("editCommentsProps", JSON.stringify(editCommentsProps));
+    console.log(editCommentsProps)
     console.log(
       "🚀 ~ file: Content.tsx:33 ~ handleChangeComments ~ editCommentsProps:",
       editCommentsProps
     );
-    await axios.post("/api/editComments", formData, {
+    const response =await axios.post("/api/editComments", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+    if(response.data?.message){
+      setRenameContentError(response.data?.message)
+    }
+    else{
     updateComments(
       { id: content.id, file_name: content.file_name, comments: comments },
       subjectId,
       chapterId,
       courseId
     );
-    setIsChngeCommentsContentPressed(false);
+    setIsChangeCommentsContentPressed(false);
+    }
   };
   return (
     <div className="p-2 bg-gray-100 rounded flex flex-col">
@@ -51,7 +58,7 @@ const Content = ({ content, chapterId, subjectId, courseId }: ContentProps) => {
       <span className="text-md">
         {editTexts.comments} : {content.comments}
       </span>
-      {isChngeCommentsContentPressed ? (
+      {isChangeCommentsContentPressed ? (
         <div className="flex items-center ml-1">
           <input
             type="text"
@@ -65,7 +72,15 @@ const Content = ({ content, chapterId, subjectId, courseId }: ContentProps) => {
             className="p-2 ml-2 bg-green-500 text-white rounded hover:bg-green-700"
           >
             {GeneralTexts.submit}
+           
           </button>
+          <div>
+          {renameContentError && (
+                  <div className="text-red-500">
+                    {renameContentError}
+                  </div>
+                )}
+            </div>
         </div>
       ) : (
         <div className="flex fles-row">
@@ -76,7 +91,7 @@ const Content = ({ content, chapterId, subjectId, courseId }: ContentProps) => {
             {editTexts.deleteContent}
           </button>
           <button
-            onClick={() => setIsChngeCommentsContentPressed(true)}
+            onClick={() => setIsChangeCommentsContentPressed(true)}
             className="p-2 ml-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
           >
             {editTexts.rename}
