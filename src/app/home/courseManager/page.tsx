@@ -4,7 +4,7 @@ import { editTexts } from "@/HebrewStrings/Texts";
 import useCoursesStore from "../../_contexts/courseContext";
 import { useRouter } from "next/navigation";
 
-const CourseManager = () => {
+const CourseManager= () => {
   const { setCourses, courses } = useCoursesStore();
   const router = useRouter();
 

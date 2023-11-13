@@ -1,6 +1,7 @@
 import { useReducer } from "react";
-import { CourseData } from "../../courseCreation/types";
+import { CourseData } from "@/app/types/types";
 import { useRouter } from "next/navigation";
+import { ChapterData } from "@/app/types/types";
 
 interface CourseCardProps {
   course: CourseData;
@@ -14,9 +15,9 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
         <div className="font-bold text-xl mb-2">{course.name}</div>
         <div className="text-gray-700 text-base" onClick={()=>{router.push(`courseCatalog/${course.id}/chapters`)}}>
           <ul>
-            {course.chapters.map((chapter, index) => (
+            {course.chapters.map((chapter:ChapterData, index:number) => (
               <li key={index} className="mb-1">
-                {chapter.name} {/* Assuming each chapter has a name property */}
+                {chapter.name}
               </li>
             ))}
           </ul>

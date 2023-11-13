@@ -2,7 +2,7 @@
 import useCoursesStore from "@/app/_contexts/courseContext";
 import Chapter from "./Chapter";
 import { useState } from "react";
-import { CourseData } from "@/app/types";
+import { CourseData } from "@/app/types/types";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
 import axios from "axios";
 import RenameCourse from "./RenameCourse";

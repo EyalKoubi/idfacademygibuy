@@ -1,8 +1,7 @@
 "use client"
 import React from 'react';
 import useCoursesStore from '@/app/_contexts/courseContext';
-import { ChapterData, CourseData } from '@/app/types';
-
+import { ChapterData, CourseData } from '@/app/types/types';
 import Chapter from '../../_components/chapter';
 interface ChapterListProps{
   params:{
@@ -15,8 +14,6 @@ const ChapterList: React.FC<ChapterListProps> = (props:ChapterListProps) => {
    //need to fix to zostan
   const courseToPresent = courses.find((course) => course.id === courseid);
   const chaptersToPresent = courseToPresent ? courseToPresent.chapters : [];
-
-
   return (
     <div>
       {chaptersToPresent.map((chapter: ChapterData) => (

@@ -1,5 +1,5 @@
 
-import { ChapterData, SubjectData } from '@/app/types';
+import { ChapterData, SubjectData } from '@/app/types/types';
 import { usePathname,useRouter } from 'next/navigation';
 
 import React, { ReactNode } from 'react';
@@ -15,7 +15,6 @@ const Subject: React.FC<SubjectProps> = ({subject,courseid,chapterid}) => {
   const router=useRouter();
   const navigateToChapter = (subjectId: string,currpath:string) => {
     router.push(currpath+`/${subjectId}/contents`);
-
    };
   return (
     <p  onClick={() => navigateToChapter(subject.id,currpath)}>

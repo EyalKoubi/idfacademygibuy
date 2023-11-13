@@ -1,12 +1,11 @@
 "use client"
 import React from 'react';
-import { ContentData } from '@/app/types';
+import { ContentData } from '@/app/types/types';
 
-type VideoLinkListProps = {
+interface VideoLinkListProps  {
     contents: ContentData[] | undefined;
     onVideoSelect: (content: ContentData) => void;
-};
-
+}
 const videoLinkList: React.FC<VideoLinkListProps> = ({ contents, onVideoSelect }) => {
     return (
         <div >

@@ -1,5 +1,5 @@
 "use client"
-import { CourseDataCard } from "@/app/types";
+// import { CourseDataCard } from "@/app/types";
 import CourseCard from "./_components/courseCard";
 import useCoursesStore from "@/app/_contexts/courseContext";
 

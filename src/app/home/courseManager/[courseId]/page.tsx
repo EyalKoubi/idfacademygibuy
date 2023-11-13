@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import useCoursesStore from "@/app/_contexts/courseContext";
-import { CourseData } from "../../courseCreation/types";
+import { CourseData } from "@/app/types/types";
 import Course from "../_components/Course";
 import { useRouter } from "next/navigation";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
@@ -12,9 +12,8 @@ interface singleCoureUpdateProps{
     courseId:string
   }
 }
-const SingleCourseUpdate = (props:singleCoureUpdateProps) => {
+const SingleCourseUpdate:React.FC<singleCoureUpdateProps> = (props:singleCoureUpdateProps) => {
   const courseId =props.params.courseId
-   
   const [curCourse, setCurCourse] = useState<CourseData>({
     id: "",
     name: "",
@@ -22,7 +21,6 @@ const SingleCourseUpdate = (props:singleCoureUpdateProps) => {
   });
   const { courses, setCourses } = useCoursesStore();
   const router = useRouter();
-
   useEffect(() => {
     for (let course of courses) {
       if (course.id === courseId) {

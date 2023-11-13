@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ContentData,CourseData,CoursesState,SubjectData,ChapterData} from "@/app/types";
+import { ContentData,CourseData,CoursesState,SubjectData,ChapterData} from "@/app/types/types";
 
 
 

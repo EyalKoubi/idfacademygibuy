@@ -20,7 +20,7 @@ interface SidebarProps {
   userType: Users;
 }
 
-const Sidebar = ({ userType }: SidebarProps) => {
+const Sidebar:React.FC<SidebarProps> = ({ userType }) => {
   const { isMenuButtonPressed } = useAppState();
   const [menu, setMenu] = useState<MenuRow[]>([]);
 

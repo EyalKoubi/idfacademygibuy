@@ -1,7 +1,7 @@
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
 import { Dispatch, SetStateAction, useState } from "react";
 import axios from "axios";
-import { ChapterData,SubjectData } from "@/app/types";
+import { ChapterData,SubjectData } from "@/app/types/types";
 import useCoursesStore from "@/app/_contexts/courseContext";
     interface AddSubjectProps{
         chapter:ChapterData,
@@ -10,7 +10,7 @@ import useCoursesStore from "@/app/_contexts/courseContext";
         setIsAddingSubject:Dispatch<SetStateAction<boolean>>
         setAddSubjectError:Dispatch<SetStateAction<string>>
     }
-    const AddSubject=({chapter,courseId,chapterIndex,setIsAddingSubject,setAddSubjectError}:AddSubjectProps)=>{
+    const AddSubject:React.FC<AddSubjectProps>=({chapter,courseId,chapterIndex,setIsAddingSubject,setAddSubjectError})=>{
       const { updateChapter, deletChapter, addSubject, courses } =
     useCoursesStore();
         const [newSubjectName, setNewSubjectName] = useState("");

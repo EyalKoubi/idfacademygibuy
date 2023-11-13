@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react";
 import { AddCourseTexts, adminTexts } from "@/HebrewStrings/Texts";
-import { CourseData } from "@/app/types";
+import { CourseData } from "@/app/types/types";
 import axios, { AxiosError } from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";
 import { useRouter } from "next/navigation";

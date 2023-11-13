@@ -1,5 +1,5 @@
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
-import { ContentData } from "../../../types";
+import { ContentData } from "../../../types/types";
 import { useState } from "react";
 import axios from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";
@@ -11,7 +11,7 @@ interface ContentProps {
   courseId: string;
 }
 
-const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseId }) => {
+const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseId }: ContentProps) => {
   const { deleteContent, updateComments } = useCoursesStore();
   const [isChangeCommentsContentPressed, setIsChangeCommentsContentPressed] =
     useState(false);

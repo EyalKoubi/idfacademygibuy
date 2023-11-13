@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ContentData } from '@/app/types';
+import { ContentData } from '@/app/types/types';
+interface MediaViewerProps{
+  content: ContentData 
 
-const MediaViewer: React.FC<{ content: ContentData }> = ({ content }) => {
+}
+const MediaViewer: React.FC<MediaViewerProps> = ({ content }) => {
     const [mediaSrc, setMediaSrc] = useState('');
     const [mediaType, setMediaType] = useState('');
     const [loading, setLoading] = useState(true);

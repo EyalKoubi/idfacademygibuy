@@ -9,7 +9,7 @@ interface AddChapterFormProps {
   addChapterError: string;
 }
 
-export const AddChapterForm = ({ onAddChapter, onCancel, addChapterError }: AddChapterFormProps) => {
+export const AddChapterForm:React.FC<AddChapterFormProps> = ({ onAddChapter, onCancel, addChapterError }) => {
   const [chapterName, setChapterName] = useState('');
   const [chapterBrief, setChapterBrief] = useState('');
 

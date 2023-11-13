@@ -1,6 +1,6 @@
 "use client";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
-import { ContentData, SubjectData } from "../../../types";
+import { ContentData, SubjectData } from "../../../types/types";
 import { FormEvent, useState } from "react";
 import axios from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";
@@ -12,7 +12,7 @@ interface SubjectProps {
   courseId: string;
 }
 
-const Subject = ({ subject, chapterId, courseId }: SubjectProps) => {
+const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
   const { deleteSubject, updateSubject, addContent, courses } =
     useCoursesStore();
   const [isSelectedSubject, setIsSelectedSubject] = useState(false);

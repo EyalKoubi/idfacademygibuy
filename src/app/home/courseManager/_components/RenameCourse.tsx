@@ -1,5 +1,5 @@
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
-import { CourseData } from "@/app/types";
+import { CourseData } from "@/app/types/types";
 import { Dispatch, SetStateAction } from "react";
 interface RenameCourseProps{
     course:CourseData

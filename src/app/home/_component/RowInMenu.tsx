@@ -9,7 +9,7 @@ interface RowInMenu {
   icon: React.ReactNode;
 }
 
-const RowInMenu = ({ rowInfo, href, icon }: RowInMenu) => {
+const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon }) => {
   const { isMenuButtonPressed } = useAppState();
   const router = useRouter();
 

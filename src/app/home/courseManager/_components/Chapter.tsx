@@ -1,6 +1,6 @@
 "use client";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
-import { ChapterData, SubjectData } from "../../../types";
+import { ChapterData } from "@/app/types/types";
 import { useState } from "react";
 import axios from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";
@@ -14,7 +14,7 @@ interface ChapterProps {
   chapterIndex: number;
 }
 
-const Chapter= ({key, chapter, chapterIndex, courseId }: ChapterProps) => {
+const Chapter:React.FC< ChapterProps>= ({key, chapter, chapterIndex, courseId }) => {
   const { updateChapter, deletChapter, addSubject, courses } =
     useCoursesStore();
   const [isUpdateChapter, setIsUpdateChapter] = useState(false);
