@@ -1,10 +1,11 @@
 "use client";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
-import { ChapterData, SubjectData } from "../../../types/types";
+import { ChapterData, SubjectData } from "../../../types";
 import { useState } from "react";
 import axios from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";
 import Subject from "./Subject";
+import AddSubject from "./AddSubject";
 
 interface ChapterProps {
   key:string,
@@ -53,33 +54,7 @@ const Chapter= ({key, chapter, chapterIndex, courseId }: ChapterProps) => {
     });
     deletChapter(chapter, courseId);
   };
-
-  const handleAddSubject = async () => {
-    const formData = new FormData();
-    const addSubjectProps = { name: newSubjectName, chapterId: chapter.id };
-    formData.append("addSubjectProps", JSON.stringify(addSubjectProps));
-    const response = await axios.post("/api/addSubject", formData, {
-      headers: { "Content-Type": "multipart/form-data" },
-    })
-    if (response.data?.message) {
-      setAddSubjectError(response.data.message);
-     // console.log(Res)
-    }
-    else{
-      const newSubFromBd: SubjectData = {
-        id: response.data.id,
-        name: response.data.name,
-        contents: [],
-      }
-    addSubject(courseId, chapterIndex, newSubFromBd);
-    console.log(
-      "🚀 ~ file: Chapter.tsx:68 ~ handleAddSubject ~ courses:",
-      courses
-    );
-    setIsAddingSubject(false);
-    };
-    }
-
+  
   return (
     <div className="p-4 bg-gray-200 rounded shadow mb-4">
       <span className="text-lg font-bold">{chapter.name}</span>
@@ -154,26 +129,8 @@ const Chapter= ({key, chapter, chapterIndex, courseId }: ChapterProps) => {
                 />
               ))}
             {isAddingSubject ? (
-              <div className="bg-white p-6 rounded shadow max-w-md mx-auto mt-10 flex flex-col space-y-4">
-                <input
-                  type="text"
-                  placeholder={editTexts.subjectName}
-                  value={newSubjectName}
-                  onChange={(e) => setNewSubjectName(e.target.value)}
-                  className="p-2 border rounded shadow-sm focus:outline-none focus:border-blue-500"
-                />
-                <button
-                  onClick={handleAddSubject}
-                  className="bg-green-500 text-white p-2 rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-opacity-50"
-                >
-                  {GeneralTexts.submit}
-                </button>
-                <button
-                  onClick={() => setIsAddingSubject(false)}
-                  className="bg-red-500 text-white p-2 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-opacity-50"
-                >
-                  {GeneralTexts.back}
-                </button>
+              <div>
+            <AddSubject chapter={chapter} courseId={courseId} chapterIndex={chapterIndex} setIsAddingSubject={setIsAddingSubject} setAddSubjectError={setAddSubjectError}/>
                 {addSubjectError && (
                   <div className="text-red-500">
                     {addSubjectError}

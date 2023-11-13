@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import MediaViewer from './_components/mediaViewer';
 import VideoLinkList from './_components/videoLinkList';
 import useCoursesStore from '@/app/_contexts/courseContext';
-import { ContentData } from '@/app/types/types';
+import { ContentData } from '@/app/types';
 
 interface ContentListProps {
   params: {

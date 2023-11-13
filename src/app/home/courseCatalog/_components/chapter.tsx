@@ -1,6 +1,6 @@
 import React from 'react';
 import { usePathname, useRouter } from 'next/navigation'; // Import from next/navigation
-import { ChapterData } from '@/app/types/types';
+import { ChapterData } from '@/app/types';
 
 interface ChapterProps {
   courseid: string;

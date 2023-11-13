@@ -5,7 +5,7 @@ import { AddCourseTexts, adminTexts, editTexts } from "@/HebrewStrings/Texts";
 import { usePathname } from "next/navigation";
 import useCoursesStore from "@/app/_contexts/courseContext";
 import Link from "next/link";
-import { ChapterData } from "@/app/types/types";
+import { ChapterData } from "@/app/types";
 import NewSubject from "../../_components/NewSubject";
 
 interface AddChaptersPageProps {

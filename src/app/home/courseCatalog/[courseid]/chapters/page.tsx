@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import useCoursesStore from '@/app/_contexts/courseContext';
-import { ChapterData, CourseData } from '@/app/types/types';
+import { ChapterData, CourseData } from '@/app/types';
 
 import Chapter from '../../_components/chapter';
 interface ChapterListProps{

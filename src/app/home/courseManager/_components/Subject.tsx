@@ -1,6 +1,6 @@
 "use client";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
-import { ContentData, SubjectData } from "../../../types/types";
+import { ContentData, SubjectData } from "../../../types";
 import { FormEvent, useState } from "react";
 import axios from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";

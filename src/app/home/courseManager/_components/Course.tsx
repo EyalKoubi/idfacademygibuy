@@ -2,15 +2,16 @@
 import useCoursesStore from "@/app/_contexts/courseContext";
 import Chapter from "./Chapter";
 import { useState } from "react";
-import { CourseData } from "../../courseCreation/types";
+import { CourseData } from "@/app/types";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
 import axios from "axios";
+import RenameCourse from "./RenameCourse";
 
 interface CourseProps {
   course: CourseData;
 }
 
-const Course = ({ course }: CourseProps) => {
+const Course:React.FC<CourseProps> = ({ course }) => {
   const { deleteCourse, renameCourse, addChapter } = useCoursesStore();
   const [isRenameCourse, setIsRenameCourse] = useState(false);
   const [courseName, setCourseName] = useState("");
@@ -32,7 +33,7 @@ const Course = ({ course }: CourseProps) => {
     });
     deleteCourse(course);
   };
-  const handleRenameCourse = async (course: CourseData) => {
+  const handleRenameCourse = async (courseName:string) => {
     const formData = new FormData();
     formData.append(
       "courseRename",
@@ -113,21 +114,7 @@ const Course = ({ course }: CourseProps) => {
       </div>
       {isRenameCourse ? (
         <>
-          <input
-            type="text"
-            placeholder={editTexts.courseName}
-            value={courseName}
-            onChange={(e) => {
-              setCourseName(e.target.value);
-            }}
-            className="p-2 ml-4 border rounded"
-          />
-          <button
-            onClick={() => handleRenameCourse(course)}
-            className="p-2 ml-2 bg-green-500 text-white rounded hover:bg-green-700"
-          >
-            {GeneralTexts.submit}
-          </button>
+       <RenameCourse course={course} courseName={courseName} setCourseName={setCourseName} handleRenameCourse={handleRenameCourse}/>
           {renameCourseError && (
                   <div className="text-red-500">
                      {renameCourseError}

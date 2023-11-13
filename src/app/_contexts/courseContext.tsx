@@ -1,71 +1,46 @@
 import { create } from "zustand";
-import { ContentData,CourseData } from "@/app/types/types";
+import { ContentData,CourseData,CoursesState,SubjectData,ChapterData} from "@/app/types";
 
-type Content = {
-  id: string;
-  file_name: string;
-  comments: string;
-};
 
-type Subject = {
-  id: string;
-  name: string;
-  contents: ContentData[];
-};
 
-type Chapter = {
-  id: string;
-  name: string;
-  brief: string;
-  subjects: Subject[];
-};
 
-type Course = {
-  id: string;
-  name: string;
-  chapters: Chapter[];
-};
-
-type CoursesState = {
-  courses: Course[];
-};
 
 type CoursesActions = {
-  addCourse: (course: Course) => void;
-  addChapter: (courseId: string, chapter: Chapter) => void;
+  addCourse: (course: CourseData) => void;
+  addChapter: (courseId: string, chapter: ChapterData) => void;
   addSubject: (
     courseId: string,
     chapterIndex: number,
-    subject: Subject
+    subject: SubjectData
   ) => void;
   addContent: (
     courseId: string,
     chapterId: string,
     subjectId: string,
-    content: Content
+    content: ContentData
   ) => void;
-  deleteCourse: (course: Course) => void;
-  deletChapter: (chapter: Chapter, courseId: string) => void;
+  deleteCourse: (course: CourseData) => void;
+  deletChapter: (chapter: ChapterData, courseId: string) => void;
   deleteSubject: (
-    subject: Subject,
+    subject: SubjectData,
     chapterId: string,
     courseId: string
   ) => void;
   deleteContent: (
-    content: Content,
+    content: ContentData,
     subjectId: string,
     chapterId: string,
     courseId: string
   ) => void;
-  renameCourse: (course: Course) => void;
-  updateChapter: (chapter: Chapter, courseId: string) => void;
+  renameCourse: (course: CourseData) => void;
+  updateChapter: (chapter: ChapterData, courseId: string) => void;
   updateSubject: (
-    subject: Subject,
+    subject: SubjectData,
     chapterId: string,
     courseId: string
   ) => void;
   updateComments: (
-    content: Content,
+    content: ContentData,
     subjectId: string,
     chapterId: string,
     courseId: string
@@ -76,7 +51,7 @@ type CoursesActions = {
     chapterIndex: number,
     brief: string
   ) => void;
-  setCourses: (courses: Course[]) => void;
+  setCourses: (courses: CourseData[]) => void;
 };
 
 const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
@@ -113,10 +88,10 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
     courseId: string,
     chapterId: string,
     subjectId: string,
-    content: Content
+    content: ContentData
   ) =>
     set((state) => {
-      state.courses = state.courses.map((curCourse) => {
+      state.courses = state.courses.map((curCourse:CourseData) => {
         if (courseId === curCourse.id) {
           const newChapters = curCourse.chapters.map((curChapter) => {
             if (curChapter.id === chapterId) {
@@ -152,7 +127,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       return { ...state };
     }),
 
-  deleteCourse: (course: Course) =>
+  deleteCourse: (course: CourseData) =>
     set((state) => {
       state.courses = state.courses.filter(
         (curCourse) => course.id !== curCourse.id
@@ -160,7 +135,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       return { ...state };
     }),
 
-  deletChapter: (chapter: Chapter, courseId: string) =>
+  deletChapter: (chapter: ChapterData, courseId: string) =>
     set((state) => {
       state.courses = state.courses.map((curCourse) => {
         if (courseId === curCourse.id) {
@@ -178,7 +153,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       return { ...state };
     }),
 
-  deleteSubject: (subject: Subject, chapterId: string, courseId: string) =>
+  deleteSubject: (subject: SubjectData, chapterId: string, courseId: string) =>
     set((state) => {
       state.courses = state.courses.map((curCourse) => {
         if (courseId === curCourse.id) {
@@ -208,7 +183,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
     }),
 
   deleteContent: (
-    content: Content,
+    content: ContentData,
     subjectId: string,
     chapterId: string,
     courseId: string
@@ -251,7 +226,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       return { ...state };
     }),
 
-  renameCourse: (course: Course) =>
+  renameCourse: (course: CourseData) =>
     set((state) => {
       state.courses = state.courses.map((curCourse) => {
         if (course.id === curCourse.id)
@@ -265,7 +240,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       return { ...state };
     }),
 
-  updateChapter: (chapter: Chapter, courseId: string) =>
+  updateChapter: (chapter: ChapterData, courseId: string) =>
     set((state) => {
       state.courses = state.courses.map((curCourse) => {
         if (courseId === curCourse.id) {
@@ -290,7 +265,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       });
       return { ...state };
     }),
-  updateSubject: (subject: Subject, chapterId: string, courseId: string) =>
+  updateSubject: (subject: SubjectData, chapterId: string, courseId: string) =>
     set((state) => {
       state.courses = state.courses.map((curCourse) => {
         if (courseId === curCourse.id) {
@@ -327,7 +302,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
     }),
 
   updateComments: (
-    content: Content,
+    content: ContentData,
     subjectId: string,
     chapterId: string,
     courseId: string

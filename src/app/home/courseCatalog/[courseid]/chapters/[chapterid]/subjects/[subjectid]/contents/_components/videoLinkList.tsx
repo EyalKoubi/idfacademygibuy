@@ -1,6 +1,6 @@
 "use client"
 import React from 'react';
-import { ContentData } from '@/app/types/types';
+import { ContentData } from '@/app/types';
 
 type VideoLinkListProps = {
     contents: ContentData[] | undefined;
