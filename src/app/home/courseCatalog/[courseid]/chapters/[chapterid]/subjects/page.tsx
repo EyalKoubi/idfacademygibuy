@@ -2,7 +2,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import useCoursesStore from '@/app/_contexts/courseContext';
-import { ChapterData, CourseData, SubjectData } from '@/app/types/types';
+import { ChapterData, CourseData, SubjectData } from '@/app/types';
 import { usePathname } from 'next/navigation';
 import Subject from '@/app/home/courseCatalog/_components/subject';
 

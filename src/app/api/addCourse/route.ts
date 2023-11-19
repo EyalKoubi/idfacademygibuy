@@ -11,25 +11,27 @@ interface CourseRequest extends NextRequest {
 export async function POST(req: CourseRequest, res: NextApiResponse) {
   try {
   const data = await req.formData();
-  if (!data.get("course"))
-    return NextResponse.json({ message: "There is no course input!" });
-    const course = JSON.parse(data.get("course") as string);
+  const course = JSON.parse(data.get("course") as string);
+  const fileData =data.get("fileData") as unknown as File;
     
   CourseSchema.parse(course); // This will throw if validation fails
 
   console.log("🚀 ~ file: route.ts:12 ~ course ~ course:", course);
-  const name: string = course.name;
   console.log("🚀 ~ file: route.ts:12 ~ POST ~ name:", name);
   console.log("🚀 ~ file: route.ts:11 ~ POST ~ data:", data);
   // console.log("🚀 ~ file: route.ts:7 ~ POST ~ name:", name);
+  const currentDate = new Date();
 
-  
+
+
     const newCourse = await db
       .insertInto("Course")
       .values({
-        name,
+        name: course.name,
+        img_id: course.img_id,
+        creationTimestamp:new Date()
       })
-      .returning(["id", "name"])
+      .returning(["id", "name","img_id"])
       .executeTakeFirstOrThrow();
     return NextResponse.json(newCourse);
   } catch (error) {

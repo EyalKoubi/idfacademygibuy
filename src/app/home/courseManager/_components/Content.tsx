@@ -1,5 +1,5 @@
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
-import { ContentData } from "../../../types/types";
+import { ContentData } from "../../../types";
 import { useState } from "react";
 import axios from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";

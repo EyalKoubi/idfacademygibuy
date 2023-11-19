@@ -80,8 +80,10 @@ export interface ChapterCourseTable {
 }
 
 export interface CourseTable {
-  id: GeneratedAlways<string>; // Assuming gen_random_uuid() generates a string UUID
+  id: GeneratedAlways<string>; 
   name: string;
+  img_id: string; 
+  creationTimestamp: Date; 
 }
 
 export interface Database {

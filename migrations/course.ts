@@ -8,8 +8,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("id", "uuid", (col) =>
       col.primaryKey().defaultTo(sql`gen_random_uuid()`)
     )
-    .addColumn("name", "text")
-    .execute();
+    .addColumn("name","text")
+    .addColumn("img_id", "text") // Assuming img_id is a text type
+    .addColumn("creationTimestamp", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`))
+    .execute();  
 
   await db.schema
     .createTable("Chapter")

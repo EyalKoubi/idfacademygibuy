@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import MediaViewer from './_components/mediaViewer';
 import VideoLinkList from './_components/videoLinkList';
 import useCoursesStore from '@/app/_contexts/courseContext';
-import { ContentData } from '@/app/types/types';
+import { ContentData } from '@/app/types';
 
 interface ContentListProps {
   params: {
@@ -51,22 +51,21 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col justify-between items-center h-screen">
       <h1>תכנים</h1>
-      <div className="flex justify-between items-center h-screen">
-        <div className="flex-1 flex justify-center items-center bg-black">
+      <div className="flex justify-between items-center mb-4"> {/* Added bottom margin */}
+        <div className="flex-1 flex justify-center items-center ">
           {currContent ? (
             <div className="flex justify-center items-center" style={{
               width: '500px',
               height: '500px',
-              backgroundColor: 'grey', // Starting color
-              borderRadius: '5%', // Makes it circular
-              transition: 'background-color 0.1s ease-in-out', // Smooth transition for background color
+              backgroundColor: 'rgba(128, 128, 128, 0.2)',
+              borderRadius: '5%',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)', // A subtle shadow for depth
-              overflow: 'hidden', // Ensures the content doesn't spill out
+              boxShadow: '0 1px 2px rgba(6, 30, 58, 0.1)',
+              overflow: 'hidden',
             }}>
               <MediaViewer content={currContent} />
             </div>
@@ -76,20 +75,21 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
             </div>
           )}
         </div>
-        <div className="flex justify-start  md:block" style={{width:'150px'}}>
+        <div className="flex justify-start md:block" style={{width:'150px'}}>
           <VideoLinkList contents={contentsToPresent} onVideoSelect={onVideoSelect} />
         </div>
-        <div>
+      </div>
+  
+      <div className="mt-4"> {/* Added top margin */}
         <button onClick={goToPreviousContent} disabled={contentIndex === 0}>
           Previous   
         </button>
         <button onClick={goToNextContent} disabled={!contentsToPresent || contentIndex === contentsToPresent.length - 1}>
           Next
         </button>
-        </div>
       </div>
     </div>
   );
-};
+          }  
 
 export default ContentList;

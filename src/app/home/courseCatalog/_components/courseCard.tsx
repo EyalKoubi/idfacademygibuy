@@ -1,7 +1,7 @@
 import { useReducer } from "react";
-import { CourseData } from "@/app/types/types";
+import { CourseData } from "@/app/types";
 import { useRouter } from "next/navigation";
-import { ChapterData } from "@/app/types/types";
+import { ChapterData } from "@/app/types";
 
 interface CourseCardProps {
   course: CourseData;

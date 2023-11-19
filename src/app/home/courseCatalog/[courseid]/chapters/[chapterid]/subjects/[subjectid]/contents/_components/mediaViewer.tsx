@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { ContentData } from '@/app/types/types';
+import { ContentData } from '@/app/types';
 interface MediaViewerProps{
   content: ContentData 
 
@@ -77,17 +77,17 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content }) => {
     
         switch (true) {
           case mediaType.startsWith('image'):
-            return <img className="max-w-full max-h-full object-contain" src={mediaSrc} alt={content.file_name} />;
+            return <img className="w-screen max-h-full object-contain" src={mediaSrc} alt={content.file_name} />;
           case mediaType.startsWith('video'):
             return (
-              <video className="max-w-full max-h-full object-contain" controls>
+              <video className="w-screen max-h-full object-contain" controls>
                 <source src={mediaSrc} type={mediaType} />
                 Your browser does not support the video tag.
               </video>
             );
           case mediaType.startsWith('audio'):
             return (
-              <audio className="w-full" controls>
+              <audio className="w-screen" controls>
                 <source src={mediaSrc} type={mediaType} />
                 Your browser does not support the audio element.
               </audio>
@@ -100,7 +100,7 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content }) => {
       };
     
       return (
-        <div className="w-[500px] h-[500px] overflow-hidden flex justify-center items-center">
+        <div className="w-[700px] h-[500px] overflow-hidden flex justify-center items-center">
           {renderMedia()}
         </div>
       );

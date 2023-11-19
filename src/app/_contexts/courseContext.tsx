@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ContentData,CourseData,CoursesState,SubjectData,ChapterData} from "@/app/types/types";
+import { ContentData,CourseData,CoursesState,SubjectData,ChapterData} from "@/app/types";
 
 
 
@@ -119,6 +119,8 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
           return {
             id: curCourse.id,
             name: curCourse.name,
+            img_id:curCourse.img_id,
+            creationTimestamp:curCourse.creationTimestamp,
             chapters: newChapters,
           };
         }
@@ -145,6 +147,8 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
           return {
             id: curCourse.id,
             name: curCourse.name,
+            img_id:curCourse.img_id,
+            creationTimestamp:curCourse.creationTimestamp,
             chapters: updatedChapter,
           };
         }
@@ -174,6 +178,8 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
           return {
             id: curCourse.id,
             name: curCourse.name,
+            img_id:curCourse.img_id,
+            creationTimestamp:curCourse.creationTimestamp,
             chapters: updatedChapters,
           };
         }
@@ -218,6 +224,8 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
           return {
             id: curCourse.id,
             name: curCourse.name,
+            img_id:curCourse.img_id,
+            creationTimestamp:curCourse.creationTimestamp,
             chapters: newChapters,
           };
         }
@@ -233,6 +241,8 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
           return {
             id: curCourse.id,
             name: course.name,
+            img_id:curCourse.img_id,
+            creationTimestamp:curCourse.creationTimestamp,
             chapters: curCourse.chapters,
           };
         return curCourse;
@@ -258,6 +268,8 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
           return {
             id: curCourse.id,
             name: curCourse.name,
+            img_id:curCourse.img_id,
+            creationTimestamp:curCourse.creationTimestamp,
             chapters: updatedChapter,
           };
         }
@@ -293,6 +305,8 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
           return {
             id: curCourse.id,
             name: curCourse.name,
+            img_id:curCourse.img_id,
+            creationTimestamp:curCourse.creationTimestamp,
             chapters: updatedChapters,
           };
         }
@@ -338,6 +352,8 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
           return {
             id: curCourse.id,
             name: curCourse.name,
+            img_id:curCourse.img_id,
+            creationTimestamp:curCourse.creationTimestamp,
             chapters: newChapters,
           };
         }

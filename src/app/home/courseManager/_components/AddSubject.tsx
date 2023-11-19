@@ -1,7 +1,7 @@
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
 import { Dispatch, SetStateAction, useState } from "react";
 import axios from "axios";
-import { ChapterData,SubjectData } from "@/app/types/types";
+import { ChapterData,SubjectData } from "@/app/types";
 import useCoursesStore from "@/app/_contexts/courseContext";
     interface AddSubjectProps{
         chapter:ChapterData,

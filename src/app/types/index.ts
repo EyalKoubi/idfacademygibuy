@@ -21,12 +21,19 @@ export type ChapterData = {
   brief: string;
   subjects: SubjectData[];
 };
-
 export type CourseData = {
   id: string;
   name: string;
+  img_id:string;
+  creationTimestamp:Date;
   chapters: ChapterData[];
 };
+// export type CourseData = {
+//   id: string;
+//   name: string;
+//   chapters: ChapterData[];
+// };
+
 export type CoursesState = {
   courses: CourseData[];
 };

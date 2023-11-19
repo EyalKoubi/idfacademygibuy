@@ -5,6 +5,7 @@ import useCoursesStore from "../_contexts/courseContext";
 import axios from "axios";
 
 const HomePage = () => {
+  
   const { setCourses, courses } = useCoursesStore();
   useEffect(() => {
     console.log("🚀 ~ file: page.tsx:12 ~ HomePage ~ courses:", courses);

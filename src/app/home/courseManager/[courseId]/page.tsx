@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import useCoursesStore from "@/app/_contexts/courseContext";
-import { CourseData } from "@/app/types/types";
+import { CourseData } from "@/app/types";
 import Course from "../_components/Course";
 import { useRouter } from "next/navigation";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
@@ -17,6 +17,8 @@ const SingleCourseUpdate:React.FC<singleCoureUpdateProps> = (props:singleCoureUp
   const [curCourse, setCurCourse] = useState<CourseData>({
     id: "",
     name: "",
+    img_id:"",
+    creationTimestamp:new Date();
     chapters: [],
   });
   const { courses, setCourses } = useCoursesStore();

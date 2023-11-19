@@ -2,15 +2,18 @@ import { NextResponse } from 'next/server';
 import { ZodError, z } from 'zod';
 
 export const CourseSchema = z.object({
-    name: z.string()
-      .min(1, { message: "Course name is required" })
-      .regex(/^[\u0590-\u05FF ]+$/, { message: "Course name must contain only Hebrew characters and spaces" }),
-
-    chapters: z.array(z.object({
-      title: z.string().min(1, { message: "Chapter title is required" }),
-      content: z.string().min(1, { message: "Chapter content is required" }),
-    })).optional(),
-  });
+  name: z.string()
+    .min(1, { message: "Course name is required" })
+    .regex(/^[\u0590-\u05FF ]+$/, { message: "Course name must contain only Hebrew characters and spaces" }),
+  img_id: z.string()
+    .min(1, { message: "Please add an image to the course" }),
+  creationTimestamp: z.instanceof(Date, { message: "Invalid date format" })
+    .refine(date => date <= new Date(), { message: "Date cannot be in the future" }),
+  chapters: z.array(z.object({
+    title: z.string().min(1, { message: "Chapter title is required" }),
+    content: z.string().min(1, { message: "Chapter content is required" }),
+  })).optional(),
+});
   
   export const ChapterSchema = z.object({
     id: z.string().optional(), 

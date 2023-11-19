@@ -1,6 +1,6 @@
 "use client";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
-import { ChapterData } from "@/app/types/types";
+import { ChapterData } from "@/app/types";
 import { useState } from "react";
 import axios from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";

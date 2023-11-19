@@ -1,5 +1,5 @@
 
-import { ChapterData, SubjectData } from '@/app/types/types';
+import { ChapterData, SubjectData } from '@/app/types';
 import { usePathname,useRouter } from 'next/navigation';
 
 import React, { ReactNode } from 'react';
