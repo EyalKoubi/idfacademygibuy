@@ -50,13 +50,15 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
       })
       .returning(["id", "file_name", "comments"])
       .executeTakeFirstOrThrow();
-    await db
-      .insertInto("ContentSubject")
-      .values({
-        contentId: newContent.id,
-        subjectId: subjectId,
-      })
+    if(subjectId){
+      await db
+        .insertInto("ContentSubject")
+        .values({
+          contentId: newContent.id,
+          subjectId: subjectId,
+        })
       .execute();
+    }
     if (!file) {
       return NextResponse.json({ success: false });
     }
@@ -79,6 +81,7 @@ export async function POST(req: MulterRequest, res: NextApiResponse) {
     });
     return NextResponse.json(newContent);
   } catch (error) {
+    console.log("erorrororororororor")
     console.log(error)
      return handleError(error)
   }

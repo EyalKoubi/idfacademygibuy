@@ -8,7 +8,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       .selectFrom("Course")
       .selectAll()
       .execute();
-
+    console.log("courses",coursesWithChapters)
     const result = [];
     for (const course of coursesWithChapters) {
       const chaptersWithOutSubjects = await db
@@ -50,6 +50,8 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       result.push({
         id: course.id,
         name: course.name,
+        img_id:course.img_id,
+        creationTimestamp:course.creationTimestamp,
         chapters: chapters,
       });
       console.log("🚀 ~ file: route.ts:54 ~ GET ~ result:", result);

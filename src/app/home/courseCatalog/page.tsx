@@ -6,6 +6,7 @@ import useCoursesStore from "@/app/_contexts/courseContext";
 
 const CourseCatalog: React.FC = () => {
   const {courses}=useCoursesStore()
+  console.log("the catalog courses",courses)
   return (
     <div className="container mx-auto p-4">
       <input type="search" />

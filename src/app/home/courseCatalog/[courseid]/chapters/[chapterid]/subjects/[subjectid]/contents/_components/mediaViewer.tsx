@@ -35,7 +35,10 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content }) => {
 
     useEffect(() => {
         setLoading(true);
+    
         if (content) {
+          console.log("reach to content")
+            console.log(content)
             const fetchMedia = async () => {
                 try {
                     // Fetch the pre-signed URL from the API
@@ -76,8 +79,9 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content }) => {
         if (error) return renderError();
     
         switch (true) {
-          case mediaType.startsWith('image'):
+          case mediaType.startsWith('image'):{
             return <img className="w-screen max-h-full object-contain" src={mediaSrc} alt={content.file_name} />;
+          }
           case mediaType.startsWith('video'):
             return (
               <video className="w-screen max-h-full object-contain" controls>

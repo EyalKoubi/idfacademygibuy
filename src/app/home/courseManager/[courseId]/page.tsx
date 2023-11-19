@@ -13,14 +13,9 @@ interface singleCoureUpdateProps{
   }
 }
 const SingleCourseUpdate:React.FC<singleCoureUpdateProps> = (props:singleCoureUpdateProps) => {
+  const {initinalCourse}=useCoursesStore();
   const courseId =props.params.courseId
-  const [curCourse, setCurCourse] = useState<CourseData>({
-    id: "",
-    name: "",
-    img_id:"",
-    creationTimestamp:new Date();
-    chapters: [],
-  });
+  const [curCourse, setCurCourse] = useState<CourseData>(initinalCourse);
   const { courses, setCourses } = useCoursesStore();
   const router = useRouter();
   useEffect(() => {

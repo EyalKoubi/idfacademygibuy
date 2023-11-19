@@ -56,7 +56,13 @@ type CoursesActions = {
 
 const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
   courses: [],
-
+  initinalCourse:{
+    id: "",
+    name: "",
+    img_id:null,
+    creationTimestamp: null,
+    chapters: [],
+  },
   addCourse: (course) =>
     set((state) => ({
       ...state,

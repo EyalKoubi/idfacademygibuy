@@ -3,17 +3,18 @@ import { CourseData } from "@/app/types";
 import { Dispatch, SetStateAction } from "react";
 interface RenameCourseProps{
   course:CourseData
+  courseName:string;
   setCourseName:Dispatch<SetStateAction<string>>
   handleRenameCourse:(course: CourseData)=>Promise<void>
 }
 
-const RenameCourse:React.FC<RenameCourseProps> = ({course,setCourseName,handleRenameCourse}) => {
+const RenameCourse:React.FC<RenameCourseProps> = ({course,courseName,setCourseName,handleRenameCourse}) => {
   return ( 
     <>
           <input
             type="text"
             placeholder={editTexts.courseName}
-            value={course.name}
+            value={courseName}
             onChange={(e) => {
               setCourseName(e.target.value);
             }}

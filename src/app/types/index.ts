@@ -24,8 +24,8 @@ export type ChapterData = {
 export type CourseData = {
   id: string;
   name: string;
-  img_id:string;
-  creationTimestamp:Date;
+  img_id:ContentData|null;
+  creationTimestamp:Date|null;
   chapters: ChapterData[];
 };
 // export type CourseData = {
@@ -36,5 +36,6 @@ export type CourseData = {
 
 export type CoursesState = {
   courses: CourseData[];
+  initinalCourse:CourseData;
 };
 

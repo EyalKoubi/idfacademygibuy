@@ -1,51 +1,47 @@
 "use client"
 import { FormEvent, useState } from "react";
 import { AddCourseTexts, adminTexts } from "@/HebrewStrings/Texts";
-import { CourseData } from "@/app/types";
+import { CourseData,ContentData } from "@/app/types";
 import axios, { AxiosError } from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";
 import { useRouter } from "next/navigation";
-import { ContentData } from "./types";
 interface ErrorResponse {
   message?: string;
 }
 const AddCoursePage: React.FC = () => {
-  const { addCourse } = useCoursesStore();
+  const { addCourse,initinalCourse } = useCoursesStore();
   const [courseData, setCourseData] = useState<CourseData>({
     id: "",
     name: "",
-    img_id: "",
-    creationTimestamp: new Date(),
-    chapters: [],
+    img_id:null,
+    creationTimestamp:null,
+    chapters: []
   });
-  const [fileData, setFileData] = useState<File | null>(null);
+  const [fileData, setFileData] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-
+  
   const submitFile = async () =>{
-    //setLoading(true)
-    if (!fileData) return;
-    const formData: any = new FormData();
-    formData.append("file", fileData, fileData.name);
-    formData.append("comments",courseData.name);
-    //formData.append("subjectId", subject.id);
-    console.log(formData);
-
     try {
-      //console.log(file);
+      let formData = new FormData();
+      formData.append("file", fileData, fileData.name);
+      formData.append("comments",courseData.name);
+      console.log(formData);
+
       const response = await axios.post("/api/addContent", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       if (response.data?.message) {
-      //     setAddContentError(response.data?.message)
-      console.log(response.data?.message)
+          console.log(response.data?.message)
+          return null;
        }
       else{
-      const newCont:ContentData = response.data;
-      //setIsAddingContent(false);
-      //addContent(courseId, chapterId, subject.id, newCont);
-      console.log(newCont)
-      return newCont.id;
+        const newCont:ContentData = response.data;
+        //setIsAddingContent(false);
+        //addContent(courseId, chapterId, subject.id, newCont);
+        setCourseData({...courseData,img_id:newCont})
+        console.log(newCont)
+      return newCont;
       }
 
     } catch (error) {
@@ -54,22 +50,39 @@ const AddCoursePage: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    setError(null);
-    try {
-      const formData = new FormData();
-      formData.append("course", JSON.stringify(courseData));
-      const img_id=await submitFile();
-      if(img_id)
-        setCourseData({ ...courseData, img_id: img_id })
-      const response = await axios.post("/api/addCourse", formData, {
+    //setError(null);
+      let image=await submitFile();
+      console.log("image from submitfile",image)
+      try {
+      if(image){
+      let courseToServer:CourseData= {
+          id: "",
+          name: courseData.name,
+          img_id:image,
+         creationTimestamp:new Date(),
+          chapters: []
+      }
+      console.log("courseTo server",courseToServer)
+     await setCourseData(courseToServer)
+      
+      let formData = new FormData();
+      formData.append("course", JSON.stringify(courseToServer));
+      console.log(courseData)
+   
+    
+        const response = await axios.post("/api/addCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      
+      console.log(response.data)
       if (response.data?.id) {
         addCourse(response.data);
+        
         router.push(`/home/courseManager/${response.data.id}`);
       } else {
         setError(response.data?.message);
       }
+    }
     } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
       setError(error?.response?.data?.message || error.message || "An error occurred while adding the course.");

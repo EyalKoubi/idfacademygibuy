@@ -46,7 +46,9 @@ const Course = ({ course }: CourseProps) => {
   const handleRenameCourse = async () => {
     try {
       const formData = new FormData();
-      formData.append("courseRename", JSON.stringify({ id: course.id, name: courseName }));
+      const newcourse= JSON.stringify({...course,name: courseName})
+      console.log(newcourse)
+      formData.append("courseRename", newcourse);
       const response = await axios.post("/api/renameCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -122,7 +124,7 @@ const Course = ({ course }: CourseProps) => {
 
       {isRenameCourse && (
         <>
-          <RenameCourse course={course} setCourseName={setCourseName} handleRenameCourse={handleRenameCourse}/>
+          <RenameCourse course={course} courseName={ courseName} setCourseName={setCourseName} handleRenameCourse={handleRenameCourse}/>
           <ErrorMessage message={renameCourseError} />
         </>
       )}
@@ -156,6 +158,8 @@ const Course = ({ course }: CourseProps) => {
                 handleAddChapter={handleAddChapter}
                 setIsAddChapterPressed={setIsAddChapterPressed}
                 addChapterError={addChapterError}
+                editTexts={editTexts}
+                GeneralTexts={GeneralTexts}
               />
             )}
           </div>
