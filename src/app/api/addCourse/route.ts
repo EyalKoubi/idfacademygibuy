@@ -3,6 +3,7 @@ import { db } from "../../../db/database"; // adjust the import according to you
 import { NextRequest, NextResponse } from "next/server";
 import { CourseSchema, handleError } from "@/utils/validation";
 import { ZodError } from "zod";
+import { ContentData, CourseData } from "@/app/types";
 
 interface CourseRequest extends NextRequest {
   name?: string;
@@ -12,33 +13,34 @@ export async function POST(req: CourseRequest, res: NextApiResponse) {
   try {
   const data = await req.formData();
   const course = JSON.parse(data.get("course") as string);
- // const fileData =data.get("fileData") as unknown as File;
+  const courseToDb={
+    name: course.name,
+    img_id: course.img_id.id,
+    creationTimestamp:course.creationTimestamp
+  }
   console.log("course that in the server",course)
-  course.img_id=course.img_id.id;
-  //course.img_id={contentId:course.img_id.id, comments:course.img_id.comments}
-  console.log(course)
-  CourseSchema.parse(course); // This will throw if validation fails
-
+  const image_content:ContentData=course.img_id
+ 
+  console.log(courseToDb)
+  CourseSchema.parse(courseToDb);
   console.log("🚀 ~ file: route.ts:12 ~ course ~ course:", course);
  // console.log("🚀 ~ file: route.ts:12 ~ POST ~ name:", name);
   console.log("🚀 ~ file: route.ts:11 ~ POST ~ data:", data);
   // console.log("🚀 ~ file: route.ts:7 ~ POST ~ name:", name);
   //const currentDate = new Date();
-
-
-
-    const newCourse = await db
+  const newCourse = await db
       .insertInto("Course")
-      .values({
-        name: course.name,
-        img_id: course.img_id,
-        creationTimestamp:course.creationTimestamp
-      })
+      .values(courseToDb)
       .returning(["id", "name","img_id","creationTimestamp"])
       .executeTakeFirstOrThrow();
-    console.log(newCourse)
-    //const contentCourse=await db.
-    return NextResponse.json(newCourse);
+  const courseToClient:CourseData={   
+      id:newCourse.id,
+      name:newCourse.name,
+      img_id:image_content,
+      creationTimestamp:newCourse.creationTimestamp,
+      chapters:[]
+    }
+    return NextResponse.json(courseToClient);
   } catch (error) {
     return handleError(error) 
 }

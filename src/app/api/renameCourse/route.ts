@@ -15,18 +15,37 @@ export async function POST(req: CourseRequest, res: NextApiResponse) {
   const courseRenameProps:CourseData = JSON.parse(
     data.get("courseRename") as string
   );
-  console.log("blabllbb-----",courseRenameProps)
+  const courseToDb={
+    id: courseRenameProps.id,
+    name: courseRenameProps.name,
+    img_id:courseRenameProps.img_id?.id,
+    creationTimestamp:courseRenameProps.creationTimestamp,
+    
+  }
+  //console.log("blabllbb-----",courseRenameProps)
   try {
-    CourseSchema.parse(courseRenameProps)
+    CourseSchema.parse(courseToDb)
     const updatedCourse = await db
       .updateTable("Course")
       .set({
         name: courseRenameProps.name,
       })
       .where("id", "=", courseRenameProps.id)
-      .returning(["name","img_id","creationTimestamp"])
+      .returning(["id","name","img_id","creationTimestamp"])
       .executeTakeFirstOrThrow();
-    return NextResponse.json(updatedCourse);
+
+      const contentImage = await db
+      .selectFrom("Content")
+      .where("id", "=", updatedCourse.img_id)
+      .selectAll()
+      .executeTakeFirstOrThrow();
+    return NextResponse.json({
+      id: courseRenameProps.id,
+      name: courseRenameProps.name,
+      img_id:contentImage,
+      creationTimestamp:courseRenameProps.creationTimestamp,
+      
+    });
   } catch (error) {
     return handleError(error)
   }

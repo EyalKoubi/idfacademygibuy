@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db/database"; // adjust the import according to your actual db import
 import { NextRequest, NextResponse } from "next/server";
-
+import { ContentData, CourseData } from "@/app/types";
 export async function GET(req: NextRequest, res: NextApiResponse) {
   try {
     const coursesWithChapters = await db
@@ -9,8 +9,14 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       .selectAll()
       .execute();
     console.log("courses",coursesWithChapters)
-    const result = [];
+    const result:CourseData[] = [];
     for (const course of coursesWithChapters) {
+      const courseContent:ContentData = await db
+        .selectFrom("Content")
+        .where("id", "=", course.img_id)
+        .select(["id", "file_name", "comments"])
+        .executeTakeFirstOrThrow();
+
       const chaptersWithOutSubjects = await db
         .selectFrom("ChapterCourse")
         .innerJoin("Chapter", "Chapter.id", "ChapterCourse.chapterId")
@@ -50,7 +56,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       result.push({
         id: course.id,
         name: course.name,
-        img_id:course.img_id,
+        img_id:courseContent,
         creationTimestamp:course.creationTimestamp,
         chapters: chapters,
       });
