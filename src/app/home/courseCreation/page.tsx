@@ -59,7 +59,7 @@ const AddCoursePage: React.FC = () => {
           id: "",
           name: courseData.name,
           img_id:image,
-         creationTimestamp:new Date(),
+          creationTimestamp:new Date(),
           chapters: []
       }
       console.log("courseTo server",courseToServer)
