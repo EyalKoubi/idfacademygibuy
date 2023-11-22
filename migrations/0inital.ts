@@ -10,6 +10,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("email", "text", (col) => col.unique().notNull())
     .addColumn("emailVerified", "timestamptz")
     .addColumn("image", "text")
+    .addColumn("role", "integer") //need to fix-i add its not entry auto right now ! 
     .execute();
 
   await db.schema

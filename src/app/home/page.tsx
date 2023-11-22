@@ -3,10 +3,23 @@ import { HomeTexts } from "@/HebrewStrings/Texts";
 import { useEffect } from "react";
 import useCoursesStore from "../_contexts/courseContext";
 import axios from "axios";
+import useUserStore from "../_contexts/userContext";
 
 const HomePage = () => {
   
   const { setCourses, courses } = useCoursesStore();
+  const {user,setUser}=useUserStore()
+  const fetchUser=async()=>{
+    const response=await axios.get("/api/getUser/")
+    console.log
+    if(response.data.message){
+      
+    }
+    else{
+      await setUser(response.data)
+      console.log(response.data)
+    }
+  }
   useEffect(() => {
     console.log("🚀 ~ file: page.tsx:12 ~ HomePage ~ courses:", courses);
   }, [courses]);
@@ -25,6 +38,7 @@ const HomePage = () => {
     };
 
     fetchData();
+    fetchUser();
   }, []);
 
   return (

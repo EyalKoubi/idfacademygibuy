@@ -15,7 +15,9 @@ const CourseCatalog: React.FC = () => {
     const filtered = courses.filter(course => 
       course.name.toLowerCase().startsWith(searchTerm.toLowerCase())
     );
+    console.log(filtered)
     setFilteredCourses(filtered);
+    
   }, [searchTerm, courses]);
 
   return (
@@ -24,9 +26,14 @@ const CourseCatalog: React.FC = () => {
         <SearchCourse searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {filteredCourses.map((course, index) => (
-          <CourseCard key={index} course={course} />
-        ))}
+
+      {filteredCourses.length > 0 ? (
+        filteredCourses.map((course, index) => (
+            <CourseCard key={index} course={course} />
+        ))
+    ) : (
+        <p className="col-span-full text-center">No courses found for this search.</p>
+    )}
       </div>
     </div>
   );

@@ -27,6 +27,7 @@ const Sidebar:React.FC<SidebarProps> = ({ userType }) => {
   const sidebarClass = isMenuButtonPressed ? "w-64" : "w-16";
 
   useEffect(() => {
+   
     switch (userType) {
       case Users.Admin:
         setMenu(admin_menu);
