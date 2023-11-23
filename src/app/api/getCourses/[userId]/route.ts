@@ -1,15 +1,30 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { db } from "../../../db/database"; // adjust the import according to your actual db import
+import { db } from "@/db/database"; // adjust the import according to your actual db import
 import { NextRequest, NextResponse } from "next/server";
 import { ContentData, CourseData } from "@/app/types";
-export async function GET(req: NextApiRequest, res: NextApiResponse) {
-  const { userId } = req.query;
+interface NextCourses extends NextRequest {
+    //fileName?: string;
+  }
+interface getCoursesByUserProps{
+    params:{
+        userId:string
+    }
+} 
+export async function GET(req: NextCourses,context:getCoursesByUserProps) {
+  const { userId } = context.params;
   console.log("the user is ",userId)
   try {
     const coursesWithChapters = await db
-      .selectFrom("Course")
-      .selectAll()
-      .execute();
+    .selectFrom("UserCourses")
+    .innerJoin("Course", "Course.id", "UserCourses.courseId")
+    .where("UserCourses.userId", "=", userId)
+    .select([
+      "Course.id",
+      "Course.name",
+      "Course.img_id",
+      "Course.creationTimestamp",
+    ])
+    .execute();
     
     console.log("courses",coursesWithChapters)
     const result:CourseData[] = [];

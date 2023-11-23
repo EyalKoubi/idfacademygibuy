@@ -24,7 +24,7 @@ export const authOptions: NextAuthOptions = {
       clientSecret: z.string().parse(process.env.AUTH0_CLIENT_SECRET),
       issuer: process.env.AUTH0_ISSUER_BASE_URL,
     }),
-    /**
+    /**זז
      * ...add more providers here.
      *
      * Most other providers require a bit more work than the Discord provider. For example, the
@@ -44,3 +44,4 @@ export const authOptions: NextAuthOptions = {
 export const getServerAuthSession = () => {
   return getServerSession(authOptions);
 };
+

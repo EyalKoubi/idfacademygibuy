@@ -9,6 +9,7 @@ const HomePage = () => {
   
   const { setCourses, courses } = useCoursesStore();
   const {user,setUser}=useUserStore()
+  
   const fetchUser=async()=>{
     const response=await axios.get("/api/getUser/")
     console.log
@@ -26,7 +27,7 @@ const HomePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("api/getCourses");
+        const response = await axios.get(`api/getCourses/${user.id}`);
         console.log(
           "🚀 ~ file: page.tsx:17 ~ fetchData ~ response.data:",
           response.data
@@ -36,9 +37,9 @@ const HomePage = () => {
         console.error("An error occurred:", error);
       }
     };
-
-    fetchData();
     fetchUser();
+    fetchData();
+    //fetchUser();
   }, []);
 
   return (

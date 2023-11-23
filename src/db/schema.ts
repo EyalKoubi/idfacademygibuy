@@ -78,6 +78,10 @@ export interface ChapterCourseTable {
   chapterId: string;
   courseId: string;
 }
+export interface UserCoursesTable{
+  userId:string;
+  courseId: string;
+}
 
 export interface CourseTable {
   id: GeneratedAlways<string>; 
@@ -98,6 +102,7 @@ export interface Database {
   SubjectChapter: SubjectChapterTable; // New types
   Chapter: ChapterTable; // New types
   ChapterCourse: ChapterCourseTable; // New types
+  UserCourses:UserCoursesTable;
 }
 
 export type SelectContent = Selectable<ContentTable>;

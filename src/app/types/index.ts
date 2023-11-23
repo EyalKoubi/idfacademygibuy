@@ -38,4 +38,7 @@ export type CoursesState = {
   courses: CourseData[];
   initinalCourse:CourseData;
 };
-
+export type UserState = {
+  user: any;
+}
+  
