@@ -31,7 +31,10 @@ export const UserTexts = {
 };
 
 export const HomeTexts = {
-  welcome: "ברוכים הבאים לאתר הכי מגניב בעולם",
+  welcome: ",ברוכים הבאים",
+  goodMorning: "בוקר טוב",
+  goodAfterNoon:"צהוריים טובים",
+  goodEvening: "ערב טוב",
   mercasHadigitech: "מרכז הדיגיטק",
   aboutUs: "שלום חברים",
 };
