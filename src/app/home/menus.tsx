@@ -34,7 +34,6 @@ const admin_permissions = [
   Menu.CourseCatalog,
   Menu.CourseManager,
   Menu.CourseCreation,
-  Menu.ContinueStading,
   Menu.AboutUs,
   Menu.Logout,
 ];
@@ -42,6 +41,7 @@ const admin_permissions = [
 const user_permissions = [
   Menu.HomePage,
   Menu.UserArea,
+  Menu.CourseCatalog,
   Menu.ContinueStading,
   Menu.AboutUs,
   Menu.Logout,

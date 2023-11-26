@@ -72,6 +72,7 @@ export const editTexts = {
   addSubject: "הוסף נושא",
   addContent: "הוסף תוכן",
 
+  showCourse:"הצג קורס",
   showChapters: "הצג פרקים",
   showSubjects: "הצג נושאים",
   showContents: "הצג תכנים",

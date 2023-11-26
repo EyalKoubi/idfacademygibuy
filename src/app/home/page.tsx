@@ -8,11 +8,23 @@ import useUserStore from "../_contexts/userContext";
 const HomePage = () => {
   
   const { setCourses, courses } = useCoursesStore();
-  const {user,setUser}=useUserStore()
-  
+  const {user, setUser,setUserCourses}=useUserStore();
+
+
+  const getData=async()=>{
+    const response=await axios.get("/api/getData/")
+    if(response.data.message){
+      
+    }
+    else{
+      await setUser(response.data.user)
+      setCourses(response.data.courses)
+      setUserCourses(response.data.userCourses)
+      console.log(response.data)
+    }
+  }
   const fetchUser=async()=>{
     const response=await axios.get("/api/getUser/")
-    console.log
     if(response.data.message){
       
     }
@@ -37,9 +49,9 @@ const HomePage = () => {
         console.error("An error occurred:", error);
       }
     };
-    fetchUser();
-    fetchData();
-    //fetchUser();
+   // fetchUser();
+   // fetchData();
+    getData();
   }, []);
 
   return (

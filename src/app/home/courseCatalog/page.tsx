@@ -5,14 +5,18 @@ import CourseCard from './_components/courseCard';
 import useCoursesStore from '@/app/_contexts/courseContext';
 import SearchCourse from './_components/searchCourse';
 import { CourseData } from '@/app/types';
+import useUserStore from '@/app/_contexts/userContext';
 
 const CourseCatalog: React.FC = () => {
   const { courses } = useCoursesStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredCourses, setFilteredCourses] = useState(courses);
+  const [hideRegistersCourses, sethideRegistersCourses] = useState(false);
 
   const [filterType, setFilterType] = useState('name'); // 'name' or 'date'
   const [dateRange, setDateRange] = useState({ start: '', end: '' });
+
+  const {userCourses}=useUserStore();
   let filtered:CourseData[];
   useEffect(() => {
    // let filtered:CourseData[];
@@ -32,8 +36,14 @@ const CourseCatalog: React.FC = () => {
         }
       });
     }
+    else if (hideRegistersCourses){
+      filtered = filtered.filter(course => 
+        !userCourses.some(userCourse => userCourse.id === course.id)
+      );
+    }
+    console.log(filtered)
     setFilteredCourses(filtered);
-  }, [searchTerm, courses, filterType, dateRange]);
+  }, [hideRegistersCourses,searchTerm, courses, filterType, dateRange]);
 
   return (
     <div className="container flex flex-col items-center mx-auto p-4">
@@ -45,6 +55,14 @@ const CourseCatalog: React.FC = () => {
         setDateRange={setDateRange}
       />
       </div>
+      <div>
+        <input 
+          type="checkbox" 
+          checked={hideRegistersCourses} 
+          onChange={() => sethideRegistersCourses(!hideRegistersCourses)}
+       />
+    </div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 
       {filteredCourses.length > 0 ? (

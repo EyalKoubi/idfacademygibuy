@@ -6,20 +6,30 @@ import { ContentData,CourseData,CoursesState,SubjectData,ChapterData, UserState}
 
 
 type CoursesActions = {
-  setUser: (user: CourseData) => void;
+  setUser: (user: any) => void;
+  setUserCourses: (courses: CourseData[]) => void;
+  addUserCourse:(course:CourseData)=>void;
   
 };
-
 const useUserStore = create<UserState & CoursesActions>((set) => ({
   user: null,
-  setUser: (
-   user:any
-  ) =>
-    set((state) => {
-      state.user = user;
-      return { ...state };
-    }),
+  userCourses: [],
 
+  setUser: (user: any) => set((state) => {
+    state.user = user;
+    return { ...state };
+  }),
+
+  setUserCourses: (courses: CourseData[]) => set((state) => {
+    state.userCourses = courses;
+    return { ...state };
+  }),
+
+  addUserCourse: (course: CourseData) => set((state) => ({
+    ...state,
+    userCourses: [...state.userCourses, course],
+  })),
 }));
+
 
 export default useUserStore;

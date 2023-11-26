@@ -3,6 +3,14 @@
 //   image: string;
 //   chapters: ChapterData[];
 // };
+
+export enum Users {
+  Admin = 1,
+  Editor = 2,
+  Creator = 3,
+  User = 4,
+}
+
 export type ContentData = {
   id: string;
   file_name: string;
@@ -40,5 +48,6 @@ export type CoursesState = {
 };
 export type UserState = {
   user: any;
+  userCourses:CourseData[]
 }
   
