@@ -1,4 +1,5 @@
-import { useReducer } from "react";
+
+import { useEffect, useReducer, useState } from "react";
 import { CourseData } from "@/app/types";
 import { useRouter } from "next/navigation";
 import { ChapterData } from "@/app/types";
@@ -9,12 +10,19 @@ import axios from "axios";
 import {Users} from "@/app/types"
 interface CourseCardProps {
   course: CourseData;
+  isPresentMode:boolean;
 }
 
-const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
-  console.log(course.img_id);
+const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
   const router = useRouter();
-  const {user,userCourses,addUserCourse}=useUserStore();
+  const {user,userCourses,adminCourses,addUserCourse}=useUserStore();
+  const [isRegister,setIsRegister]=useState(false)
+  //const [isAdmin,setIsAdmin]=useState(false)
+
+  useEffect(()=>{
+    setIsRegister((userCourses.some(userCourse => userCourse.id === course.id)))
+    console.log((isPresentMode))
+  },[userCourses])
   // Function to format the timestamp
   const formatDate = (timestamp: Date ) => {
     const date = new Date(timestamp);
@@ -33,7 +41,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       addUserCourse(course)
     }
   }
-  const isregister=(userCourses.some(userCourse => userCourse.id === course.id))
+ // const isregister=(userCourses.some(userCourse => userCourse.id === course.id))
+ // const isAdmin=(adminCourses.some(admincourse => admincourse.id === course.id))
   return (
     <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white m-4" >
       <div className="px-6 py-4">
@@ -49,8 +58,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
         </div>
         {course.img_id && <MediaViewer content={course.img_id} />}
         {course.creationTimestamp &&<p className="text-sm text-gray-500">Created on: {formatDate(course.creationTimestamp)}</p>}
-        {(!isregister)&&(user.role===Users.User)&&<button onClick={registerCourse}>{LoginTexts.register}</button>}
-        {(isregister||(user.role===Users.Admin))&&<button onClick={() => { router.push(`courseCatalog/${course.id}/chapters`) }}>{editTexts.showCourse}</button>}
+        {(!isRegister)&&<button onClick={registerCourse}>{LoginTexts.register}</button>}
+        {(isRegister&&isPresentMode)&&<button onClick={() => { router.push(`courseCatalog/${course.id}/chapters`) }}>{editTexts.showCourse}</button>}
       </div>
     </div>
   );

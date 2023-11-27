@@ -5,6 +5,7 @@ import { CourseData,ContentData } from "@/app/types";
 import axios, { AxiosError } from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";
 import { useRouter } from "next/navigation";
+import useUserStore from "@/app/_contexts/userContext";
 interface ErrorResponse {
   message?: string;
 }
@@ -20,7 +21,7 @@ const AddCoursePage: React.FC = () => {
   const [fileData, setFileData] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  
+  const {user,addAdminCourse}=useUserStore();
   const submitFile = async () =>{
     try {
       let formData = new FormData();
@@ -67,6 +68,7 @@ const AddCoursePage: React.FC = () => {
       
       let formData = new FormData();
       formData.append("course", JSON.stringify(courseToServer));
+      formData.append("userId", user.id);
       console.log(courseData)
    
     
@@ -77,7 +79,7 @@ const AddCoursePage: React.FC = () => {
       console.log(response.data)
       if (response.data?.id) {
         addCourse(response.data);
-        
+        addAdminCourse(response.data)
         router.push(`/home/courseManager/${response.data.id}`);
       } else {
         setError(response.data?.message);

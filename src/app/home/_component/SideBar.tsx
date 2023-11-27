@@ -9,12 +9,7 @@ import {
   MenuRow,
 } from "../menus";
 
-enum Users {
-  Admin = 1,
-  Editor = 2,
-  Creator = 3,
-  User = 4,
-}
+import {Users} from "@/app/types"
 
 interface SidebarProps {
   userType: Users;

@@ -48,6 +48,7 @@ export type CoursesState = {
 };
 export type UserState = {
   user: any;
-  userCourses:CourseData[]
+  userCourses:CourseData[];
+  adminCourses:CourseData[];
 }
   

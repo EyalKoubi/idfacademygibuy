@@ -22,8 +22,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const {user,setUser}=useUserStore()
-
+  const {user,adminCourses,setUser}=useUserStore()
+  
   useEffect(()=>{
      
   },
@@ -35,7 +35,9 @@ export default function RootLayout({
           <Navbar />
           <div className="flex justify-end">
             {children}
-            {user&&<Sidebar userType={user?.role} />}
+            {/* need to fix */}
+            {user&&<Sidebar userType={Users.Admin}/>}
+            {/* if have admin courses do admin menu (1 enum ) else () */}
           </div>
         </div>
       </body>

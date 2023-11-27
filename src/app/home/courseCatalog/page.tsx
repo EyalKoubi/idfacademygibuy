@@ -67,7 +67,7 @@ const CourseCatalog: React.FC = () => {
 
       {filteredCourses.length > 0 ? (
         filteredCourses.map((course, index) => (
-            <CourseCard key={index} course={course} />
+            <CourseCard key={index} course={course} isPresentMode={false}/>
         ))
     ) : (
         <p className="col-span-full text-center">No courses found for this search.</p>

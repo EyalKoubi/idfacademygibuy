@@ -99,9 +99,9 @@ export const admin_menu: MenuRow[] = [
   },
   {
     id: 6,
-    href: "/home/continueStading",
-    rowInfo: SidebarText.continueStading,
-    icon: <ContinueStudyingIcon />,
+    href: "/home/myCourses",
+    rowInfo: SidebarText.myCourses,
+    icon: <ContinueStudyingIcon />, 
   },
   {
     id: 7,

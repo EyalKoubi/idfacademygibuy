@@ -21,7 +21,8 @@ export async function POST(req: CourseRequest, res: NextApiResponse) {
       .insertInto("UserCourses")
       .values({
         courseId:courseId,
-        userId:userId
+        userId:userId,
+        role:4// user role
       })
       .returning(["userId","courseId"])
       .executeTakeFirstOrThrow();

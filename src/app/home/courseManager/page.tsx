@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import { editTexts } from "@/HebrewStrings/Texts";
 import useCoursesStore from "../../_contexts/courseContext";
 import { useRouter } from "next/navigation";
+import useUserStore from "@/app/_contexts/userContext";
 
 const CourseManager= () => {
   const { setCourses, courses } = useCoursesStore();
   const router = useRouter();
-
+  const {adminCourses}=useUserStore();
   useEffect(() => {
     console.log("🚀 ~ file: page.tsx:34 ~ CourseManager ~ courses:", courses);
   }, [courses]);
@@ -22,7 +23,7 @@ const CourseManager= () => {
         {editTexts.courses}
       </h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
-        {courses.map((course) => {
+        {adminCourses.map((course) => {
           return (
             <button
               key={course.id}

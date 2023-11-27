@@ -81,6 +81,7 @@ export interface ChapterCourseTable {
 export interface UserCoursesTable{
   userId:string;
   courseId: string;
+  role:number;
 }
 
 export interface CourseTable {
@@ -140,3 +141,7 @@ export type UserUpdate = Updateable<User>;
 export type SelectAccount = Selectable<Account>;
 export type NewAccount = Insertable<Account>;
 export type AccountUpdate = Updateable<Account>;
+
+export type SelectUserCourses = Selectable<UserCoursesTable>;
+export type NewUserCourses = Insertable<UserCoursesTable>;
+export type UserCoursesUpdate = Updateable<UserCoursesTable>;

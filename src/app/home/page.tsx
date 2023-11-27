@@ -8,7 +8,7 @@ import useUserStore from "../_contexts/userContext";
 const HomePage = () => {
   
   const { setCourses, courses } = useCoursesStore();
-  const {user, setUser,setUserCourses}=useUserStore();
+  const {user, setUser,setUserCourses,setAdminCourses}=useUserStore();
 
   function getHebrewGreeting(): string {
     const currentHour = new Date().getHours();
@@ -24,25 +24,27 @@ const HomePage = () => {
   const getData=async()=>{
     const response=await axios.get("/api/getData/")
     if(response.data.message){
-      
+      console.log("error to fetch data")
     }
     else{
       await setUser(response.data.user)
       setCourses(response.data.courses)
       setUserCourses(response.data.userCourses)
-      console.log(response.data)
+      setAdminCourses(response.data.adminCourses)
+      console.log("data from db :",response.data)
     }
   }
-  useEffect(() => {
-    console.log("🚀 ~ file: page.tsx:12 ~ HomePage ~ courses:", courses);
-  }, [courses,user]);
+  // useEffect(() => {
+  //   console.log("🚀 ~ file: page.tsx:12 ~ HomePage ~ courses:", courses);
+  // }, [courses,user]);
+
   useEffect(() => {
     getData();
   }, []);
 
   return (
     <div>
-      {user&&<h1>{` ${user.name}  ${getHebrewGreeting()} `}</h1>}
+     {user && <h1 className="text-2xl">{` ${user.name}  ${getHebrewGreeting()} `}</h1>}
     </div>
   );
 };

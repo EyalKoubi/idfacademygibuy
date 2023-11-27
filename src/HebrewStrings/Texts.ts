@@ -19,7 +19,7 @@ export const SidebarText = {
   courseCatalog: "קטלוג קורסים",
   courseManager: "ניהול קורסים",
   courseCreation: "יצירת קורס",
-  continueStading: "המשך למידה",
+  myCourses: "הקורסים שלי",
   aboutUs: "אודותינו",
   logout: "התנתק",
 };

@@ -103,7 +103,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn("email", "text", (col) => col.unique().notNull())
     .addColumn("emailVerified", "timestamptz")
     .addColumn("image", "text")
-    .addColumn("role", "integer", (col) => col.defaultTo(1)) //need to do that its will change 
+    // .addColumn("role", "integer", (col) => col.defaultTo(1)) //need to do that its will change 
     .execute();
   
     await db.schema
@@ -161,11 +161,12 @@ export async function up(db: Kysely<any>): Promise<void> {
       await db.schema
     .createTable("UserCourses")
     .addColumn("userId", "uuid", (col) =>
-      col.references("User.id").onDelete("cascade").notNull().unique()
+      col.references("User.id").onDelete("cascade").notNull()
     )
     .addColumn("courseId", "uuid", (col) =>
       col.references("Course.id").onDelete("cascade").notNull()
     )
+    .addColumn("role", "integer")
     .execute(); 
 
 }
@@ -178,6 +179,8 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable("Chapter").ifExists().execute();
   await db.schema.dropTable("ChapterCourse").ifExists().execute();
   await db.schema.dropTable("Course").ifExists().execute();
+
+  await db.schema.dropTable("UserCourses").ifExists().execute();
 
   await db.schema.dropTable("Account").ifExists().execute();
   await db.schema.dropTable("Session").ifExists().execute();

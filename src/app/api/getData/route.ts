@@ -2,14 +2,27 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { db } from "../../../db/database"; // adjust the import according to your actual db import
 import { NextRequest, NextResponse } from "next/server";
 import { ContentData, CourseData } from "@/app/types";
+
+
 export async function GET(req: NextRequest, res: NextApiResponse) {
+  const getUserCourses=async (userId:string,result:CourseData[],roleIndex:number)=>{
+    const coursesidofuser=  await db.selectFrom("UserCourses")
+    .where("userId", "=", userId)
+    .where("role", "=", 4)//4 is users courses
+    .select(["UserCourses.courseId"])
+    .execute();
+    const courseIds = coursesidofuser.map(item => item.courseId);
+    console.log(coursesidofuser)
+    const userCourses=result.filter((course)=>courseIds.includes(course.id))
+    return userCourses;
+  }
   try {
     const userFromDb = await db
       .selectFrom("User")
       //.where("User.id", "=", ) need to fix
       .selectAll()
       .executeTakeFirstOrThrow();
-      const coursesWithChapters = await db
+    const coursesWithChapters = await db
       .selectFrom("Course")
       .selectAll()
       .execute();
@@ -69,14 +82,14 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       console.log("🚀 ~ file: route.ts:54 ~ GET ~ result:", result);
     }
     //get users courses
-    const coursesidofuser=  await db.selectFrom("UserCourses")
-    .where("userId", "=", userFromDb.id)
-    .select(["UserCourses.courseId"])
-    .execute();
-    const courseIds = coursesidofuser.map(item => item.courseId);
-    console.log(coursesidofuser)
-    const userCourses=result.filter((course)=>courseIds.includes(course.id))
-    const data={user:userFromDb,courses:result,userCourses:userCourses}
+
+    const userCourses=await getUserCourses(userFromDb.id,result,4)//4 is user role index
+    console.log("userCousers",userCourses)
+    const adminCourses=await getUserCourses(userFromDb.id,result,1)//1 is admin role index
+    console.log("adminCourses",adminCourses)
+
+    
+    const data={user:userFromDb,courses:result,userCourses,adminCourses}
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error fetching courses:", error);

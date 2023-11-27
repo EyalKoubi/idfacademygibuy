@@ -22,7 +22,7 @@ const Chapter: React.FC<ChapterProps> = ({ chapter, courseid }) => {
   return (
     <p onClick={() => navigateToChapter(chapter.id, courseid)} style={{ cursor: 'pointer' }}>
       {chapter.name}
-      {chapter.brief}
+      // {chapter.brief}
     </p>
   );
 };

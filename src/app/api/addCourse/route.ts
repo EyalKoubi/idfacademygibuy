@@ -13,6 +13,7 @@ export async function POST(req: CourseRequest, res: NextApiResponse) {
   try {
   const data = await req.formData();
   const course = JSON.parse(data.get("course") as string);
+  const userId=data.get("userId") as string;
   const courseToDb={
     name: course.name,
     img_id: course.img_id.id,
@@ -33,6 +34,12 @@ export async function POST(req: CourseRequest, res: NextApiResponse) {
       .values(courseToDb)
       .returning(["id", "name","img_id","creationTimestamp"])
       .executeTakeFirstOrThrow();
+
+  const newUserCourse = await db
+      .insertInto("UserCourses")
+      .values({courseId:newCourse.id,userId:userId ,role:1})
+      .returning(["courseId","UserCourses.userId","UserCourses.role"])
+      .executeTakeFirstOrThrow();    
   const courseToClient:CourseData={   
       id:newCourse.id,
       name:newCourse.name,
