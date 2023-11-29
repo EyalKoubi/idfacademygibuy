@@ -10,7 +10,7 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content }) => {
     const [mediaType, setMediaType] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-
+    // console.log(content)
     const cleanup = () => {
         if (mediaSrc) {
             URL.revokeObjectURL(mediaSrc);

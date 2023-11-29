@@ -37,6 +37,7 @@ export const HomeTexts = {
   goodEvening: "ערב טוב",
   mercasHadigitech: "מרכז הדיגיטק",
   aboutUs: "שלום חברים",
+  continueStanding:"המשך למידה"
 };
 
 export const AddCourseTexts = {

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import useCoursesStore from '@/app/_contexts/courseContext';
 import { ChapterData, CourseData, SubjectData } from '@/app/types';
 import { usePathname } from 'next/navigation';
-import Subject from '@/app/home/courseCatalog/_components/subject';
+import Subject from '@/app/home/myCourses/_components/subject';
 
 interface SubjectListProps{
   params:{

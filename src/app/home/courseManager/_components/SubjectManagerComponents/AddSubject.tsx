@@ -11,7 +11,7 @@ import useCoursesStore from "@/app/_contexts/courseContext";
         setAddSubjectError:Dispatch<SetStateAction<string>>
     }
     const AddSubject:React.FC<AddSubjectProps>=({chapter,courseId,chapterIndex,setIsAddingSubject,setAddSubjectError})=>{
-      const { updateChapter, deletChapter, addSubject, courses } =
+      const { updateChapter, deleteChapter, addSubject, courses } =
     useCoursesStore();
         const [newSubjectName, setNewSubjectName] = useState("");
         const handleAddSubject = async () => {

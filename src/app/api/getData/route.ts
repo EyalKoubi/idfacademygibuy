@@ -8,7 +8,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
   const getUserCourses=async (userId:string,result:CourseData[],roleIndex:number)=>{
     const coursesidofuser=  await db.selectFrom("UserCourses")
     .where("userId", "=", userId)
-    .where("role", "=", 4)//4 is users courses
+    .where("role", "=", roleIndex)//4 is users courses
     .select(["UserCourses.courseId"])
     .execute();
     const courseIds = coursesidofuser.map(item => item.courseId);
@@ -19,7 +19,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
   try {
     const userFromDb = await db
       .selectFrom("User")
-      //.where("User.id", "=", ) need to fix
+      //.where("User.id", "=", ) need to fix when will be a lot of users
       .selectAll()
       .executeTakeFirstOrThrow();
     const coursesWithChapters = await db
@@ -28,6 +28,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       .execute();
     
     console.log("courses",coursesWithChapters)
+
     const result:CourseData[] = [];
     for (const course of coursesWithChapters) {
       const courseContent:ContentData = await db
@@ -84,12 +85,24 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
     //get users courses
 
     const userCourses=await getUserCourses(userFromDb.id,result,4)//4 is user role index
-    console.log("userCousers",userCourses)
+    console.log("userCourses",userCourses)
     const adminCourses=await getUserCourses(userFromDb.id,result,1)//1 is admin role index
     console.log("adminCourses",adminCourses)
 
+    //define the role of user
+    const roleValue = adminCourses.length > 0 ? 1 : 4;
+
+    const data = {
+      user: {
+        ...userFromDb,
+        role: roleValue
+     },
+      courses: result,
+      userCourses,
+      adminCourses
+};
     
-    const data={user:userFromDb,courses:result,userCourses,adminCourses}
+    // const data={user:userFromDb,courses:result,userCourses,adminCourses}
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error fetching courses:", error);

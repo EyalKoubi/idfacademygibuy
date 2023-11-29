@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import useCoursesStore from "@/app/_contexts/courseContext";
 import { CourseData } from "@/app/types";
-import Course from "../_components/Course";
+import Course from "../_components/CourseMangerComponents/Course";
 import { useRouter } from "next/navigation";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
 import axios from "axios";

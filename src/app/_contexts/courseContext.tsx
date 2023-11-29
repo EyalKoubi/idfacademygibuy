@@ -20,7 +20,7 @@ type CoursesActions = {
     content: ContentData
   ) => void;
   deleteCourse: (course: CourseData) => void;
-  deletChapter: (chapter: ChapterData, courseId: string) => void;
+  deleteChapter: (chapter: ChapterData, courseId: string) => void;
   deleteSubject: (
     subject: SubjectData,
     chapterId: string,
@@ -143,7 +143,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       return { ...state };
     }),
 
-  deletChapter: (chapter: ChapterData, courseId: string) =>
+  deleteChapter: (chapter: ChapterData, courseId: string) =>
     set((state) => {
       state.courses = state.courses.map((curCourse) => {
         if (courseId === curCourse.id) {

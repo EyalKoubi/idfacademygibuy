@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react';
-import MediaViewer from './_components/mediaViewer';
+import MediaViewer from '@/app/home/_component/mediaViewer';
 import VideoLinkList from './_components/videoLinkList';
 import useCoursesStore from '@/app/_contexts/courseContext';
 import { ContentData } from '@/app/types';

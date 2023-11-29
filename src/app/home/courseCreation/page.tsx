@@ -80,6 +80,7 @@ const AddCoursePage: React.FC = () => {
       if (response.data?.id) {
         addCourse(response.data);
         addAdminCourse(response.data)
+        
         router.push(`/home/courseManager/${response.data.id}`);
       } else {
         setError(response.data?.message);

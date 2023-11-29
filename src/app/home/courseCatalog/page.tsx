@@ -1,7 +1,7 @@
 "use client"
 // import { CourseDataCard } from "@/app/types";
 import React, { useState, useEffect } from 'react';
-import CourseCard from './_components/courseCard';
+import CourseCard from '@/app/home/_component/courseCard';
 import useCoursesStore from '@/app/_contexts/courseContext';
 import SearchCourse from './_components/searchCourse';
 import { CourseData } from '@/app/types';

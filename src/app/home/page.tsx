@@ -20,31 +20,12 @@ const HomePage = () => {
     } else {
       return HomeTexts.goodEvening;  
     }
-}
-  const getData=async()=>{
-    const response=await axios.get("/api/getData/")
-    if(response.data.message){
-      console.log("error to fetch data")
-    }
-    else{
-      await setUser(response.data.user)
-      setCourses(response.data.courses)
-      setUserCourses(response.data.userCourses)
-      setAdminCourses(response.data.adminCourses)
-      console.log("data from db :",response.data)
-    }
   }
-  // useEffect(() => {
-  //   console.log("🚀 ~ file: page.tsx:12 ~ HomePage ~ courses:", courses);
-  // }, [courses,user]);
-
-  useEffect(() => {
-    getData();
-  }, []);
 
   return (
     <div>
      {user && <h1 className="text-2xl">{` ${user.name}  ${getHebrewGreeting()} `}</h1>}
+     <button>{HomeTexts.continueStanding}</button> 
     </div>
   );
 };

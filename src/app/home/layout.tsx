@@ -10,6 +10,7 @@ import { User } from "next-auth";
 import useUserStore from "../_contexts/userContext";
 
 const inter = Inter({ subsets: ["latin"] });
+
 enum Users {
   Admin = 1,
   Editor = 2,
@@ -22,12 +23,27 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const {user,adminCourses,setUser}=useUserStore()
+  const { setCourses, courses } = useCoursesStore();
+  const {user, setUser,setUserCourses,setAdminCourses}=useUserStore();
+
   
-  useEffect(()=>{
-     
-  },
-  [])
+  const getData=async()=>{
+    const response=await axios.get("/api/getData/")
+    if(response.data.message){
+      console.log("error to fetch data")
+    }
+    else{
+      setUser(response.data.user)
+      setCourses(response.data.courses)
+      setUserCourses(response.data.userCourses)
+      setAdminCourses(response.data.adminCourses)
+      console.log("data from db :",response.data)
+    }
+  }
+  useEffect(() => {
+    getData();
+  }, []);
+
   return (
     <html>
       <body className={inter.className}>
@@ -37,7 +53,7 @@ export default function RootLayout({
             {children}
             {/* need to fix */}
             {user&&<Sidebar userType={Users.Admin}/>}
-            {/* if have admin courses do admin menu (1 enum ) else () */}
+            {/* if have admin courses do admin menu (1 enum ) else (4) */}
           </div>
         </div>
       </body>
