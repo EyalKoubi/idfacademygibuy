@@ -22,9 +22,11 @@ const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
   //const [isAdmin,setIsAdmin]=useState(false)
 
   useEffect(()=>{
+   // console.log("registered:",(userCourses.some(userCourse => userCourse.id === course.id)))
     setIsRegister((userCourses.some(userCourse => userCourse.id === course.id)))
-    console.log((isPresentMode))
-  },[userCourses])
+   // console.log((isPresentMode))
+  },[course])
+
   // Function to format the timestamp
   const formatDate = (timestamp: Date ) => {
     const date = new Date(timestamp);

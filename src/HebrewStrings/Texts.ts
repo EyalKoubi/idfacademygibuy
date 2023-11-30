@@ -63,7 +63,9 @@ export const AddCourseTexts = {
     },
   },
 };
-
+export const searchCourseTexts={
+  hideRegisterCourses:"הסתר קורסים שאתה רשום כבר ",
+}
 export const editTexts = {
   rename: "שנה שם",
 
