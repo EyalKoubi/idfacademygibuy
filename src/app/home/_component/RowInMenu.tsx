@@ -14,7 +14,7 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon }) => {
   const router = useRouter();
 
   const clickHandeller = () => {
-    if (!isMenuButtonPressed) return;
+    //if (!isMenuButtonPressed) return; //for do if its icons menu its will be clickable
     switch (rowInfo) {
       case SidebarText.logout:
         signOut({ redirect: false }).then(() => {

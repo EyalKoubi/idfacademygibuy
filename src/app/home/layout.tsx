@@ -49,7 +49,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <div>
           <Navbar />
-          <div className="flex justify-end">
+          <div className="flex justify-end bg-gray-100">
             {children}
             {/* need to fix */}
             {user&&<Sidebar userType={Users.Admin}/>}

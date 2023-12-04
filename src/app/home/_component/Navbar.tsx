@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 const Navbar = () => {
   const router = useRouter();
   return (
-    <header className="bg-gray-600 py-4">
+    <header className="bg-gray-700 py-4">
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex">
           <Image src={tikshuvPicture} alt="Tikshuv" width={35} height={0.5} />
@@ -19,7 +19,7 @@ const Navbar = () => {
             router.push("/home/aboutUs");
           }}
         >
-          {HomeTexts.mercasHadigitech}
+          {/* {HomeTexts.mercasHadigitech} */}
         </button>
         <HamburgerMenu />
       </div>

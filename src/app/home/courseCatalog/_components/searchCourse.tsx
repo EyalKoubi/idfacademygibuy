@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 interface searchCourseProps{ 
     searchTerm:string,
+    filterType:string,
     setSearchTerm: React.Dispatch<React.SetStateAction<string>>
     
     setFilterType:React.Dispatch<React.SetStateAction<string>>
@@ -10,7 +11,7 @@ interface searchCourseProps{
       end: string;
   }>>
 }
-const SearchCourse: React.FC<searchCourseProps> = ({ searchTerm,setSearchTerm,setFilterType,setDateRange }) => {
+const SearchCourse: React.FC<searchCourseProps> = ({ searchTerm,filterType,setSearchTerm,setFilterType,setDateRange }) => {
 
   return (
     <>
@@ -25,19 +26,27 @@ const SearchCourse: React.FC<searchCourseProps> = ({ searchTerm,setSearchTerm,se
         className="form-input border border-black "
         placeholder="Search courses..."
       />
+    {filterType==="date"&&
       <div className='flex flex-col'>
         {/* Date range inputs */}
+        <p>please choose date range</p>
+        <div >
+        <p>From:</p>
         <input 
           type="date" 
           onChange={(e) => setDateRange(prev => ({ ...prev, start: e.target.value }))}
           className="form-input"
         />
+         </div>
+         <div>
+          <p>To:</p>
         <input 
           type="date" 
           onChange={(e) => setDateRange(prev => ({ ...prev, end: e.target.value }))}
           className="form-input"
         />
-      </div>
+        </div>
+      </div>}
     </>
   );
 };

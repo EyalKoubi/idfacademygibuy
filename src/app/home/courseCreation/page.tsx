@@ -20,6 +20,7 @@ const AddCoursePage: React.FC = () => {
   });
   const [fileData, setFileData] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [loading,setLoading]=useState<boolean>(false)
   const router = useRouter();
   const {user,addAdminCourse}=useUserStore();
   const submitFile = async () =>{
@@ -52,6 +53,7 @@ const AddCoursePage: React.FC = () => {
 
   const handleSubmit = async () => {
     //setError(null);
+      setLoading(true)
       let image=await submitFile();
       console.log("image from submitfile",image)
       try {
@@ -80,7 +82,7 @@ const AddCoursePage: React.FC = () => {
       if (response.data?.id) {
         addCourse(response.data);
         addAdminCourse(response.data)
-        
+        setLoading(false)
         router.push(`/home/courseManager/${response.data.id}`);
       } else {
         setError(response.data?.message);
@@ -112,12 +114,15 @@ const AddCoursePage: React.FC = () => {
         className="p-2 w-full border rounded-md shadow-sm mb-4"
       />
       {error && <p className="text-red-500">{error}</p>}
+      {!loading?
       <button
         onClick={handleSubmit}
         className="p-2 w-full bg-blue-600 text-white rounded-md hover:bg-blue-800 shadow-sm"
       >
         {adminTexts.adminAddCourse}
-      </button>
+      </button> :
+        <p>loading....</p>
+}
     </div>
   );
 };

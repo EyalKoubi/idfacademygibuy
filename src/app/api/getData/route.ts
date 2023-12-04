@@ -90,8 +90,8 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
     console.log("adminCourses",adminCourses)
 
     //define the role of user
-    const roleValue = adminCourses.length > 0 ? 1 : 4;
-
+    //const roleValue = adminCourses.length > 0 ? 1 : 4;
+    const roleValue=1;// need to fix when will be roles (define role 1-admin)
     const data = {
       user: {
         ...userFromDb,
@@ -102,7 +102,6 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       adminCourses
 };
     
-    // const data={user:userFromDb,courses:result,userCourses,adminCourses}
     return NextResponse.json(data);
   } catch (error) {
     console.error("Error fetching courses:", error);

@@ -58,6 +58,7 @@ const CourseCatalog: React.FC = () => {
       <div>
       <SearchCourse 
         searchTerm={searchTerm} 
+        filterType={filterType}
         setSearchTerm={setSearchTerm}
         setFilterType={setFilterType}
         setDateRange={setDateRange}

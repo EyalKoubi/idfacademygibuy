@@ -18,7 +18,7 @@ const CourseManager= () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen p-5">
+    <div className="bg-gray-50 min-h-screen p-5">
       <h1 className="text-4xl mb-6 text-center text-gray-800">
         {editTexts.courses}
       </h1>
