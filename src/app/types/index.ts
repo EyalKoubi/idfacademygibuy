@@ -36,6 +36,11 @@ export type CourseData = {
   creationTimestamp:Date|null;
   chapters: ChapterData[];
 };
+
+export type UserRequestsCourse={
+  user:any;
+  course:CourseData;
+};
 // export type CourseData = {
 //   id: string;
 //   name: string;
@@ -52,3 +57,6 @@ export type UserState = {
   adminCourses:CourseData[];
 }
   
+export type UserRequestCourseState={
+  userRequestsCourses:UserRequestsCourse[];
+}

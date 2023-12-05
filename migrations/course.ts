@@ -164,6 +164,17 @@ await db.schema
       .addColumn("role", "integer")
       .addUniqueConstraint("unique_user_course", ["userId", "courseId", "role"])
       .execute();
+
+      await db.schema
+      .createTable("UserRequestsCourse")
+      .addColumn("userId", "uuid", (col) =>
+        col.references("User.id").onDelete("cascade").notNull()
+      )
+      .addColumn("courseId", "uuid", (col) =>
+        col.references("Course.id").onDelete("cascade").notNull()
+      )
+      .addUniqueConstraint("unique_user_course_requests", ["userId", "courseId"])
+      .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
@@ -176,6 +187,7 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable("Course").ifExists().execute();
 
   await db.schema.dropTable("UserCourses").ifExists().execute();
+  await db.schema.dropTable("UserRequestsCourse").ifExists().execute();
 
   await db.schema.dropTable("Account").ifExists().execute();
   await db.schema.dropTable("Session").ifExists().execute();

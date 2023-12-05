@@ -54,27 +54,7 @@ export async function getPresignedUrlFromS3Service(bucket: string, fileName: str
       throw error;
   }
 }
-  // export async function getFileFromS3Service(bucket: string, fileName: string): Promise<string> {
-  //   try {
-  //     const stream = await s3Client.getObject(bucket, fileName);
-  //     const chunks: Buffer[] = [];
-  
-  //     return new Promise((resolve, reject) => {
-  //       stream.on('data', (chunk: Buffer) => chunks.push(chunk));
-  //       stream.on('end', () => {
-  //         const buffer = Buffer.concat(chunks);
-  //         const base64 = buffer.toString('base64');
-  //         resolve(base64);
-  //       });
-  //       stream.on('error', reject);
-  //     });
-  //   } catch (error) {
-  //     console.error('Error fetching file from S3:', error);
-  //     console.log("fail in the getObject func")
-  //     throw error;
-  //   }
-  // }
-// ... (rest of your imports)
+
 
 import { createReadStream } from 'fs';
 import { PassThrough } from 'stream';

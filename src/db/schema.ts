@@ -91,6 +91,11 @@ export interface CourseTable {
   creationTimestamp: Date; 
 }
 
+export interface UserRequestsCourseTable {
+  userId:string;
+  courseId: string;
+}
+
 export interface Database {
   Account: Account; // Existing types
   Session: Session; // Existing types
@@ -104,6 +109,7 @@ export interface Database {
   Chapter: ChapterTable; // New types
   ChapterCourse: ChapterCourseTable; // New types
   UserCourses:UserCoursesTable;
+  UserRequestsCourse:UserRequestsCourseTable;
 }
 
 export type SelectContent = Selectable<ContentTable>;
@@ -145,3 +151,7 @@ export type AccountUpdate = Updateable<Account>;
 export type SelectUserCourses = Selectable<UserCoursesTable>;
 export type NewUserCourses = Insertable<UserCoursesTable>;
 export type UserCoursesUpdate = Updateable<UserCoursesTable>;
+
+export type SelectUserRequestsCourse = Selectable<UserCoursesTable>;
+export type NewUserRequestsCourse = Insertable<UserCoursesTable>;
+export type UserUserRequestsCourse = Updateable<UserCoursesTable>;

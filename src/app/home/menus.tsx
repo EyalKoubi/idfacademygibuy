@@ -5,10 +5,12 @@ import {
   CourseCatalogIcon,
   CourseCreationIcon,
   CourseManagerIcon,
+  CourseUserRequestsIcon,
   ExitIcon,
   HomePageIcon,
   PersonalAreaIcon,
 } from "./_component/icons";
+
 
 export interface MenuRow {
   id: number;
@@ -22,10 +24,11 @@ enum Menu {
   UserArea = 2,
   CourseCatalog = 3,
   CourseManager = 4,
-  CourseCreation = 5,
-  ContinueStading = 6,
-  AboutUs = 7,
-  Logout = 8,
+  PremisionManager=5,
+  CourseCreation = 6,
+  ContinueStading = 7,
+  AboutUs = 8,
+  Logout = 9,
 }
 
 const admin_permissions = [
@@ -33,6 +36,7 @@ const admin_permissions = [
   Menu.UserArea,
   Menu.CourseCatalog,
   Menu.CourseManager,
+  Menu.PremisionManager,
   Menu.CourseCreation,
   Menu.AboutUs,
   Menu.Logout,
@@ -93,24 +97,30 @@ export const admin_menu: MenuRow[] = [
   },
   {
     id: 5,
+    href: "/home/premisionManager",
+    rowInfo: SidebarText.premsionManager,
+    icon: <CourseUserRequestsIcon />,
+  },
+  {
+    id: 6,
     href: "/home/courseCreation",
     rowInfo: SidebarText.courseCreation,
     icon: <CourseCreationIcon />,
   },
   {
-    id: 6,
+    id: 7,
     href: "/home/myCourses",
     rowInfo: SidebarText.myCourses,
     icon: <ContinueStudyingIcon />, 
   },
   {
-    id: 7,
+    id: 8,
     href: "/home/aboutUs",
     rowInfo: SidebarText.aboutUs,
     icon: <AboutUsIcon />,
   },
   {
-    id: 8,
+    id: 9,
     href: "/",
     rowInfo: SidebarText.logout,
     icon: <ExitIcon />,

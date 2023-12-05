@@ -2,6 +2,7 @@ import AboutUsIcon from "./AboutUsIcon";
 import ContinueStudyingIcon from "./ContinueStudyingIcon";
 import CourseCatalogIcon from "./CourseCatalogIcon";
 import CourseCreationIcon from "./CourseCreationIcon";
+import CourseUserRequestsIcon from "./CourseUserRequestsIcon"
 import CourseManagerIcon from "./CourseManagerIcon";
 import ExitIcon from "./ExitIcon";
 import HamburgerMenu from "./HamburgerMenu";
@@ -14,6 +15,7 @@ export {
   CourseCatalogIcon,
   CourseCreationIcon,
   CourseManagerIcon,
+  CourseUserRequestsIcon,
   ExitIcon,
   HamburgerMenu,
   HomePageIcon,

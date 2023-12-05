@@ -43,7 +43,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
       setRegistererror("problem to register please try again")
     }
     else{
-      addUserCourse(course)
+      //addUserCourse(course)
     }
   }
  // const isregister=(userCourses.some(userCourse => userCourse.id === course.id))

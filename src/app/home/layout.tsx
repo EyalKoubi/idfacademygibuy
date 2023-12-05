@@ -8,6 +8,7 @@ import axios from "axios";
 import useCoursesStore from "../_contexts/courseContext";
 import { User } from "next-auth";
 import useUserStore from "../_contexts/userContext";
+import useUserRequestCourseStore from "../_contexts/requestsCoursesContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
 }) {
   const { setCourses, courses } = useCoursesStore();
   const {user, setUser,setUserCourses,setAdminCourses}=useUserStore();
+  const {setUserRequestsCourse}=useUserRequestCourseStore()
 
   
   const getData=async()=>{
@@ -37,6 +39,7 @@ export default function RootLayout({
       setCourses(response.data.courses)
       setUserCourses(response.data.userCourses)
       setAdminCourses(response.data.adminCourses)
+      setUserRequestsCourse(response.data.userRequestsCourse)
       console.log("data from db :",response.data)
     }
   }

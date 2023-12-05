@@ -18,6 +18,7 @@ export const SidebarText = {
   userArea: "אזור אישי",
   courseCatalog: "קטלוג קורסים",
   courseManager: "ניהול קורסים",
+  premsionManager:"בקשות משתמש לקורס",
   courseCreation: "יצירת קורס",
   myCourses: "הקורסים שלי",
   aboutUs: "אודותינו",

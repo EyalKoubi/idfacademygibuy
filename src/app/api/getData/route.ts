@@ -87,8 +87,46 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
     const userCourses=await getUserCourses(userFromDb.id,result,4)//4 is user role index
     console.log("userCourses",userCourses)
     const adminCourses=await getUserCourses(userFromDb.id,result,1)//1 is admin role index
+
+    //admin requests user courses
+    const admincourseIds = adminCourses.map(course => course.id); 
     console.log("adminCourses",adminCourses)
 
+    const userRequestsCoursesDb = await db
+    .selectFrom("UserCourses")
+    .leftJoin("User", "User.id", "UserCourses.userId")
+    .leftJoin("Course", "Course.id", "UserCourses.courseId")
+    .where("UserCourses.courseId", "in", admincourseIds) // Add this where clause
+    .select([ 
+        "User.id as userId", 
+        "User.name as userName", 
+        "User.email as userEmail", 
+        "User.emailVerified as userEmailVerified", 
+        "User.image as userImage",
+
+        "Course.id as courseId", 
+        "Course.name as courseName", 
+        "Course.img_id as courseImgId", 
+        "Course.creationTimestamp as courseCreationTimestamp"
+    ])
+    .execute();
+    const userRequestsCourse = userRequestsCoursesDb.map(request => ({
+      user: {
+          // Map the user-related fields from the request
+          id: request.userId, // Assuming the alias used for User.id is userId
+          name: request.userName, // Assuming the alias used for User.name is userName
+          email: request.userEmail, // Assuming the alias used for User.email is userEmail
+          emailVerified: request.userEmailVerified, // Assuming the alias used for User.emailVerified
+          image: request.userImage // Assuming the alias used for User.image is userImage
+      },
+      course: {
+          // Map the course-related fields from the request
+          id: request.courseId, // Assuming the alias used for Course.id is courseId
+          name: request.courseName, // Assuming the alias used for Course.name is courseName
+          img_id: request.courseImgId, // Assuming the alias used for Course.img_id is courseImgId
+          creationTimestamp: request.courseCreationTimestamp // Assuming the alias used for Course.creationTimestamp
+      }
+  }));
     //define the role of user
     //const roleValue = adminCourses.length > 0 ? 1 : 4;
     const roleValue=1;// need to fix when will be roles (define role 1-admin)
@@ -99,7 +137,8 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
      },
       courses: result,
       userCourses,
-      adminCourses
+      adminCourses,
+      userRequestsCourse,
 };
     
     return NextResponse.json(data);
