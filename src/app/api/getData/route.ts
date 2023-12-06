@@ -14,6 +14,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
     const courseIds = coursesidofuser.map(item => item.courseId);
     console.log(coursesidofuser)
     const userCourses=result.filter((course)=>courseIds.includes(course.id))
+    console.log("user coursess",userCourses)
     return userCourses;
   }
   try {
@@ -90,13 +91,14 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
 
     //admin requests user courses
     const admincourseIds = adminCourses.map(course => course.id); 
+    console.log(admincourseIds)
     console.log("adminCourses",adminCourses)
-
-    const userRequestsCoursesDb = await db
-    .selectFrom("UserCourses")
-    .leftJoin("User", "User.id", "UserCourses.userId")
-    .leftJoin("Course", "Course.id", "UserCourses.courseId")
-    .where("UserCourses.courseId", "in", admincourseIds) // Add this where clause
+    
+    const userRequestsCoursesDb = admincourseIds.length > 0 ? await db
+    .selectFrom("UserRequestsCourse")
+    .leftJoin("User", "User.id", "UserRequestsCourse.userId")
+    .leftJoin("Course", "Course.id", "UserRequestsCourse.courseId")
+    .where("UserRequestsCourse.courseId", "in", admincourseIds) 
     .select([ 
         "User.id as userId", 
         "User.name as userName", 
@@ -109,22 +111,22 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
         "Course.img_id as courseImgId", 
         "Course.creationTimestamp as courseCreationTimestamp"
     ])
-    .execute();
+    .execute():[];
+    
     const userRequestsCourse = userRequestsCoursesDb.map(request => ({
       user: {
-          // Map the user-related fields from the request
-          id: request.userId, // Assuming the alias used for User.id is userId
-          name: request.userName, // Assuming the alias used for User.name is userName
-          email: request.userEmail, // Assuming the alias used for User.email is userEmail
-          emailVerified: request.userEmailVerified, // Assuming the alias used for User.emailVerified
-          image: request.userImage // Assuming the alias used for User.image is userImage
+          id: request.userId, 
+          name: request.userName, 
+          email: request.userEmail, 
+          emailVerified: request.userEmailVerified,
+          image: request.userImage 
       },
       course: {
-          // Map the course-related fields from the request
-          id: request.courseId, // Assuming the alias used for Course.id is courseId
-          name: request.courseName, // Assuming the alias used for Course.name is courseName
-          img_id: request.courseImgId, // Assuming the alias used for Course.img_id is courseImgId
-          creationTimestamp: request.courseCreationTimestamp // Assuming the alias used for Course.creationTimestamp
+          
+          id: request.courseId,
+          name: request.courseName, 
+          img_id: request.courseImgId,
+          creationTimestamp: request.courseCreationTimestamp
       }
   }));
     //define the role of user

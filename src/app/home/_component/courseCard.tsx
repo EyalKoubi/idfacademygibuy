@@ -9,6 +9,7 @@ import { LoginTexts, editTexts } from "@/HebrewStrings/Texts";
 import useUserStore from "@/app/_contexts/userContext";
 import axios from "axios";
 import {Users} from "@/app/types"
+import useUserRequestCourseStore from "@/app/_contexts/requestsCoursesContext";
 interface CourseCardProps {
   course: CourseData;
   isPresentMode:boolean;
@@ -17,13 +18,16 @@ interface CourseCardProps {
 const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
   const router = useRouter();
   const {user,userCourses,adminCourses,addUserCourse}=useUserStore();
+  const {userRequestsCourses,addUserRequestsCourse}=useUserRequestCourseStore();
   const [isRegister,setIsRegister]=useState(false)
   const [registererror,setRegistererror]=useState('')
+  const [isRequested,setIsRequested]=useState(false)
   //const [isAdmin,setIsAdmin]=useState(false)
 
   useEffect(()=>{
    // console.log("registered:",(userCourses.some(userCourse => userCourse.id === course.id)))
     setIsRegister((userCourses.some(userCourse => userCourse.id === course.id)))
+    setIsRequested((userRequestsCourses.some(userrequestCourse => (userrequestCourse.course.id === course.id)&&(userrequestCourse.user.id === user.id))))
    // console.log((isPresentMode))
   },[course])
 
@@ -32,6 +36,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
     const date = new Date(timestamp);
     return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear().toString().slice(-2)}`;
   };
+  useEffect(()=>{console.log("userCourseRequest",userRequestsCourses)},[userRequestsCourses])
   const registerCourse=async ()=> {
     
     let formData = new FormData();
@@ -43,7 +48,11 @@ const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
       setRegistererror("problem to register please try again")
     }
     else{
+      console.log("reach to success request")
       //addUserCourse(course)
+      addUserRequestsCourse(user,course)
+      setIsRequested(true)
+      console.log(userRequestsCourses)
     }
   }
  // const isregister=(userCourses.some(userCourse => userCourse.id === course.id))
@@ -64,7 +73,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
         {course.img_id && <MediaViewer content={course.img_id} />}
         {<ErrorMessage  message={registererror}/>}
         {course.creationTimestamp &&<p className="text-sm text-gray-500">Created on: {formatDate(course.creationTimestamp)}</p>}
-        {(!isRegister)&&<button onClick={registerCourse}>{LoginTexts.register}</button>}
+        {(!isRegister&&!isRequested)&&<button onClick={registerCourse}>{LoginTexts.register}</button>}
+        {isRequested&&<p className="text-blue-700">הבקשה ממתינה לאישור</p>}
         {(isRegister&&isPresentMode)&&<button onClick={() => { router.push(`myCourses/${course.id}/chapters`) }}>{editTexts.showCourse}</button>}
       </div>
     </div>

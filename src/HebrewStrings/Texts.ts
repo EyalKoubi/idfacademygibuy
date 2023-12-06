@@ -106,6 +106,8 @@ export const editTexts = {
 export const GeneralTexts = {
   submit: "אישור",
   back: "חזור",
+  accept:"אשר",
+  reject:"דחה"
 };
 
 /*

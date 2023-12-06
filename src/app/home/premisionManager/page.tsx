@@ -3,11 +3,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { User } from 'next-auth';
 import useUserRequestCourseStore from '@/app/_contexts/requestsCoursesContext';
+import { CourseData } from '@/app/types';
+import useUserStore from '@/app/_contexts/userContext';
+import { GeneralTexts } from '@/HebrewStrings/Texts';
 
 const Page = () => {
     const [pendingRegistrations, setPendingRegistrations] = useState<User[]>([]);
     const [selectedCourse, setSelectedCourse] = useState<{[userId: string]: string}>({});
-    const {userRequestsCourses}=useUserRequestCourseStore();
+    const {userRequestsCourses,removeRequestUserCourse}=useUserRequestCourseStore();
+    const {user,addUserCourse}=useUserStore();
     // useEffect(() => {
     //     // Fetch pending registrations when component mounts
     //     axios.get("/api/getPermissionRequests")
@@ -17,24 +21,22 @@ const Page = () => {
     //         .catch(error => console.error(error));
     // }, []);
 
-    const approveRegistration = (userId: string,courseId:string) => {
-        //const courseId = selectedCourse[userId]; // Get the selected course for the user
-        axios.post(`/api/approveUserForCourse`, { userId, courseId })
+    const answerRequestCourse = (userCurrent:any,course:CourseData,answerType:string) => {
+        const formData=new FormData();
+        formData.append("userId",userCurrent.id)
+        formData.append("courseId",course.id)
+        formData.append("answerType",answerType)
+        //const courseId = selectedCourse[userId]; // Get the selected course for the userCurrent
+        axios.post(`/api/answerRequestCourse`,formData)
             .then(() => {
-                // Update the list to remove the approved user
-                setPendingRegistrations(pendingRegistrations.filter(user => user.id !== userId));
+                removeRequestUserCourse(userCurrent,course)
+                if(userCurrent.id===user.id&&answerType==="Accept")//if we approve request to my self
+                    addUserCourse(course)
             })
             .catch(error => console.error(error));
     };
 
-    const rejectRegistration = (userId: string,courseId:string) => {
-        axios.post(`/api/rejectUser/${userId}`)
-            .then(() => {
-                // Update the list to remove the rejected user
-                setPendingRegistrations(pendingRegistrations.filter(user => user.id !== userId));
-            })
-            .catch(error => console.error(error));
-    };
+   
 
     const handleCourseSelection = (userId: string, courseId: string) => {
         setSelectedCourse({ ...selectedCourse, [userId]: courseId });
@@ -53,9 +55,12 @@ const Page = () => {
                             <div className='m-3'>
                             {userRequestCourse.course.name}
                             </div>
-                       
-                        <button onClick={() => approveRegistration(userRequestCourse.user.id,userRequestCourse.course.id)}>Approve</button>
-                        <button onClick={() => rejectRegistration(userRequestCourse.user.id,userRequestCourse.course.id)}>Reject</button>
+                            <div className='m-3'>
+                        <button onClick={() => answerRequestCourse(userRequestCourse.user,userRequestCourse.course,"Accept")}>{GeneralTexts.accept}</button>
+                        </div>
+                        <div className='m-3'>
+                        <button onClick={() => answerRequestCourse(userRequestCourse.user,userRequestCourse.course,"Reject")}>{GeneralTexts.reject}</button>
+                        </div>
                         </div>
                     </li>
                 ))}
