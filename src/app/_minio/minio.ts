@@ -1,14 +1,15 @@
 import * as Minio from "minio";
 import { Stream } from "stream";
 
-export const s3Config = {
-    endPoint: "127.0.0.1",
-    port: 9000,
-    accessKey: "AKIAIOSFODNN7EXAMPLE",
-    secretKey: "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY",
-    useSSL: false,
-  };
-export const bucket: string = "bucket1"; // Specify the name of your MinIO bucket
+export const s3Config: Minio.ClientOptions = {
+  endPoint: process.env.S3_ENDPOINT || '127.0.0.1', // Default value if not set
+  port: parseInt(process.env.S3_PORT || '9000', 10), // Provide a default port and parse it as an integer
+  accessKey: process.env.MINIO_ROOT_USER || '', // Default to empty string if not set
+  secretKey: process.env.MINIO_ROOT_PASSWORD || '', // Default to empty string if not set
+  useSSL: false, // Assuming SSL is not used; adjust as needed
+};
+
+export const bucket: string = process.env.S3_BUCKET ||"idfacademy"; // Specify the name of your MinIO bucket
 export const s3Client = new Minio.Client(s3Config);
 
 export async function uploadFileToS3Service(
