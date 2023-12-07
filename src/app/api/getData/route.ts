@@ -112,7 +112,13 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
         "Course.creationTimestamp as courseCreationTimestamp"
     ])
     .execute():[];
-    
+
+    const userCourseProgressData = await db
+      .selectFrom('UserCourseProgress')
+      .where('userId', '=', userFromDb.id)
+      .selectAll()
+      .execute();
+
     const userRequestsCourse = userRequestsCoursesDb.map(request => ({
       user: {
           id: request.userId, 
@@ -136,12 +142,13 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       user: {
         ...userFromDb,
         role: roleValue
-     },
+      },
       courses: result,
       userCourses,
       adminCourses,
       userRequestsCourse,
-};
+     // userCourseProgress: userCourseProgressData, // Include user course progress
+    };
     
     return NextResponse.json(data);
   } catch (error) {

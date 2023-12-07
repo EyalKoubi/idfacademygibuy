@@ -55,8 +55,31 @@ export type UserState = {
   user: any;
   userCourses:CourseData[];
   adminCourses:CourseData[];
+  courseProgress: UserCourseProgress[]; 
 }
-  
+
+//user process structre
+export type UserCourseProgress = {
+  courseId: string;
+  lastChapterId: string;
+  lastSubjectId: string;
+  contentProgress: ContentProgress[];
+};
+export type ContentProgress = {
+  chapterId:string;
+  subjectId: string;
+  contents: ContentItemProgress[];
+};
+
+export type ContentItemProgress = {
+  contentId: string;
+  watched: boolean;
+};
+
 export type UserRequestCourseState={
   userRequestsCourses:UserRequestsCourse[];
 }
+
+//for the fiture of continue standing 
+
+

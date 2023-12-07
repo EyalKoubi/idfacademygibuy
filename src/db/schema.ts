@@ -96,20 +96,28 @@ export interface UserRequestsCourseTable {
   courseId: string;
 }
 
+export interface UserCourseProgressTable {
+  userId: string;              
+  courseId: string;           
+  lastChapterId: string;      
+  lastSubjectId: string;       
+  contentProgress: string;     // Serialized JSON string of content progress details
+}
 export interface Database {
-  Account: Account; // Existing types
-  Session: Session; // Existing types
-  User: User; // Existing types
-  VerificationToken: VerificationToken; // Existing types
-  Course: CourseTable; // Existing types
-  Content: ContentTable; // New types
-  ContentSubject: ContentSubjectTable; // New types
-  Subject: SubjectTable; // New types
-  SubjectChapter: SubjectChapterTable; // New types
-  Chapter: ChapterTable; // New types
-  ChapterCourse: ChapterCourseTable; // New types
+  Account: Account; 
+  Session: Session; 
+  User: User; 
+  VerificationToken: VerificationToken; 
+  Course: CourseTable; 
+  Content: ContentTable; 
+  ContentSubject: ContentSubjectTable; 
+  Subject: SubjectTable; 
+  SubjectChapter: SubjectChapterTable; 
+  Chapter: ChapterTable;
+  ChapterCourse: ChapterCourseTable; 
   UserCourses:UserCoursesTable;
   UserRequestsCourse:UserRequestsCourseTable;
+  UserCourseProgress:UserCourseProgressTable;
 }
 
 export type SelectContent = Selectable<ContentTable>;
@@ -152,6 +160,10 @@ export type SelectUserCourses = Selectable<UserCoursesTable>;
 export type NewUserCourses = Insertable<UserCoursesTable>;
 export type UserCoursesUpdate = Updateable<UserCoursesTable>;
 
+export type SelectUserCourseProgress = Selectable<UserCoursesTable>;
+export type NewUserCourseProgress = Insertable<UserCoursesTable>;
+export type UserRequestsCourseUpdate = Updateable<UserCoursesTable>;
+
 export type SelectUserRequestsCourse = Selectable<UserCoursesTable>;
 export type NewUserRequestsCourse = Insertable<UserCoursesTable>;
-export type UserUserRequestsCourse = Updateable<UserCoursesTable>;
+export type UserCourseProgressUpdate = Updateable<UserCoursesTable>;

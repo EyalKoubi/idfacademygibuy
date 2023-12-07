@@ -175,6 +175,21 @@ await db.schema
       )
       .addUniqueConstraint("unique_user_course_requests", ["userId", "courseId"])
       .execute();
+
+      await db.schema
+      .createTable("UserCourseProgress")
+      .addColumn("userId", "uuid", (col) =>
+      col.references("User.id").onDelete("cascade").notNull()
+      )
+      .addColumn("courseId", "uuid", (col) =>
+      col.references("Course.id").onDelete("cascade").notNull()
+      )
+      .addColumn("lastChapterId", "uuid")
+      .addColumn("lastSubjectId", "uuid")
+      .addColumn("contentProgress", "jsonb") // JSONB for PostgreSQL, adjust according to your DBMS
+      .addUniqueConstraint("unique_user_course_progress", ["userId", "courseId"])
+      .execute();
+
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
@@ -188,7 +203,8 @@ export async function down(db: Kysely<any>): Promise<void> {
 
   await db.schema.dropTable("UserCourses").ifExists().execute();
   await db.schema.dropTable("UserRequestsCourse").ifExists().execute();
-
+  await db.schema.dropTable("UserCourseProgress").ifExists().execute();
+  
   await db.schema.dropTable("Account").ifExists().execute();
   await db.schema.dropTable("Session").ifExists().execute();
   await db.schema.dropTable("User").ifExists().execute();
