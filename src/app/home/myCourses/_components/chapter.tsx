@@ -14,7 +14,6 @@ const Chapter: React.FC<ChapterProps> = ({ chapter, courseid }) => {
   const navigateToChapter = (chapterId: string, courseid: string) => {
     // Construct the new path by appending the chapterId and '/subjects' to the current path
     const newPath = `${currentPath}/${chapterId}/subjects`;
-
     // Navigate to the new path
     router.push(newPath);
   };

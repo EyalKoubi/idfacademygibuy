@@ -14,8 +14,8 @@ type CoursesActions = {
   addAdminCourse:(course:CourseData)=>void;
   updateCourseProgress: (courseProgress: UserCourseProgress) => void;
   markContentAsWatched: (courseId: string, chapterId: string, subjectId: string, contentId: string) => void;
-};
-
+  isChapterFullyWatched :(state: UserState, courseId: string, chapterId: string)=>boolean;
+}
 const useUserStore = create<UserState & CoursesActions>((set) => ({
   user: null,
   userCourses: [],
@@ -107,9 +107,19 @@ const useUserStore = create<UserState & CoursesActions>((set) => ({
         }]
       });
     }
-  
+    
     return { ...state };
-  })
+  }),
+   isChapterFullyWatched :(state: UserState, courseId: string, chapterId: string): boolean => {
+    const course = state.courseProgress.find(c => c.courseId === courseId);
+    if (!course) return false;
+
+    const chapterProgress = course.contentProgress.find(cp => cp.chapterId === chapterId);
+    if (!chapterProgress) return false;
+
+    return chapterProgress.contents.every(content => content.watched);
+  },
+
 }))
 
 

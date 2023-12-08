@@ -4,6 +4,7 @@ import MediaViewer from '@/app/home/_component/mediaViewer';
 import VideoLinkList from './_components/videoLinkList';
 import useCoursesStore from '@/app/_contexts/courseContext';
 import { ContentData } from '@/app/types';
+import useUserStore from '@/app/_contexts/userContext';
 
 interface ContentListProps {
   params: {
@@ -15,6 +16,7 @@ interface ContentListProps {
 
 const ContentList: React.FC<ContentListProps> = ({ params }) => {
   const { courses } = useCoursesStore();
+  const {markContentAsWatched}=useUserStore();
   const subjectId = params.subjectid;
   const chapterId = params.chapterid;
   const courseId = params.courseid;
@@ -33,6 +35,7 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
     if (typeof newIndex === 'number' && newIndex >= 0 &&contentsToPresent!==undefined) {
       setContentIndex(newIndex);
       setCurrContent(contentsToPresent[newIndex]); // No optional chaining needed, newIndex is a number
+      markContentAsWatched(courseId,chapterId,subjectId,contentsToPresent[newIndex].id)
     }
   };
   
