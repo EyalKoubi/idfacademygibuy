@@ -34,6 +34,7 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content }) => {
     };
 
     useEffect(() => {
+        console.log(content)
         setLoading(true);
     
         if (content) {

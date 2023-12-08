@@ -106,10 +106,10 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
         "User.emailVerified as userEmailVerified", 
         "User.image as userImage",
 
-        "Course.id as courseId", 
-        "Course.name as courseName", 
-        "Course.img_id as courseImgId", 
-        "Course.creationTimestamp as courseCreationTimestamp"
+        "Course.id as id", 
+        "Course.name as name", 
+        "Course.img_id as img_id", 
+        "Course.creationTimestamp as creationTimestamp"
     ])
     .execute():[];
 
@@ -120,6 +120,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       .execute();
 
     const userRequestsCourse = userRequestsCoursesDb.map(request => ({
+
       user: {
           id: request.userId, 
           name: request.userName, 
@@ -129,12 +130,14 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       },
       course: {
           
-          id: request.courseId,
-          name: request.courseName, 
-          img_id: request.courseImgId,
-          creationTimestamp: request.courseCreationTimestamp
+          id: request.id,
+          name: request.name, 
+          img_id:result.find(course=>course.id===request.id)?.img_id,
+          creationTimestamp: request.creationTimestamp
       }
   }));
+  const userRequestsCourseResult=[]
+
     //define the role of user
     //const roleValue = adminCourses.length > 0 ? 1 : 4;
     const roleValue=1;// need to fix when will be roles (define role 1-admin)
