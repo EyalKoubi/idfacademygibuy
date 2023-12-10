@@ -1,10 +1,11 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MediaViewer from '@/app/home/_component/mediaViewer';
 import VideoLinkList from './_components/videoLinkList';
 import useCoursesStore from '@/app/_contexts/courseContext';
-import { ContentData } from '@/app/types';
+import { ContentData, ContentItemProgress } from '@/app/types';
 import useUserStore from '@/app/_contexts/userContext';
+import axios from 'axios';
 
 interface ContentListProps {
   params: {
@@ -16,26 +17,46 @@ interface ContentListProps {
 
 const ContentList: React.FC<ContentListProps> = ({ params }) => {
   const { courses } = useCoursesStore();
-  const {markContentAsWatched}=useUserStore();
+  const {markContentAsWatched,ContentsSubjectStatus } = useUserStore();
   const subjectId = params.subjectid;
   const chapterId = params.chapterid;
   const courseId = params.courseid;
 
   const courseToPresent = courses.find(course => course.id === courseId);
   const contentsToPresent:ContentData[]|undefined = courseToPresent?.chapters?.find(chapter => chapter.id === chapterId)?.subjects.find(subject => subject.id === subjectId)?.contents;
+  const userState = useUserStore(); // This is how you access the state
 
+  const contentsStatus =ContentsSubjectStatus(userState,courseId, chapterId, subjectId);
   const [contentIndex, setContentIndex] = useState<number>(0);
   const [currContent, setCurrContent] = useState<ContentData | undefined>(contentsToPresent?.[0]);
 
-  const onVideoSelect = (content: ContentData) => {
+  const onVideoSelect = async(content: ContentData,contentStatus:ContentItemProgress) => {
     console.log('Selected Content:', content);
     // Find the index of the selected content in the contentsToPresent array
     const newIndex = contentsToPresent?.findIndex((c) => c.id === content.id);
     // Check if a valid index is found
     if (typeof newIndex === 'number' && newIndex >= 0 &&contentsToPresent!==undefined) {
       setContentIndex(newIndex);
-      setCurrContent(contentsToPresent[newIndex]); // No optional chaining needed, newIndex is a number
-      markContentAsWatched(courseId,chapterId,subjectId,contentsToPresent[newIndex].id)
+      setCurrContent(contentsToPresent[newIndex]);
+      if(!contentStatus.watched){ // No optional chaining needed, newIndex is a number
+        const updatePayload = {
+          courseId: courseId,
+          chapterId: chapterId,
+          subjectId: subjectId,
+          contentId: contentsToPresent[newIndex].id,
+          watched: true
+        };
+
+        try {
+        // Send a POST request to the server
+        const response = await axios.post('/api/updateProgressCourse', updatePayload);
+        console.log('Course progress updated:', response.data);
+        } catch (error) {
+        console.error('Error updating course progress:', error);
+        }
+
+        markContentAsWatched(courseId, chapterId, subjectId, contentsToPresent[newIndex].id);
+       } 
     }
   };
   
@@ -79,7 +100,7 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
           )}
         </div>
         <div className="flex justify-start md:block" style={{width:'150px'}}>
-          <VideoLinkList contents={contentsToPresent} onVideoSelect={onVideoSelect} />
+        { contentsToPresent&&contentsStatus&& <VideoLinkList contents={contentsToPresent} onVideoSelect={onVideoSelect} contentsStatus={contentsStatus} />}
         </div>
       </div>
   

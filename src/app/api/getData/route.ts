@@ -113,12 +113,32 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
     ])
     .execute():[];
 
+    //for the progress of user courses 
     const userCourseProgressData = await db
-      .selectFrom('UserCourseProgress')
-      .where('userId', '=', userFromDb.id)
-      .selectAll()
-      .execute();
+    .selectFrom('UserCourseProgress')
+    .where('userId', '=', userFromDb.id)
+    .selectAll()
+    .execute();
+  
+  // Assuming userCourseProgressData is an array of results
+  const formattedProgressData = userCourseProgressData.map(progress => {
+    // Parse the JSON content if it's not already an object
+    const contentProgress = typeof progress.contentProgress === 'string'
+      ? JSON.parse(progress.contentProgress)
+      : progress.contentProgress;
+  
 
+    return {
+      courseId: progress.courseId,
+      lastChapterId: progress.lastChapterId,
+      lastSubjectId: progress.lastSubjectId,
+      firstUnwatchedContentId: progress.firstUnwatchedContentId,
+      contentProgress: contentProgress 
+    };
+  });
+  
+
+  //for the course requests 
     const userRequestsCourse = userRequestsCoursesDb.map(request => ({
 
       user: {
@@ -150,7 +170,7 @@ export async function GET(req: NextRequest, res: NextApiResponse) {
       userCourses,
       adminCourses,
       userRequestsCourse,
-     // userCourseProgress: userCourseProgressData, // Include user course progress
+      userCourseProgress: formattedProgressData, // Include user course progress
     };
     
     return NextResponse.json(data);

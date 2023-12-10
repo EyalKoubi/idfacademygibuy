@@ -3,6 +3,7 @@ import React from 'react';
 import useCoursesStore from '@/app/_contexts/courseContext';
 import { ChapterData, CourseData } from '@/app/types';
 import Chapter from '../../_components/chapter';
+import useUserStore from '@/app/_contexts/userContext';
 interface ChapterListProps{
   params:{
     courseid:string;
@@ -10,6 +11,7 @@ interface ChapterListProps{
 }
 const ChapterList: React.FC<ChapterListProps> = (props:ChapterListProps) => {
   const { courses } = useCoursesStore();
+  
   console.log(courses)
   const courseid =props.params.courseid;
    //need to fix to zostan

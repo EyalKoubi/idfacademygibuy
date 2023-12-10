@@ -186,6 +186,7 @@ await db.schema
       )
       .addColumn("lastChapterId", "uuid")
       .addColumn("lastSubjectId", "uuid")
+      .addColumn("firstUnwatchedContentId","uuid")
       .addColumn("contentProgress", "jsonb") // JSONB for PostgreSQL, adjust according to your DBMS
       .addUniqueConstraint("unique_user_course_progress", ["userId", "courseId"])
       .execute();

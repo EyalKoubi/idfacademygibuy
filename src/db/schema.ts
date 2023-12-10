@@ -100,7 +100,8 @@ export interface UserCourseProgressTable {
   userId: string;              
   courseId: string;           
   lastChapterId: string;      
-  lastSubjectId: string;       
+  lastSubjectId: string;
+  firstUnwatchedContentId:string ;    
   contentProgress: string;     // Serialized JSON string of content progress details
 }
 export interface Database {

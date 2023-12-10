@@ -11,6 +11,7 @@ interface ErrorResponse {
 }
 const AddCoursePage: React.FC = () => {
   const { addCourse,initinalCourse } = useCoursesStore();
+  const {addNewCourseProcess}=useUserStore()
   const [courseData, setCourseData] = useState<CourseData>({
     id: "",
     name: "",
@@ -77,11 +78,11 @@ const AddCoursePage: React.FC = () => {
         const response = await axios.post("/api/addCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      
       console.log(response.data)
       if (response.data?.id) {
         addCourse(response.data);
         addAdminCourse(response.data)
+        addNewCourseProcess(response.data)
         setLoading(false)
         router.push(`/home/courseManager/${response.data.id}`);
       } else {

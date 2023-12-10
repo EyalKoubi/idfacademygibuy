@@ -55,7 +55,7 @@ export type UserState = {
   user: any;
   userCourses:CourseData[];
   adminCourses:CourseData[];
-  courseProgress: UserCourseProgress[]; 
+  coursesProgress: UserCourseProgress[]; 
 }
 
 //user process structre
