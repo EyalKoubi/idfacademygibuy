@@ -33,7 +33,9 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
   
   const [currContent, setCurrContent] = useState<ContentData | undefined>(contentsToPresent?.find(content=>content.id===params.contentid));
   useEffect(()=>{
+    console.log(coursesProgress)
     const curContentStatus=contentsStatus?.find(contentstatus=>contentstatus.contentId===currContent?.id)
+    console.log("cur content:",currContent,curContentStatus)
     if(curContentStatus&&currContent)
       onVideoSelect(currContent,curContentStatus)}
     ,[])

@@ -11,7 +11,9 @@ interface CourseRequest extends NextRequest {
 export async function POST(req: CourseRequest, res: NextApiResponse) {
 let insertIntoUserCourses
   const data = await req.formData();
-  const courseId:string = data.get("courseId") as string;
+  const course:CourseData=JSON.parse(data.get("course") as string);
+  console.log(course)
+  const courseId:string =course.id;
   console.log("courseId",courseId)
   const userId:string = data.get("userId") as string;
   console.log("userId",userId)
@@ -36,14 +38,15 @@ let insertIntoUserCourses
                 })
                 .returning(["userId", "courseId","role"])
             .executeTakeFirstOrThrow();
-            const insertIntoUserProgressCourses = await db
+          
+          const insertIntoUserProgressCourses = await db
             .insertInto("UserCourseProgress")
             .values({       
                 userId:userId,//need to fix 
                 courseId:courseId,
-                lastChapterId:null ,
-                lastSubjectId: null,
-                firstUnwatchedContentId: null,
+                lastChapterId:course.chapters[0].id ,
+                lastSubjectId:course.chapters[0].subjects[0].id,
+                firstUnwatchedContentId: course.chapters[0].subjects[0].contents[0].id,
                 contentProgress: JSON.stringify({}),
                
             })

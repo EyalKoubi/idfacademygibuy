@@ -157,7 +157,7 @@ const useUserStore = create<UserState & CoursesActions>((set) => ({
     if (!courseProgress) return undefined;
   
     // Find the chapter progress for the given chapterId
-    const chapterSubjectProgress = courseProgress.contentProgress.find(cp =>( cp.chapterId === chapterId&&cp.subjectId===subjectId));
+    const chapterSubjectProgress = courseProgress.contentProgress?.find(cp =>( cp.chapterId === chapterId&&cp.subjectId===subjectId));
     if (!chapterSubjectProgress) return undefined;
   
     // Find the specific content item by contentId and return its watched status

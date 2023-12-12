@@ -31,6 +31,11 @@ export async function POST(req: SubjectRequest, res: NextApiResponse) {
       .deleteFrom("Subject")
       .where("Subject.id", "=", subjectId)
       .executeTakeFirst();
+    await db
+    .updateTable("UserCourseProgress")
+    .set({ lastSubjectId: null })
+    .where("lastSubjectId", "=", subjectId)
+    .execute();
     return NextResponse.json({ message: "subject deleted successfully!" });
   } catch (error) {
     return NextResponse.json({ message: "Error delete subject" });

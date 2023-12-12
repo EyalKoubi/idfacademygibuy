@@ -42,6 +42,11 @@ export async function POST(req: ChapterRequest, res: NextApiResponse) {
       .deleteFrom("Chapter")
       .where("Chapter.id", "=", chapterId)
       .executeTakeFirst();
+    await db
+      .updateTable("UserCourseProgress")
+      .set({ lastChapterId: null })
+      .where("lastChapterId", "=", chapterId)
+      .execute();
     return NextResponse.json({ message: "chapter deleted successfully!" });
   } catch (error) {
     return NextResponse.json({ message: "Error delete chapter" });
