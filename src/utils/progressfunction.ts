@@ -1,5 +1,6 @@
 import useUserStore from '@/app/_contexts/userContext';
 import { CourseData, UserCourseProgress,ChapterData,ContentProgress, ContentItemProgress } from '@/app/types'
+import { useRouter } from 'next/navigation';
 
 export const createInitialContentProgress = (course: CourseData): ContentProgress[] => {
   return course.chapters.map((chapter:ChapterData )=> ({
@@ -15,30 +16,37 @@ export const createInitialContentProgress = (course: CourseData): ContentProgres
 };
 
 // Function to find the first chapter with any unwatched content and create content progress
-export const findFirstUnwatched = (course: CourseData): UserCourseProgress => {
+const findFirstUnwatched = (course: CourseData,router:any,coursesProgress:UserCourseProgress[]): void => {
+  console.log(course)
   let firstUnwatchedChapterId = '';
   let firstUnwatchedSubjectId = '';
-  const {coursesProgress}=useUserStore()
-    const coursesProcessById=coursesProgress.find(courseprogress=>courseprogress.courseId===course.id)
+  let firstUnwatchedContentId = '';
+
+  const courseProgressById = coursesProgress?.find(cp => cp.courseId === course.id);
+
+  // Looping through each chapter and subject
+  outerLoop:
   for (const chapter of course.chapters) {
     for (const subject of chapter.subjects) {
-        const unwatchedContent = subject.contents.find(content => {
-            const contentProgress = coursesProcessById?.contentProgress.find(cp => cp.chapterId === chapter.id)?.contents.find(c => c.contentId === content.id);
-            return !contentProgress?.watched;
-          });
-      if (unwatchedContent) {
-        firstUnwatchedChapterId = chapter.id;
-        firstUnwatchedSubjectId = subject.id;
-        break;
+      // Find the content progress for the current chapter and subject
+      const currentContentProgress = courseProgressById?.contentProgress.find(cp => cp.chapterId === chapter.id && cp.subjectId === subject.id);
+
+      // Loop through each content in the subject
+      for (const content of subject.contents) {
+        // Check if this content is not watched
+        const isWatched = currentContentProgress?.contents.some(c => c.contentId === content.id && c.watched);
+        if (!isWatched) {
+          firstUnwatchedChapterId = chapter.id;
+          firstUnwatchedSubjectId = subject.id;
+          firstUnwatchedContentId = content.id;
+          console.log(firstUnwatchedChapterId ,
+            firstUnwatchedSubjectId,
+            firstUnwatchedContentId )
+          router.push(`/home/myCourses/${course.id}/chapters/${firstUnwatchedChapterId}/subjects/${firstUnwatchedSubjectId}/contents/${firstUnwatchedContentId}`);
+          break outerLoop; // Break out of all loops
+        }
       }
     }
-    if (firstUnwatchedChapterId) break;
   }
+}
 
-  return {
-    courseId: course.id,
-    lastChapterId: firstUnwatchedChapterId,
-    lastSubjectId: firstUnwatchedSubjectId,
-    contentProgress: coursesProcessById?.contentProgress
-  };
-};

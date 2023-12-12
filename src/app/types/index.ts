@@ -63,6 +63,7 @@ export type UserCourseProgress = {
   courseId: string;
   lastChapterId: string;
   lastSubjectId: string;
+  firstUnwatchedContentId:string;
   contentProgress: ContentProgress[];
 };
 export type ContentProgress = {

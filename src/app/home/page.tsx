@@ -4,11 +4,16 @@ import { useEffect } from "react";
 import useCoursesStore from "../_contexts/courseContext";
 import axios from "axios";
 import useUserStore from "../_contexts/userContext";
+import { findFirstUnwatched } from "@/utils/progressfunction";
+import { CourseData, UserCourseProgress } from "../types";
+import { useRouter } from "next/navigation";
 
 const HomePage = () => {
   
   const { setCourses, courses } = useCoursesStore();
-  const {user, setUser,setUserCourses,setAdminCourses}=useUserStore();
+  const {user,userCourses,coursesProgress, setUser,setUserCourses,setAdminCourses}=useUserStore();
+  const router = useRouter();
+ 
 
   function getHebrewGreeting(): string {
     const currentHour = new Date().getHours();
@@ -25,7 +30,7 @@ const HomePage = () => {
   return (
     <div>
      {user && <h1 className="text-2xl">{` ${user.name}  ${getHebrewGreeting()} `}</h1>}
-     <button>{HomeTexts.continueStanding}</button> 
+     <button onClick={()=>findFirstUnwatched(userCourses[0],router,coursesProgress)}>{HomeTexts.continueStanding}</button> 
     </div>
   );
 };

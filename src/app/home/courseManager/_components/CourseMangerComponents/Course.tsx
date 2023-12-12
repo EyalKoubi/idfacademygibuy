@@ -7,6 +7,7 @@ import ErrorMessage from '../../../_component/ErrorMessage';
 import AddChapter from '../ChapterManagerComponents/AddChapter';
 import { CourseData } from '@/app/types';
 import { GeneralTexts, editTexts } from '@/HebrewStrings/Texts';
+import useUserStore from '@/app/_contexts/userContext';
 
 interface CourseProps {
   course: CourseData;
@@ -14,6 +15,7 @@ interface CourseProps {
 
 const Course = ({ course }: CourseProps) => {
   const { deleteCourse, renameCourse, addChapter } = useCoursesStore();
+  const {userCourses,deleteCourseFromUser}=useUserStore();
   const [isRenameCourse, setIsRenameCourse] = useState(false);
   const [courseName, setCourseName] = useState(course.name);
   const [isSelectedCourse, setIsSelectedCourse] = useState(false);
@@ -38,6 +40,7 @@ const Course = ({ course }: CourseProps) => {
         headers: { "Content-Type": "multipart/form-data" },
       });
       deleteCourse(course);
+      deleteCourseFromUser(course)
     } catch (error) {
       console.error('Error deleting course:', error);
     }

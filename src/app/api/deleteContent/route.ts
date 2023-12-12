@@ -2,6 +2,7 @@ import { NextApiResponse } from "next";
 import { db } from "../../../db/database";
 import { NextRequest, NextResponse } from "next/server";
 import {s3Config,s3Client,bucket} from "../../_minio/minio"
+import { ContentItemProgress } from "@/app/types";
 interface ContentRequest extends NextRequest {
   contentId?: string;
 }
@@ -20,9 +21,43 @@ export async function POST(req: ContentRequest, res: NextApiResponse) {
       .executeTakeFirst();
    
     await deleteByNameContentFromMinio(bucket,contentId);
+    await deleteContentFromUserProgress(contentId)
     return NextResponse.json({ message: "content deleted successfully!" });
   } catch (error) {
     return NextResponse.json({ message: "Error delete content" });
+  }
+}
+async function deleteContentFromUserProgress(contentId:string) {
+  try {
+    // Fetch all rows from UserCourseProgress
+    const userCourseProgressRows = await db
+      .selectFrom("UserCourseProgress")
+      .selectAll()
+      .execute();
+
+    // Iterate over each row to modify the contentProgress
+    for (const row of userCourseProgressRows) {
+      // Parse the contentProgress JSONB field
+      let contentProgress = JSON.parse(row.contentProgress);
+
+      // Remove the specified content from contentProgress
+      for (const cp of contentProgress) {
+        cp.contents = cp.contents.filter((content:ContentItemProgress) => content.contentId !== contentId);
+      }
+
+      // Update the row with the modified contentProgress
+      await db
+        .updateTable("UserCourseProgress")
+        .set({
+          contentProgress: JSON.stringify(contentProgress) // Convert back to JSONB
+        })
+        .where("userId", "=", row.userId)
+        .where("courseId", "=", row.courseId)
+        .execute();
+    }
+  } catch (error) {
+    console.error('Error in deleteContentFromUserProgress:', error);
+    throw error;
   }
 }
 async function deleteContentFromMinio(bucket: string) {

@@ -14,7 +14,7 @@ const Subject: React.FC<SubjectProps> = ({subject,courseid,chapterid}) => {
   const currpath=usePathname();
   const router=useRouter();
   const navigateToChapter = (subjectId: string,currpath:string) => {
-    router.push(currpath+`/${subjectId}/contents`);
+    router.push(currpath+`/${subjectId}/contents/${subject.contents[0].id}`);
    };
   return (
     <p  onClick={() => navigateToChapter(subject.id,currpath)}>

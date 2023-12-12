@@ -23,7 +23,9 @@ let insertIntoUserCourses
     .where("UserRequestsCourse.courseId", '=', courseId)
     .where("UserRequestsCourse.userId", '=', userId)
     .executeTakeFirstOrThrow();
+    console.log(answerType)
     if(answerType==="Accept"){
+
           const roleType=4;
            insertIntoUserCourses = await db
                 .insertInto("UserCourses")
@@ -34,7 +36,21 @@ let insertIntoUserCourses
                 })
                 .returning(["userId", "courseId","role"])
             .executeTakeFirstOrThrow();
-            return NextResponse.json(insertIntoUserCourses);
+            const insertIntoUserProgressCourses = await db
+            .insertInto("UserCourseProgress")
+            .values({       
+                userId:null,//need to fix 
+                courseId:courseId,
+                lastChapterId:null ,
+                lastSubjectId: null,
+                firstUnwatchedContentId: null,
+                contentProgress: JSON.stringify({}),
+               
+            })
+
+          .executeTakeFirstOrThrow();
+          console.log(insertIntoUserProgressCourses)
+          return NextResponse.json(insertIntoUserCourses);
     }
     return NextResponse.json(null);
   } catch (error) {

@@ -10,6 +10,7 @@ type CoursesActions = {
   setUserCourses: (courses: CourseData[]) => void;
   addUserCourse:(course:CourseData)=>void;
   setAdminCourses: (courses: CourseData[]) => void;
+  deleteCourseFromUser: (course:CourseData)=>void;
   addNewCourseProcess: (course: CourseData) => void;
   setCourseProgress: (coursesProgress: UserCourseProgress[])=>void;
   addAdminCourse:(course:CourseData)=>void;
@@ -48,6 +49,29 @@ const useUserStore = create<UserState & CoursesActions>((set) => ({
     ...state,
     adminCourses: [...state.adminCourses, course],
   })),
+  deleteCourseFromUser: (course: CourseData) => set((state) => {
+    // Delete from userCourses
+    const newUserCourses = state.userCourses.filter(
+      (curCourse) => course.id !== curCourse.id
+    );
+
+    // Delete from adminCourses
+    const newAdminCourses = state.adminCourses.filter(
+      (curCourse) => course.id !== curCourse.id
+    );
+
+    // Delete from coursesProgress
+    const newCoursesProgress = state.coursesProgress.filter(
+      (courseProgress) => course.id !== courseProgress.courseId
+    );
+
+    return { 
+      ...state, 
+      userCourses: newUserCourses,
+      adminCourses: newAdminCourses,
+      coursesProgress: newCoursesProgress 
+    };
+}),
 
   addNewCourseProcess: (course: CourseData) => set((state) => ({
     ...state,

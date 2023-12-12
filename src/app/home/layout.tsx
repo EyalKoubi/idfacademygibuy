@@ -25,7 +25,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const { setCourses, courses } = useCoursesStore();
-  const {user, setUser,setUserCourses,setAdminCourses,setCourseProgress}=useUserStore();
+  const {user,userCourses,adminCourses,coursesProgress, setUser,setUserCourses,setAdminCourses,setCourseProgress}=useUserStore();
   const {setUserRequestsCourse}=useUserRequestCourseStore()
 
   
@@ -40,7 +40,7 @@ export default function RootLayout({
       setUserCourses(response.data.userCourses)
       setAdminCourses(response.data.adminCourses)
       setUserRequestsCourse(response.data.userRequestsCourse)
-    //  setCourseProgress(response.data.userCourseProgress)
+      setCourseProgress(response.data.userCourseProgress)
 
       console.log("data from db :",response.data)
     }
@@ -48,6 +48,9 @@ export default function RootLayout({
   useEffect(() => {
     getData();
   }, []);
+  // useEffect(() => {
+  //   getData();
+  // }, [userCourses,adminCourses,coursesProgress]);
 
   return (
     <html>

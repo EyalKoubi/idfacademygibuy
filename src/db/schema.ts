@@ -97,8 +97,8 @@ export interface UserRequestsCourseTable {
 }
 
 export interface UserCourseProgressTable {
-  userId: string;              
-  courseId: string;           
+  userId: string;   
+  courseId: string;                  
   lastChapterId: string;      
   lastSubjectId: string;
   firstUnwatchedContentId:string ;    
@@ -161,10 +161,12 @@ export type SelectUserCourses = Selectable<UserCoursesTable>;
 export type NewUserCourses = Insertable<UserCoursesTable>;
 export type UserCoursesUpdate = Updateable<UserCoursesTable>;
 
-export type SelectUserCourseProgress = Selectable<UserCoursesTable>;
-export type NewUserCourseProgress = Insertable<UserCoursesTable>;
-export type UserRequestsCourseUpdate = Updateable<UserCoursesTable>;
+export type SelectUserCourseProgress = Selectable<UserCourseProgressTable>;
+export type NewUserCourseProgress = Insertable<UserCourseProgressTable>;
+export type UserRequestsCourseUpdate = Updateable<UserCourseProgressTable>;
 
 export type SelectUserRequestsCourse = Selectable<UserCoursesTable>;
 export type NewUserRequestsCourse = Insertable<UserCoursesTable>;
 export type UserCourseProgressUpdate = Updateable<UserCoursesTable>;
+
+
