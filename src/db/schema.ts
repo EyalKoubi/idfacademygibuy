@@ -99,10 +99,10 @@ export interface UserRequestsCourseTable {
 export interface UserCourseProgressTable {
   userId: string;   
   courseId: string;                  
-  lastChapterId: string;      
-  lastSubjectId: string;
-  firstUnwatchedContentId:string ;    
-  contentProgress: string;     // Serialized JSON string of content progress details
+  lastChapterId: string|null;      
+  lastSubjectId: string|null;
+  firstUnwatchedContentId:string|null ;    
+  contentProgress: string;     
 }
 export interface Database {
   Account: Account; 

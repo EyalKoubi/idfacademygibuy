@@ -39,7 +39,7 @@ let insertIntoUserCourses
             const insertIntoUserProgressCourses = await db
             .insertInto("UserCourseProgress")
             .values({       
-                userId:null,//need to fix 
+                userId:userId,//need to fix 
                 courseId:courseId,
                 lastChapterId:null ,
                 lastSubjectId: null,
