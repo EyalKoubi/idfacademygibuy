@@ -27,6 +27,7 @@ export async function POST(req: SubjectRequest, res: NextApiResponse) {
       .values({ name: name })
       .returning(["id", "name"])
       .executeTakeFirstOrThrow();
+    
 
     await db
       .insertInto("SubjectChapter")

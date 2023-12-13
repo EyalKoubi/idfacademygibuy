@@ -50,6 +50,34 @@ export const findFirstUnwatched = (course: CourseData,router:any,coursesProgress
         }
       }
     }
+    console.log("you finish the course ")
   }
+ export function updateContentProgress(updatedContentProgress:ContentProgress[], subjectId:string, chapterId:string,contentId:string) {
+    let found = false;
+
+    for (let i = 0; i < updatedContentProgress.length; i++) {
+        if (updatedContentProgress[i].subjectId === subjectId && updatedContentProgress[i].chapterId === chapterId) {
+            // If content array does not exist, initialize it
+            if (!updatedContentProgress[i].contents) {
+                updatedContentProgress[i].contents = [];
+            }
+
+            // Add new content object
+            updatedContentProgress[i].contents.push({ contentId, watched: true });
+            found = true;
+            break;
+        }
+    }
+
+    // If no matching subjectId and chapterId were found, add a new element
+    if (!found) {
+        updatedContentProgress.push({
+            subjectId: subjectId,
+            chapterId: chapterId,
+            contents: [{ contentId, watched: true }]
+        });
+    }
+}
+
 
 

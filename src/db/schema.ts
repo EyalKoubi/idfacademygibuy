@@ -102,7 +102,7 @@ export interface UserCourseProgressTable {
   lastChapterId: string|null;      
   lastSubjectId: string|null;
   firstUnwatchedContentId:string|null ;    
-  contentProgress: string;     
+  contentProgress: string;  
 }
 export interface Database {
   Account: Account; 

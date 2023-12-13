@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react';
 import MediaViewer from '@/app/home/_component/mediaViewer';
 import VideoLinkList from '../_components/videoLinkList';
 import useCoursesStore from '@/app/_contexts/courseContext';
-import { ContentData, ContentItemProgress } from '@/app/types';
+import { ContentData, ContentItemProgress, ContentProgress } from '@/app/types';
 import useUserStore from '@/app/_contexts/userContext';
 import axios from 'axios';
+import { updateContentProgress } from '@/utils/progressfunction';
 
 interface ContentListProps {
   params: {
@@ -36,22 +37,25 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
     console.log(coursesProgress)
     const curContentStatus=contentsStatus?.find(contentstatus=>contentstatus.contentId===currContent?.id)
     console.log("cur content:",currContent,curContentStatus)
-    if(curContentStatus&&currContent)
+    if(currContent)
       onVideoSelect(currContent,curContentStatus)}
     ,[])
 
 
-  const onVideoSelect = async(content: ContentData,contentStatus:ContentItemProgress) => {
+  const onVideoSelect = async(content: ContentData,contentStatus:ContentItemProgress|undefined) => {
+
     console.log('Selected Content:', content);
+    
     // Find the index of the selected content in the contentsToPresent array
     const newIndex = contentsToPresent?.findIndex((c) => c.id === content?.id);
+
+   
     // Check if a valid index is found
     if (typeof newIndex === 'number' && newIndex >= 0 &&contentsToPresent!==undefined) {
       setContentIndex(newIndex);
       setCurrContent(contentsToPresent[newIndex]);
-      if(!contentStatus.watched){ // No optional chaining needed, newIndex is a number
-        
-        await markContentAsWatched(courseId, chapterId, subjectId, contentsToPresent[newIndex].id);
+      if(!contentStatus?.watched||contentStatus){ 
+        markContentAsWatched(courseId, chapterId, subjectId, contentsToPresent[newIndex].id);// No optional chaining needed, newIndex is a number
         try {
           let formData = new FormData();
           formData.append("courseId", courseId);
@@ -60,11 +64,13 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
           formData.append("lastSubjectId", subjectId); // Assuming lastSubjectId is defined
           formData.append("firstUnwatchedContentId", contentsToPresent[newIndex].id); // Assuming firstUnwatchedContentId is defined
             // Now retrieve the updated contentProgress from the state
-    const updatedContentProgress = coursesProgress.find(courseProgress => courseProgress.courseId === courseId)?.contentProgress;
+    const updatedContentProgress:ContentProgress[]|undefined= coursesProgress?.find(courseProgress => courseProgress.courseId === courseId)?.contentProgress;
+    let newupdatedContentProgress=updatedContentProgress?updatedContentProgress:[];
+    //updateContentProgress(newupdatedContentProgress, subjectId, chapterId,content.id)
 
     // Prepare FormData with the updated state
 
-          formData.append("contentProgress", JSON.stringify(updatedContentProgress));
+          formData.append("contentProgress", JSON.stringify(newupdatedContentProgress));
       
           // Send a POST request to the server
           const response = await axios.post('/api/updateProgressCourse', formData, {

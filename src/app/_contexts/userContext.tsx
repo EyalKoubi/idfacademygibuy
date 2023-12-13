@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ContentData,CourseData,CoursesState,SubjectData,ChapterData, UserState,UserCourseProgress, ContentItemProgress} from "@/app/types";
+import { ContentData,CourseData,CoursesState,SubjectData,ChapterData, UserState,UserCourseProgress, ContentItemProgress, ContentProgress} from "@/app/types";
 import {createInitialContentProgress} from '@/utils/progressfunction'
 
 
@@ -83,63 +83,37 @@ const useUserStore = create<UserState & CoursesActions>((set) => ({
   })),
 
   
-  markContentAsWatched: (courseId: string, chapterId: string, subjectId: string, contentId: string) => set((state) => {
+  markContentAsWatched : (courseId, chapterId, subjectId, contentId) => set(state => {
     const courseProgressIndex = state.coursesProgress.findIndex(cp => cp.courseId === courseId);
   
     if (courseProgressIndex >= 0) {
-      // Find the chapter progress index
-      const chapterProgressIndex = state.coursesProgress[courseProgressIndex].contentProgress.findIndex(cp => cp.chapterId === chapterId);
+      const courseProgress = state.coursesProgress[courseProgressIndex];
+      let chapterSubjectIndex = courseProgress.contentProgress.findIndex(cp => cp.chapterId === chapterId && cp.subjectId === subjectId);
   
-      if (chapterProgressIndex >= 0) {
-        // Find the subject within the chapter
-        if (state.coursesProgress[courseProgressIndex].contentProgress[chapterProgressIndex].subjectId === subjectId) {
-          const contentIndex = state.coursesProgress[courseProgressIndex].contentProgress[chapterProgressIndex].contents.findIndex(c => c.contentId === contentId);
+      if (chapterSubjectIndex >= 0) {
+        const chapterSubject = courseProgress.contentProgress[chapterSubjectIndex];
+        let contentIndex = chapterSubject.contents.findIndex(c => c.contentId === contentId);
   
-          if (contentIndex >= 0) {
-            // Update the watched status of the content item
-            state.coursesProgress[courseProgressIndex].contentProgress[chapterProgressIndex].contents[contentIndex].watched = true;
-          } else {
-            // If the content item is not found, add it as watched
-            state.coursesProgress[courseProgressIndex].contentProgress[chapterProgressIndex].contents.push({ contentId, watched: true });
-          }
+        if (contentIndex >= 0) {
+          chapterSubject.contents[contentIndex].watched = true;
         } else {
-          // If no progress exists for this subject in the chapter, create a new entry
-          state.coursesProgress[courseProgressIndex].contentProgress[chapterProgressIndex] = {
-            chapterId,
-            subjectId,
-            contents: [{ contentId, watched: true }]
-          };
+          chapterSubject.contents.push({ contentId, watched: true });
         }
       } else {
-        // If no progress exists for this chapter, create a new entry
-        state.coursesProgress[courseProgressIndex].contentProgress.push({
+        courseProgress.contentProgress.push({
           chapterId,
           subjectId,
           contents: [{ contentId, watched: true }]
         });
       }
-  
-      // Logic to find next unwatched content
-      let nextUnwatchedContentId = '';
-      for (const chapter of state.coursesProgress[courseProgressIndex].contentProgress) {
-        for (const content of chapter.contents) {
-          if (!content.watched) {
-            nextUnwatchedContentId = content.contentId;
-            break;
-          }
-        }
-        if (nextUnwatchedContentId) break;
-      }
-  
-      // Update firstUnwatchedContentId
-      state.coursesProgress[courseProgressIndex].firstUnwatchedContentId = nextUnwatchedContentId;
     } else {
-      // If no progress exists for this course, create a new entry
+      const course=state.userCourses.find(course=>course.id===courseId)
+      if(course){
       state.coursesProgress.push({
         courseId,
-        lastChapterId: chapterId,
-        lastSubjectId: subjectId,
-        firstUnwatchedContentId: '', // Set to empty as this is a new course entry
+        lastChapterId: course.chapters[0].id,
+        lastSubjectId: course.chapters[0].subjects[0].id,
+        firstUnwatchedContentId:course.chapters[0].subjects[0].contents[0].id,
         contentProgress: [{
           chapterId,
           subjectId,
@@ -147,17 +121,30 @@ const useUserStore = create<UserState & CoursesActions>((set) => ({
         }]
       });
     }
+    }
+    // Logic to find next unwatched content
+    let nextUnwatchedContentId = '';
+    if (courseProgressIndex >= 0) {
+      const courseProgress = state.coursesProgress[courseProgressIndex];
+      for (const chapterSubject of courseProgress.contentProgress) {
+        const unwatchedContent = chapterSubject.contents.find(c => !c.watched);
+        if (unwatchedContent) {
+          nextUnwatchedContentId = unwatchedContent.contentId;
+          break;
+        }
+      }
+      courseProgress.firstUnwatchedContentId = nextUnwatchedContentId;
+    }
   
     return { ...state };
   }),
-  
   ContentsSubjectStatus: (state: UserState, courseId: string, chapterId: string, subjectId: string): ContentItemProgress[]|undefined => {
     // Find the course progress for the given courseId
-    const courseProgress = state.coursesProgress.find(c => c.courseId === courseId);
+    const courseProgress = state.coursesProgress?.find(c => c.courseId === courseId);
     if (!courseProgress) return undefined;
   
     // Find the chapter progress for the given chapterId
-    const chapterSubjectProgress = courseProgress.contentProgress?.find(cp =>( cp.chapterId === chapterId&&cp.subjectId===subjectId));
+    const chapterSubjectProgress:ContentProgress|undefined= courseProgress.contentProgress?.find(cp =>( cp.chapterId === chapterId&&cp.subjectId===subjectId));
     if (!chapterSubjectProgress) return undefined;
   
     // Find the specific content item by contentId and return its watched status

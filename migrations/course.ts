@@ -184,10 +184,8 @@ await db.schema
       .addColumn("courseId", "uuid", (col) =>
       col.references("Course.id").onDelete("cascade").notNull()
       )
-      .addColumn("lastChapterId", "uuid",(col) =>
-      col.references("Chapter.id").onDelete("cascade"))
-      .addColumn("lastSubjectId", "uuid",(col) =>
-      col.references("Subject.id").onDelete("cascade"))
+      .addColumn("lastChapterId", "uuid",)
+      .addColumn("lastSubjectId", "uuid")
       .addColumn("firstUnwatchedContentId","uuid")
       .addColumn("contentProgress", "jsonb") // JSONB for PostgreSQL, adjust according to your DBMS
       .addUniqueConstraint("unique_user_course_progress", ["userId", "courseId"])

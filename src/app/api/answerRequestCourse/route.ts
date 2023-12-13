@@ -47,7 +47,7 @@ let insertIntoUserCourses
                 lastChapterId:course.chapters[0].id ,
                 lastSubjectId:course.chapters[0].subjects[0].id,
                 firstUnwatchedContentId: course.chapters[0].subjects[0].contents[0].id,
-                contentProgress: JSON.stringify({}),
+                contentProgress: JSON.stringify([]),
                
             })
 
