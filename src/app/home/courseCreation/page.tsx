@@ -24,58 +24,28 @@ const AddCoursePage: React.FC = () => {
   const [loading,setLoading]=useState<boolean>(false)
   const router = useRouter();
   const {user,addAdminCourse}=useUserStore();
-  const submitFile = async () =>{
-    try {
-      let formData = new FormData();
-      formData.append("file", fileData, fileData.name);
-      formData.append("comments",courseData.name);
-      console.log(formData);
-
-      const response = await axios.post("/api/addContent", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      if (response.data?.message) {
-          console.log(response.data?.message)
-          return null;
-       }
-      else{
-        const newCont:ContentData = response.data;
-        //setIsAddingContent(false);
-        //addContent(courseId, chapterId, subject.id, newCont);
-        setCourseData({...courseData,img_id:newCont})
-        console.log(newCont)
-      return newCont;
-      }
-
-    } catch (error) {
-      console.log("🚀 ~ file: Subject.tsx:38 ~ submitFile ~ error:", error);
-    }
-  };
 
   const handleSubmit = async () => {
+    try{
     //setError(null);
       setLoading(true)
-      let image=await submitFile();
-      console.log("image from submitfile",image)
-      try {
-      if(image){
       let courseToServer:CourseData= {
           id: "",
           name: courseData.name,
-          img_id:image,
+          img_id:null,
           creationTimestamp:new Date(),
           chapters: []
       }
-      console.log("courseTo server",courseToServer)
-     await setCourseData(courseToServer)
-      
+      // console.log("courseTo server",courseToServer)
       let formData = new FormData();
       formData.append("course", JSON.stringify(courseToServer));
       formData.append("userId", user.id);
+      formData.append("file", fileData, fileData.name);
+      formData.append("comments",courseData.name);
       console.log(courseData)
    
     
-        const response = await axios.post("/api/addCourse", formData, {
+      const response = await axios.post("/api/addCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       console.log(response.data)
@@ -85,11 +55,11 @@ const AddCoursePage: React.FC = () => {
         addNewCourseProcess(response.data)
         setLoading(false)
         router.push(`/home/courseManager/${response.data.id}`);
+     await setCourseData(response.data)
       } else {
         setError(response.data?.message);
-      }
     }
-    } catch (err) {
+   } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
       setError(error?.response?.data?.message || error.message || "An error occurred while adding the course.");
     }
