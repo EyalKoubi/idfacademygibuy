@@ -52,7 +52,7 @@ const Course = ({ course }: CourseProps) => {
       const newcourse= JSON.stringify({...course,name: courseName})
       console.log(newcourse)
       formData.append("courseRename", newcourse);
-      const response = await axios.post("/api/renameCourse", formData, {
+      const response = await axios.post("/api/editCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       if (response.data?.message) {

@@ -60,19 +60,7 @@ export async function getPresignedUrlFromS3Service(bucket: string, fileName: str
 import { createReadStream } from 'fs';
 import { PassThrough } from 'stream';
 
-// Helper function to convert a stream to base64
-function streamToBase64(stream: NodeJS.ReadableStream): Promise<string> {
-    return new Promise((resolve, reject) => {
-        const chunks: Buffer[] = [];
-        stream.on('data', (chunk: Buffer) => {
-            chunks.push(chunk);
-        });
-        stream.on('end', () => {
-            resolve(Buffer.concat(chunks).toString('base64'));
-        });
-        stream.on('error', reject);
-    });
-}
+
 
 export async function getFileChunkedBase64(bucket: string, fileName: string): Promise<PassThrough> {
     try {

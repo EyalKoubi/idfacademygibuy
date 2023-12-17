@@ -45,7 +45,7 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
       "subjectRename",
       JSON.stringify({ id: subject.id, name: subjectName })
     );
-    const response=await axios.post("/api/renameSubject", formData, {
+    const response=await axios.post("/api/editSubject", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     if(response.data?.message){

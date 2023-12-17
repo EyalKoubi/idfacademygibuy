@@ -9,6 +9,11 @@ interface SubjectCreationData {
   name: string;
   chapterId: string;
 }
+interface SubjectRenameProps {
+  id: string;
+  name: string;
+}
+
 
 export async function createSubject(subjectData: SubjectCreationData) {
   const { name, chapterId } = subjectData;
@@ -67,4 +72,23 @@ export async function deleteSubject(subjectId: string) {
       console.error("Error in deleteSubject:", error);
       return handleError(error); // Ensure you have a handleError function
     }
+}
+
+export async function editSubject(subjectRenameProps: SubjectRenameProps) {
+  try {
+    SubjectSchema.parse(subjectRenameProps);
+    const updatedSubject = await db
+      .updateTable("Subject")
+      .set({
+        name: subjectRenameProps.name,
+      })
+      .where("id", "=", subjectRenameProps.id)
+      .returning(["name"])
+      .executeTakeFirstOrThrow();
+
+    return NextResponse.json(updatedSubject);
+  } catch (error) {
+    console.log(error);
+    handleError(error);
+  }
 }

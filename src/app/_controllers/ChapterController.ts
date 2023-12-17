@@ -5,6 +5,12 @@ import { NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import { deleteContent } from "./ContentController";
 import { deleteSubject } from "./SubjectController";
+interface ChapterUpdateProps {
+  id: string;
+  name: string;
+  brief: string;
+}
+
 export async function addChapter(
     courseId: string, 
     chapterName: string, 
@@ -71,5 +77,26 @@ export async function addChapter(
     } catch (error) {
       console.error("Error in deleteChapter:", error);
       return handleError(error); 
+    }
+  }
+
+  export async function editChapter(updateChapterProps: ChapterUpdateProps) {
+    try {
+      ChapterSchema.parse(updateChapterProps);
+      const updatedChapter = await db
+        .updateTable("Chapter")
+        .set({
+          name: updateChapterProps.name,
+          brief: updateChapterProps.brief,
+        })
+        .where("id", "=", updateChapterProps.id)
+        .returning(["name", "brief"])
+        .executeTakeFirstOrThrow();
+  
+     return NextResponse.json(updatedChapter);
+    } catch (error) {
+      console.log("Sdfsdfsdsf")
+      console.log(error);
+      handleError(error);
     }
   }

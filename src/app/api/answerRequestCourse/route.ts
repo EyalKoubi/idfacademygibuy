@@ -3,7 +3,7 @@ import { db } from "../../../db/database";
 import { NextRequest, NextResponse } from "next/server";
 import { CourseSchema, handleError } from "@/utils/validation";
 import { CourseData } from "@/app/types";
-import { processCourseUserRequest } from "@/app/_controllers/CourseUserRequestController";
+import { processCourseUserRequest } from "@/app/_controllers/CourseUserController";
 
 interface CourseRequestUser extends NextRequest {
   course?: CourseData;

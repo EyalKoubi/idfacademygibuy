@@ -33,7 +33,7 @@ const Chapter: React.FC<ChapterProps> = ({ chapter, courseId, chapterIndex }) =>
       subjects: chapter.subjects,
     };
     formData.append("updateChapterProps", JSON.stringify(updatedChapter));
-    const response = await axios.post("/api/updateChapter", formData, {
+    const response = await axios.post("/api/editChapter", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     if (response.data?.message) {

@@ -2,7 +2,7 @@
 import { NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import { db } from "@/db/database";
-import { ContentSchema, handleError } from "@/utils/validation";
+import { ContentSchema, EditContentSchema, handleError } from "@/utils/validation";
 import * as Minio from "minio";
 import { uploadFileToS3Service, bucket,s3Client } from "@/app/_minio/minio";
 import { ContentItemProgress } from "../types";
@@ -12,6 +12,11 @@ interface ContentData {
   comments: string;
   subjectId: string;
 }
+interface EditContentProps {
+    contentId: string;
+    comments: string;
+  }
+  
 
 async function ensureBucketExists( bucket: string) {
   try {
@@ -25,7 +30,14 @@ async function ensureBucketExists( bucket: string) {
     throw error;
   }
 }
-async function processContent(contentData: ContentData) {
+export async function getContent(contentId:string){
+    const contentFromDb=await db
+    .selectFrom("Content")
+    .where("id", "=", contentId)
+    .selectAll()
+    .executeTakeFirstOrThrow();
+}
+export async function processContent(contentData: ContentData) {
     const { file, comments, subjectId } = contentData;
   
     ContentSchema.parse({ file_size: file.size, comments });
@@ -175,4 +187,20 @@ export async function deleteContentFromUserProgress(contentId:string) {
       });
     });
   }
+  export async function editContentComments(editProps: EditContentProps) {
+    try {
+      EditContentSchema.parse(editProps);
   
+      const updatedContent = await db
+        .updateTable("Content")
+        .set({ comments: editProps.comments })
+        .where("id", "=", editProps.contentId)
+        .returning(["comments"])
+        .executeTakeFirstOrThrow();
+  
+      return NextResponse.json(updatedContent);
+    } catch (error) {
+      console.error("Error in editContentComments:", error);
+      return handleError(error); // Ensure you have a handleError function
+    }
+}
