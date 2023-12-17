@@ -7,6 +7,7 @@ import {fetchData} from "@/app/_controllers/DataController"
 export async function GET(req: NextRequest, res: NextApiResponse) {
   try{
     const data = await fetchData();
+    console.log(data);
     return NextResponse.json(data);
   } catch (error) {
   console.error("Error in GET request:", error);

@@ -18,5 +18,5 @@ export async function POST(req: ChapterUpdateRequest, res: NextApiResponse) {
   const updateChapterProps: { id: string; name: string; brief: string } =
     JSON.parse(data.get("updateChapterProps") as string);
 
-  await editChapter(updateChapterProps);
+  return await editChapter(updateChapterProps);
 }

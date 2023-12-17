@@ -10,6 +10,7 @@ import useUserStore from "@/app/_contexts/userContext";
 import axios from "axios";
 import {Users} from "@/app/types"
 import useUserRequestCourseStore from "@/app/_contexts/requestsCoursesContext";
+import { calculateProgress } from "@/utils/progressfunction";
 interface CourseCardProps {
   course: CourseData;
   isPresentMode:boolean;
@@ -17,8 +18,9 @@ interface CourseCardProps {
 
 const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
   const router = useRouter();
-  const {user,userCourses,adminCourses,addUserCourse}=useUserStore();
+  const {user,userCourses,adminCourses,addUserCourse,coursesProgress}=useUserStore();
   const {userRequestsCourses,addUserRequestsCourse}=useUserRequestCourseStore();
+  const [currCourseProgress,setCurrCourseProgress]=useState(coursesProgress.find(cp=>cp.courseId===course.id))
   const [isRegister,setIsRegister]=useState(false)
   const [registererror,setRegistererror]=useState('')
   const [isRequested,setIsRequested]=useState(false)
@@ -28,6 +30,10 @@ const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
    // console.log("registered:",(userCourses.some(userCourse => userCourse.id === course.id)))
     setIsRegister((userCourses.some(userCourse => userCourse.id === course.id)))
     setIsRequested((userRequestsCourses.some(userrequestCourse => (userrequestCourse.course.id === course.id)&&(userrequestCourse.user.id === user.id))))
+    const curcourseprogress=coursesProgress.find(cp=>cp.courseId===course.id)
+    if(curcourseprogress)
+      setCurrCourseProgress(curcourseprogress)
+   
    // console.log((isPresentMode))
   },[course])
 
@@ -54,31 +60,45 @@ const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
       setIsRequested(true)
       console.log(userRequestsCourses)
     }
-  }
- // const isregister=(userCourses.some(userCourse => userCourse.id === course.id))
- // const isAdmin=(adminCourses.some(admincourse => admincourse.id === course.id))
-  return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white m-4" >
-      <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{course.name}</div>
-        <div className="text-gray-700 text-base">
-          <ul>
-            {course.chapters?.map((chapter, index) => (
-              <li key={index} className="mb-1">
-                {chapter.name}
-              </li>
-            ))}
-          </ul>
-        </div>
-        {course.img_id && <MediaViewer content={course.img_id} />}
-        {<ErrorMessage  message={registererror}/>}
-        {course.creationTimestamp &&<p className="text-sm text-gray-500">Created on: {formatDate(course.creationTimestamp)}</p>}
-        {(!isRegister&&!isRequested)&&<button onClick={registerCourse}>{LoginTexts.register}</button>}
-        {isRequested&&<p className="text-blue-700">הבקשה ממתינה לאישור</p>}
-        {(isRegister&&isPresentMode)&&<button onClick={() => { router.push(`myCourses/${course.id}/chapters`) }}>{editTexts.showCourse}</button>}
-      </div>
-    </div>
-  );
-};
+  } 
 
+return (
+  <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white m-4">
+    <div className="px-6 py-4">
+      <div className="font-bold text-xl mb-2">{course.name}</div>
+      <div className="text-gray-700 text-base">
+        <ul>
+          {course.chapters?.map((chapter, index) => (
+            <li key={index} className="mb-1">
+              {chapter.name}
+            </li>
+          ))}
+        </ul>
+      </div>
+      {course.img_id && <MediaViewer content={course.img_id} />}
+      {<ErrorMessage message={registererror} />}
+      {course.creationTimestamp && (
+        <p className="text-sm text-gray-500">Created on: {formatDate(course.creationTimestamp)}</p>
+      )}
+      {(!isRegister && !isRequested) && <button className="p-2 ml-1 bg-pink-500 text-white rounded hover:bg-yellow-600"onClick={registerCourse}>{LoginTexts.register}</button>}
+      {isRequested && <p className="text-blue-700">הבקשה ממתינה לאישור</p>}
+      {(isRegister && isPresentMode) && (
+        <div>
+          <button  className="p-2 ml-1 bg-yellow-500 text-white rounded hover:bg-yellow-600" onClick={() => { router.push(`myCourses/${course.id}/chapters`) }}>{editTexts.showCourse}</button>
+          <p>Progress: {calculateProgress (course,currCourseProgress?.contentProgress)}%</p>
+          <div style={{ width: '100%', backgroundColor: '#ccc' }}>
+            <div
+              style={{
+                width: `${calculateProgress (course,currCourseProgress?.contentProgress)}%`,
+                height: '20px',
+                backgroundColor: 'green',
+              }}
+            ></div>
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+);
+};
 export default CourseCard;

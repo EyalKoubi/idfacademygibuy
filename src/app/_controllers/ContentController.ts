@@ -5,9 +5,9 @@ import { db } from "@/db/database";
 import { ContentSchema, EditContentSchema, handleError } from "@/utils/validation";
 import * as Minio from "minio";
 import { uploadFileToS3Service, bucket,s3Client } from "@/app/_minio/minio";
-import { ContentItemProgress } from "../types";
+import { ContentData, ContentItemProgress } from "../types";
 
-interface ContentData {
+interface ContentDataProps{
   file: File;
   comments: string;
   subjectId: string;
@@ -30,14 +30,15 @@ async function ensureBucketExists( bucket: string) {
     throw error;
   }
 }
-export async function getContent(contentId:string){
+export async function getContent(contentId:string):Promise<ContentData>{
     const contentFromDb=await db
     .selectFrom("Content")
     .where("id", "=", contentId)
     .selectAll()
     .executeTakeFirstOrThrow();
+    return contentFromDb;
 }
-export async function processContent(contentData: ContentData) {
+export async function processContent(contentData: ContentDataProps) {
     const { file, comments, subjectId } = contentData;
   
     ContentSchema.parse({ file_size: file.size, comments });
@@ -59,7 +60,7 @@ export async function processContent(contentData: ContentData) {
     console.log("Files are being processed");
     return newContent;
   }
-export async function addContentWithResponse(contentData: ContentData) {
+export async function addContentWithResponse(contentData: ContentDataProps) {
     if (contentData.subjectId !== "") {
       try {
         const newContent = await processContent(contentData);
@@ -72,7 +73,7 @@ export async function addContentWithResponse(contentData: ContentData) {
   }
 
 
-export async function addContentWithoutResponse(contentData: ContentData) {
+export async function addContentWithoutResponse(contentData: ContentDataProps) {
     if (contentData.subjectId === "") {
       try {
         return await processContent(contentData);
@@ -83,7 +84,7 @@ export async function addContentWithoutResponse(contentData: ContentData) {
     }
   }
   
-export async function addContent(contentData: ContentData){
+export async function addContent(contentData: ContentDataProps){
   const { file, comments, subjectId } = contentData;
 
   try {
@@ -94,7 +95,7 @@ export async function addContent(contentData: ContentData){
       .returning(["id", "file_name", "comments"])
       .executeTakeFirstOrThrow();
 
-    if (subjectId==='') {
+    if (subjectId!=='') {
       await db
         .insertInto("ContentSubject")
         .values({ contentId: newContent.id, subjectId })

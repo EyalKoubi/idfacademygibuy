@@ -14,10 +14,8 @@ interface getFileProps{
     }
 } 
 
-  
 export async function GET(req: FileRequest, context: getFileProps) {
     const { contentId } = context.params;
-
     try {
         const presignedUrl = await getPresignedUrlFromS3Service(bucket, contentId);
         const newHeaders = new Headers();
