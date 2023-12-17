@@ -110,6 +110,10 @@ export const GeneralTexts = {
   reject:"דחה"
 };
 
+export const CourseCardTexts={
+  progress:"הושלם:",
+  requestContinueToApprove:"הבקשה ממתינה לאישור מנהל"
+}
 /*
 
 אודותינו,

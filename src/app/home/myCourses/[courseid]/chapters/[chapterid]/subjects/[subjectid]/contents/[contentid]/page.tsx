@@ -115,7 +115,6 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
           {currContent ? (
             <div className="flex justify-center items-center" style={{
               width: '500px',
-              height: '500px',
               backgroundColor: 'rgba(128, 128, 128, 0.2)',
               borderRadius: '5%',
               display: 'flex',
@@ -124,7 +123,7 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
               boxShadow: '0 1px 2px rgba(6, 30, 58, 0.1)',
               overflow: 'hidden',
             }}>
-              <MediaViewer content={currContent} />
+              <MediaViewer content={currContent} isPresentMode={true}/>
             </div>
           ) : (
             <div className="text-white">

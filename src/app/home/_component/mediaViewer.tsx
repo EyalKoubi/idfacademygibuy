@@ -3,9 +3,9 @@ import axios from 'axios';
 import { ContentData } from '@/app/types';
 interface MediaViewerProps{
   content: ContentData 
-
+  isPresentMode:boolean;
 }
-const MediaViewer: React.FC<MediaViewerProps> = ({ content }) => {
+const MediaViewer: React.FC<MediaViewerProps> = ({ content,isPresentMode }) => {
     const [mediaSrc, setMediaSrc] = useState('');
     const [mediaType, setMediaType] = useState('');
     const [loading, setLoading] = useState(true);
@@ -81,7 +81,7 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content }) => {
     
         switch (true) {
           case mediaType.startsWith('image'):{
-            return <img className="w-screen max-h-full object-contain" src={mediaSrc} alt={content.file_name} />;
+            return <img className="w-full max-h-full object-contain" src={mediaSrc} alt={content.file_name} />;
           }
           case mediaType.startsWith('video'):
             return (
@@ -105,9 +105,9 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content }) => {
       };
     
       return (
-        <div className="w-[700px] h-[500px] overflow-hidden flex justify-center items-center">
-          {renderMedia()}
-        </div>
+        <div className={`overflow-hidden flex justify-center items-center ${isPresentMode ? 'w-[700px] h-[500px]' : 'w-[100%] h-[250px]'}`}>
+        {renderMedia()}
+      </div>
       );
     };
     
