@@ -17,13 +17,14 @@ import useCoursesStore from "@/app/_contexts/courseContext";
         const handleAddSubject = async () => {
             const formData = new FormData();
             const addSubjectProps = { name: newSubjectName, chapterId: chapter.id };
+            console.log(addSubjectProps)
             formData.append("addSubjectProps", JSON.stringify(addSubjectProps));
             const response = await axios.post("/api/addSubject", formData, {
               headers: { "Content-Type": "multipart/form-data" },
             })
             if (response.data?.message) {
               setAddSubjectError(response.data.message);
-             // console.log(Res)
+           
             }
             else{
               const newSubFromBd: SubjectData = {
@@ -32,10 +33,6 @@ import useCoursesStore from "@/app/_contexts/courseContext";
                 contents: [],
               }
             addSubject(courseId, chapterIndex, newSubFromBd);
-            console.log(
-              "🚀 ~ file: Chapter.tsx:68 ~ handleAddSubject ~ courses:",
-              courses
-            );
             setIsAddingSubject(false);
             };
             }

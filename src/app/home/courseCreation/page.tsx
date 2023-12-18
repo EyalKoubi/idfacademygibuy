@@ -6,6 +6,7 @@ import axios, { AxiosError } from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/app/_contexts/userContext";
+import { Loading } from "react-daisyui";
 interface ErrorResponse {
   message?: string;
 }
@@ -36,19 +37,15 @@ const AddCoursePage: React.FC = () => {
           creationTimestamp:new Date(),
           chapters: []
       }
-      // console.log("courseTo server",courseToServer)
       let formData = new FormData();
       formData.append("course", JSON.stringify(courseToServer));
       formData.append("userId", user.id);
       formData.append("file", fileData, fileData.name);
       formData.append("comments",courseData.name);
-      console.log(courseData)
-   
-    
+
       const response = await axios.post("/api/addCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(response.data)
       if (response.data?.id) {
         addCourse(response.data);
         addAdminCourse(response.data)
@@ -58,6 +55,7 @@ const AddCoursePage: React.FC = () => {
      await setCourseData(response.data)
       } else {
         setError(response.data?.message);
+        setLoading(false)
     }
    } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
@@ -92,7 +90,7 @@ const AddCoursePage: React.FC = () => {
       >
         {adminTexts.adminAddCourse}
       </button> :
-        <p>loading....</p>
+        <Loading />
 }
     </div>
   );

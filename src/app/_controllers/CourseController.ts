@@ -91,7 +91,6 @@ export async function getAllCourses():Promise<CourseData[]|undefined> {
     .selectAll()
     .execute();
   
-  console.log("courses",coursesWithChapters)
 
   const result:CourseData[] = [];
   for (const course of coursesWithChapters) {
@@ -123,7 +122,7 @@ export async function getAllCourses():Promise<CourseData[]|undefined> {
           .where("ContentSubject.subjectId", "=", subjectWithOutContents.id)
           .select(["Content.id", "Content.file_name", "Content.comments"])
           .execute();
-        console.log("🚀 ~ file: route.ts:36 ~ GET ~ contents:", contents);
+
         subjects.push({
           id: subjectWithOutContents.id,
           name: subjectWithOutContents.name,
@@ -144,7 +143,6 @@ export async function getAllCourses():Promise<CourseData[]|undefined> {
       creationTimestamp:course.creationTimestamp,
       chapters: chapters,
     });
-    console.log("🚀 ~ file: route.ts:54 ~ GET ~ result:", result);
     return result;
   }
 }

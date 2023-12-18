@@ -1,6 +1,7 @@
 import React, { FormEvent } from "react";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
 import { ContentData } from "@/app/types";
+import { Loading } from "react-daisyui";
 
 interface AddContentFormProps {
   contentData: ContentData;
@@ -47,7 +48,7 @@ const AddContentForm: React.FC<AddContentFormProps> = ({
           disabled={loading}
           className={`p-2 ${loading ? 'bg-gray-600' : 'bg-green-600'} text-white rounded-md hover:bg-green-800 shadow-sm`}
         >
-          {loading ? 'Loading...' : GeneralTexts.submit}
+          {loading ?  <Loading /> : GeneralTexts.submit}
         </button>
       </form>
       {addContentError && <div className="text-red-500">{addContentError}</div>}

@@ -60,16 +60,19 @@ export const CourseSchema = z.object({
   });
 
   //function to treat in zod error and return value to client
-  export const handleError=(error:any)=>{
-    
+  export const handleError = (error: any) => {
     if (error instanceof ZodError) {
-        console.log(error)
-        const errorMessages = error.issues.map(issue => issue.message);
-        console.log("asdasdasd"+ errorMessages)
-        return NextResponse.json({ message:errorMessages[0]});
+      console.log(error);
+      const errorMessages = error.issues.map((issue) => issue.message);
+      return NextResponse.json({ message: errorMessages[0] });
+    } else if (error.code === '23505') {
+      // Handle PostgreSQL unique constraint violation (code 23505)
+      return NextResponse.json({
+        message: 'Its already exist please try another name',
+        detail: error.detail, // Include the database error detail
+      });
+    } else {
+      console.error("MY Server Error:", error);
+      return NextResponse.json({ message: "Internal Server Error" });
     }
-    else{
-    console.error("MY Server Error:", error);
-    return NextResponse.json({ message: "Internal Server Error" });
-    }
-  }
+  };

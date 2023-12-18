@@ -12,7 +12,7 @@ const HomePage = () => {
   
   const { setCourses, courses } = useCoursesStore();
   const {user,userCourses,coursesProgress, setUser,setUserCourses,setAdminCourses}=useUserStore();
-  const router = useRouter();
+  // const router = useRouter();
   useEffect(()=>{
     console.log(coursesProgress)
   },[])
@@ -32,7 +32,6 @@ const HomePage = () => {
   return (
     <div>
      {user && <h1 className="text-2xl">{` ${user.name}  ${getHebrewGreeting()} `}</h1>}
-     <button onClick={()=>{findFirstUnwatched(userCourses[0],router,coursesProgress);}}>{HomeTexts.continueStanding}</button> 
     </div>
   );
 };

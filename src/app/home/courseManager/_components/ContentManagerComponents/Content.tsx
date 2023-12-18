@@ -31,11 +31,6 @@ const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseI
     const formData: any = new FormData();
     const editCommentsProps = { contentId: content.id, comments: comments };
     formData.append("editCommentsProps", JSON.stringify(editCommentsProps));
-    console.log(editCommentsProps)
-    console.log(
-      "🚀 ~ file: Content.tsx:33 ~ handleChangeComments ~ editCommentsProps:",
-      editCommentsProps
-    );
     const response =await axios.post("/api/editContentComment", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });

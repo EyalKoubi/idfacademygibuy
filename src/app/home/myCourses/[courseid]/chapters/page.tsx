@@ -12,7 +12,6 @@ interface ChapterListProps{
 const ChapterList: React.FC<ChapterListProps> = (props:ChapterListProps) => {
   const { courses } = useCoursesStore();
   
-  console.log(courses)
   const courseid =props.params.courseid;
    //need to fix to zostan
   const courseToPresent = courses.find((course) => course.id === courseid);

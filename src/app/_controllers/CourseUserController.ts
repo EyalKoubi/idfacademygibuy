@@ -134,9 +134,8 @@ export async function filterUserCourses(userId: string, courses: CourseData[], r
     .select(["UserCourses.courseId"])
     .execute();
     const courseIds = coursesidofuser.map(item => item.courseId);
-    console.log(coursesidofuser)
     const userCourses=courses.filter((course)=>courseIds.includes(course.id))
-    console.log("user coursess",userCourses)
+   
     return userCourses;
   }
 
@@ -184,7 +183,6 @@ export async function filterUserCourses(userId: string, courses: CourseData[], r
         .executeTakeFirstOrThrow();
   
       const serializedResult = result
-      console.log(serializedResult)
       return NextResponse.json(serializedResult);
     } catch (error) {
       handleError(error);

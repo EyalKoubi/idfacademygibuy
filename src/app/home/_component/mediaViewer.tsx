@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ContentData } from '@/app/types';
+import { Loading } from 'react-daisyui';
 interface MediaViewerProps{
   content: ContentData 
   isPresentMode:boolean;
@@ -10,7 +11,6 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content,isPresentMode }) => {
     const [mediaType, setMediaType] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    // console.log(content)
     const cleanup = () => {
         if (mediaSrc) {
             URL.revokeObjectURL(mediaSrc);
@@ -34,12 +34,9 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content,isPresentMode }) => {
     };
 
     useEffect(() => {
-        console.log(content)
         setLoading(true);
     
         if (content) {
-          console.log("reach to content")
-            console.log(content)
             const fetchMedia = async () => {
                 try {
                     // Fetch the pre-signed URL from the API
@@ -68,7 +65,9 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content,isPresentMode }) => {
 
    
     const renderLoading = () => (
-        <div className="text-center text-white">Loading...</div>
+        <div className="text-center text-white">
+           <Loading  />
+        </div>
       );
     
       const renderError = () => (

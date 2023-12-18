@@ -18,7 +18,6 @@ const SubjectList: React.FC<SubjectListProps>= (props:SubjectListProps) => {
   const { courses } = useCoursesStore();
   const chapterId = props.params.chapterid;
   const courseId = props.params.courseid;
-  console.log(courseId);
   // Find the course with the specified ID
   const courseToPresent = courses.find((course) => course.id === courseId);
 

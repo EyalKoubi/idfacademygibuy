@@ -22,7 +22,6 @@ const SingleCourseUpdate:React.FC<singleCoureUpdateProps> = (props:singleCoureUp
     for (let course of courses) {
       if (course.id === courseId) {
         setCurCourse(course);
-        console.log("🚀 ~ file: page.tsx:44 ~ useEffect ~ course:", course);
         break;
       }
     }

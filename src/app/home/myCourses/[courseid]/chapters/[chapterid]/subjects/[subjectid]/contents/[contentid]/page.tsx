@@ -8,6 +8,9 @@ import useUserStore from '@/app/_contexts/userContext';
 import axios from 'axios';
 import { updateContentProgress } from '@/utils/progressfunction';
 
+import { Button,Pagination } from 'react-daisyui';
+
+
 interface ContentListProps {
   params: {
     courseid: string;
@@ -26,7 +29,7 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
 
   const courseToPresent = courses.find(course => course.id === courseId);
   const contentsToPresent:ContentData[]|undefined = courseToPresent?.chapters?.find(chapter => chapter.id === chapterId)?.subjects.find(subject => subject.id === subjectId)?.contents;
-  console.log(contentsToPresent)
+
   const userState = useUserStore(); // This is how you access the state
 
   const contentsStatus:ContentItemProgress[]|undefined =ContentsSubjectStatus(userState,courseId, chapterId, subjectId);
@@ -34,28 +37,27 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
   
   const [currContent, setCurrContent] = useState<ContentData | undefined>(contentsToPresent?.find(content=>content.id===params.contentid));
   useEffect(()=>{
-    console.log(coursesProgress)
     const curContentStatus=contentsStatus?.find(contentstatus=>contentstatus.contentId===currContent?.id)
-    console.log("cur content:",currContent,curContentStatus)
     if(currContent)
       onVideoSelect(currContent,curContentStatus)}
     ,[])
+  useEffect(()=>{
+      const curContentStatus=contentsStatus?.find(contentstatus=>contentstatus.contentId===currContent?.id)
+      if(currContent)
+        onVideoSelect(currContent,curContentStatus)}
+  ,[currContent])
+  
 
 
   const onVideoSelect = async(content: ContentData,contentStatus:ContentItemProgress|undefined) => {
-
-    console.log('Selected Content:', content);
-    
     // Find the index of the selected content in the contentsToPresent array
     const newIndex = contentsToPresent?.findIndex((c) => c.id === content?.id);
-
-   
     // Check if a valid index is found
     if (typeof newIndex === 'number' && newIndex >= 0 &&contentsToPresent!==undefined) {
       setContentIndex(newIndex);
       setCurrContent(contentsToPresent[newIndex]);
       if(!contentStatus?.watched||contentStatus){ 
-        markContentAsWatched(courseId, chapterId, subjectId, contentsToPresent[newIndex].id);// No optional chaining needed, newIndex is a number
+      
         try {
           let formData = new FormData();
           formData.append("courseId", courseId);
@@ -64,12 +66,8 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
           formData.append("lastSubjectId", subjectId); // Assuming lastSubjectId is defined
           formData.append("firstUnwatchedContentId", contentsToPresent[newIndex].id); // Assuming firstUnwatchedContentId is defined
             // Now retrieve the updated contentProgress from the state
-    const updatedContentProgress:ContentProgress[]|undefined= coursesProgress?.find(courseProgress => courseProgress.courseId === courseId)?.contentProgress;
-    let newupdatedContentProgress=updatedContentProgress?updatedContentProgress:[];
-    //updateContentProgress(newupdatedContentProgress, subjectId, chapterId,content.id)
-
-    // Prepare FormData with the updated state
-
+          const updatedContentProgress:ContentProgress[]|undefined= coursesProgress?.find(courseProgress => courseProgress.courseId === courseId)?.contentProgress;
+          let newupdatedContentProgress=updatedContentProgress?updatedContentProgress:[];
           formData.append("contentProgress", JSON.stringify(newupdatedContentProgress));
       
           // Send a POST request to the server
@@ -79,16 +77,13 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
               }
           });
           if(!response.data.message)
-            console.log('Course progress updated:', response.data);
+          markContentAsWatched(courseId, chapterId, subjectId, contentsToPresent[newIndex].id);// No optional chaining needed, newIndex is a number
           else{
             console.log('ERRROR');
           }
       } catch (error) {
           console.error('Error updating course progress:', error);
       }
-      
-        
-        console.log("course process:",coursesProgress)
        } 
     }
   };
@@ -137,12 +132,16 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
       </div>
   
       <div className="mt-4"> {/* Added top margin */}
-        <button onClick={goToPreviousContent} disabled={contentIndex === 0}>
-          Previous   
-        </button>
-        <button onClick={goToNextContent} disabled={!contentsToPresent || contentIndex === contentsToPresent.length - 1}>
-          Next
-        </button>
+        
+        <Pagination >
+      <Button variant="outline" className="join-item" onClick={goToPreviousContent} disabled={contentIndex === 0}>
+      Previous 
+      </Button>
+      <Button variant="outline" className="join-item" onClick={goToNextContent}  disabled={!contentsToPresent || contentIndex === contentsToPresent.length - 1}>
+      Next
+      </Button>
+    </Pagination>
+
       </div>
     </div>
   );

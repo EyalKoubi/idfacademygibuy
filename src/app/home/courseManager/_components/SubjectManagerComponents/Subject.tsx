@@ -71,10 +71,7 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
     formData.append("bucket", courseId);
     formData.append("comments", contentData.comments);
     formData.append("subjectId", subject.id);
-    console.log(formData);
-
     try {
-      console.log(file);
       const response = await axios.post("/api/addContent", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });

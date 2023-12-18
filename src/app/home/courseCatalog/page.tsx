@@ -37,12 +37,11 @@ const CourseCatalog: React.FC = () => {
       });
     }
     if (hideRegistersCourses) {
-      console.log("hide:", hideRegistersCourses);
       filtered = filtered?.filter(course => 
         userCourses.every(userCourse => userCourse.id !== course.id)
       );
     }
-    console.log(filtered)
+
     return filtered;
   }
 

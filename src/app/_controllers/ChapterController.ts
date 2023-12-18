@@ -95,8 +95,6 @@ export async function addChapter(
   
      return NextResponse.json(updatedChapter);
     } catch (error) {
-      console.log("Sdfsdfsdsf")
-      console.log(error);
       handleError(error);
     }
   }

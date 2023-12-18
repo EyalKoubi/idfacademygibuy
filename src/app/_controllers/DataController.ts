@@ -7,7 +7,6 @@ export async function fetchData() {
     try {
       const coursesFromDb = await getAllCourses();
       const courses=coursesFromDb?coursesFromDb:[];
-      console.log("this is the courses:",courses)
       const userFromDb=await getUser("");//need to put id or something
       if(courses){
       const userCourses = await filterUserCourses(userFromDb.id, courses, 4); // 4 is user role index

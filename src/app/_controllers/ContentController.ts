@@ -23,7 +23,6 @@ async function ensureBucketExists( bucket: string) {
     const exists = await s3Client.bucketExists(bucket);
     if (!exists) {
       await s3Client.makeBucket(bucket, "us-east-1");
-      console.log(`Bucket ${bucket} created successfully.`);
     }
   } catch (error) {
     console.error("Error ensuring bucket exists:", error);
@@ -111,7 +110,7 @@ export async function addContent(contentData: ContentDataProps){
     const buffer = Buffer.from(bytes);
 
     await uploadFileToS3Service(file, buffer, bucket, newContent.id);
-    console.log("Files are being processed");
+
     if(subjectId!=="")
         return NextResponse.json(newContent);
     else{
