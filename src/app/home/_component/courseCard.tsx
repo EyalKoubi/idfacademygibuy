@@ -58,8 +58,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
   } 
 
 return (
-  <div className="max-w-sm rounded overflow-hidden shadow-lg bg-white m-4 text-right">
-    <div className="px-6">
+  <div className={`max-w-sm rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-slate-200 m-4 text-right ${isPresentMode ? 'h-4/5' : ''}`}>
+    <div className="p-4">
       <div className="font-bold text-xl mb-2">{course.name}</div>
       <div className="text-gray-700 text-base">
         <ul>

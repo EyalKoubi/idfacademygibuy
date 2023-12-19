@@ -21,6 +21,9 @@ const CourseCatalog: React.FC = () => {
 
   const SearchfilteredCourses=()=>{
     let filtered:CourseData[]=[];
+    if(filterType === ''){
+      filtered=courses;
+    }
     if (filterType === 'name') {
       filtered = courses.filter(course =>
         course.name.toLowerCase().startsWith(searchTerm.toLowerCase())
