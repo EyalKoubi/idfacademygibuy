@@ -3,6 +3,7 @@ import { ContentData } from "@/app/types";
 import { useState } from "react";
 import axios from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";
+import { Loading } from "react-daisyui";
 
 interface ContentProps {
   content: ContentData;
@@ -17,17 +18,26 @@ const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseI
     useState(false);
   const [comments, setComments] = useState(content.comments);
   const [renameContentError,setRenameContentError]=useState("")
+  const [loading,setLoading]=useState(false)
 
   const handleDeleteContent = async () => {
+    setLoading(true)
     const formData: any = new FormData();
     formData.append("contentId", content.id);
-    await axios.post("/api/deleteContent", formData, {
+    const response =await axios.post("/api/deleteContent", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    deleteContent(content, subjectId, chapterId, courseId);
+    if(response.data?.message){
+      setRenameContentError(response.data?.message)
+    }
+    else{
+      deleteContent(content, subjectId, chapterId, courseId);
+    }
+    setLoading(false)
   };
 
   const handleChangeComments = async () => {
+    setLoading(true)
     const formData: any = new FormData();
     const editCommentsProps = { contentId: content.id, comments: comments };
     formData.append("editCommentsProps", JSON.stringify(editCommentsProps));
@@ -46,6 +56,7 @@ const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseI
     );
     setIsChangeCommentsContentPressed(false);
     }
+    setLoading(false)
   };
   return (
     <div className="p-2 bg-gray-100 rounded flex flex-col">
@@ -79,19 +90,26 @@ const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseI
         </div>
       ) : (
         <div className="flex fles-row">
-          <button
-            onClick={handleDeleteContent}
-            className="p-2 ml-1 bg-red-500 text-white rounded hover:bg-red-700"
-          >
-            {editTexts.deleteContent}
-          </button>
-          <button
-            onClick={() => setIsChangeCommentsContentPressed(true)}
-            className="p-2 ml-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
-          >
-            {editTexts.rename}
-          </button>
-        </div>
+        {/* Render Loading component if loading is true */}
+        {loading ? (
+            <Loading/>
+        ) : (
+            <>
+                <button
+                    onClick={handleDeleteContent}
+                    className="p-2 ml-1 bg-red-500 text-white rounded hover:bg-red-700"
+                >
+                    {editTexts.deleteContent}
+                </button>
+                <button
+                    onClick={() => setIsChangeCommentsContentPressed(true)}
+                    className="p-2 ml-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                >
+                    {editTexts.rename}
+                </button>
+            </>
+        )}
+    </div>
       )}
     </div>
   );

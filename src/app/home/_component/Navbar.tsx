@@ -14,13 +14,7 @@ const Navbar = () => {
           <Image src={tikshuvPicture} alt="Tikshuv" width={35} height={0.5} />
           <h1 className="text-white text-2xl font-semibold">IDF ACADEMY</h1>
         </div>
-        <button
-          onClick={() => {
-            router.push("/home/aboutUs");
-          }}
-        >
-          {/* {HomeTexts.mercasHadigitech} */}
-        </button>
+    
         <HamburgerMenu />
       </div>
     </header>

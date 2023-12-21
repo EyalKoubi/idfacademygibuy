@@ -1,7 +1,9 @@
 import PopupWindow from "../_component/PopupWindow";
 
 const AboutUs = () => {
-  return <PopupWindow />;
+  return (
+    <p>אודות</p>
+  )
 };
 
 export default AboutUs;

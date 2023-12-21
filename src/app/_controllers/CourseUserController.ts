@@ -108,15 +108,11 @@ export async function getUserCourseRequests(userId: string,courses:CourseData[],
     .where('userId', '=', userId)
     .selectAll()
     .execute();
-  
-  // Assuming userCourseProgressData is an array of results
+
   const formattedProgressData = userCourseProgressData.map(progress => {
-    // Parse the JSON content if it's not already an object
     const contentProgress = typeof progress.contentProgress === 'string'
       ? JSON.parse(progress.contentProgress)
       : progress.contentProgress;
-  
-
     return {
       courseId: progress.courseId,
       lastChapterId: progress.lastChapterId,
@@ -125,6 +121,7 @@ export async function getUserCourseRequests(userId: string,courses:CourseData[],
       contentProgress: contentProgress 
     };
   });
+  
   return formattedProgressData;
 }
 export async function filterUserCourses(userId: string, courses: CourseData[], roleIndex: number): Promise<CourseData[]> {
@@ -185,6 +182,6 @@ export async function filterUserCourses(userId: string, courses: CourseData[], r
       const serializedResult = result
       return NextResponse.json(serializedResult);
     } catch (error) {
-      handleError(error);
+      return handleError(error);
     }
   }

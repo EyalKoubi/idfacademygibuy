@@ -7,6 +7,7 @@ import useCoursesStore from "@/app/_contexts/courseContext";
 import Subject from "../SubjectManagerComponents/Subject";
 import AddSubject from "../SubjectManagerComponents/AddSubject";
 import UpdateChapterForm from "./UpdateChapter";
+import ErrorMessage from "@/app/home/_component/ErrorMessage";
 
 interface ChapterProps {
   chapter: ChapterData,
@@ -23,8 +24,10 @@ const Chapter: React.FC<ChapterProps> = ({ chapter, courseId, chapterIndex }) =>
   const [isAddingSubject, setIsAddingSubject] = useState(false);
   const [addSubjectError, setAddSubjectError] = useState('');
   const [renameChapterError, setRenameChapterError] = useState('');
+  const [loading,setLoading]=useState(false)
 
   const handleUpdateChapter = async () => {
+    setLoading(true)
     const formData = new FormData();
     const updatedChapter = {
       id: chapter.id,
@@ -36,21 +39,30 @@ const Chapter: React.FC<ChapterProps> = ({ chapter, courseId, chapterIndex }) =>
     const response = await axios.post("/api/editChapter", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+    console.log(response.data)
     if (response.data?.message) {
       setRenameChapterError(response.data?.message);
     } else {
       updateChapter(updatedChapter, courseId);
       setIsUpdateChapter(false);
     }
+    setLoading(false)
   };
 
   const handleDeleteChapter = async () => {
+    setLoading(true)
     const formData = new FormData();
     formData.append("chapterId", chapter.id);
-    await axios.post("/api/deleteChapter", formData, {
+    const response=await axios.post("/api/deleteChapter", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+    if(response.data.message){
+      setRenameChapterError(response.data.message)
+    }
+    else{
     deleteChapter(chapter, courseId);
+    }
+    setLoading(false)
   };
 
   return (
@@ -64,6 +76,8 @@ const Chapter: React.FC<ChapterProps> = ({ chapter, courseId, chapterIndex }) =>
           setChapterBrief={setChapterBrief}
           handleUpdateChapter={handleUpdateChapter}
           renameChapterError={renameChapterError}
+          loading={loading}
+          setIsUpdateChapter={setIsUpdateChapter}
         />
       ) : (
         <div className="flex flex-row">
@@ -111,7 +125,8 @@ const Chapter: React.FC<ChapterProps> = ({ chapter, courseId, chapterIndex }) =>
                   setAddSubjectError={setAddSubjectError}
                 />
                 {addSubjectError && (
-                  <div className="text-red-500">{addSubjectError}</div>
+                  <ErrorMessage message={addSubjectError}/>
+          
                 )}
               </div>
             ) : (

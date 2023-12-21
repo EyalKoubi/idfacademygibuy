@@ -73,9 +73,8 @@ export async function addChapter(
         .execute();
         
   
-      return NextResponse.json({ message: "Chapter deleted successfully!" });
+      return NextResponse.json({ chapterId});
     } catch (error) {
-      console.error("Error in deleteChapter:", error);
       return handleError(error); 
     }
   }
@@ -95,6 +94,6 @@ export async function addChapter(
   
      return NextResponse.json(updatedChapter);
     } catch (error) {
-      handleError(error);
+      return handleError(error);
     }
   }

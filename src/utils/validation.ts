@@ -59,17 +59,18 @@ export const CourseSchema = z.object({
       .max(500, {message:'chapter id must be less than 500 characters'}).optional()
   });
 
-  //function to treat in zod error and return value to client
   export const handleError = (error: any) => {
     if (error instanceof ZodError) {
+      console.log("reach to zod error :")
       console.log(error);
       const errorMessages = error.issues.map((issue) => issue.message);
+      console.log(errorMessages[0])
       return NextResponse.json({ message: errorMessages[0] });
     } else if (error.code === '23505') {
       // Handle PostgreSQL unique constraint violation (code 23505)
       return NextResponse.json({
-        message: 'Its already exist please try another name',
-        detail: error.detail, // Include the database error detail
+        message: 'this name is already exist please try another name',
+        detail: error.detail, 
       });
     } else {
       console.error("MY Server Error:", error);

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
+import { Loading } from "react-daisyui";
 
 interface UpdateChapterFormProps {
   chapterName: string;
@@ -8,6 +9,8 @@ interface UpdateChapterFormProps {
   setChapterBrief: (brief: string) => void;
   handleUpdateChapter: () => void;
   renameChapterError: string | null;
+  loading:boolean;
+  setIsUpdateChapter:Dispatch<SetStateAction<boolean>>;
 }
 
 const UpdateChapterForm: React.FC<UpdateChapterFormProps> = ({
@@ -17,6 +20,8 @@ const UpdateChapterForm: React.FC<UpdateChapterFormProps> = ({
   setChapterBrief,
   handleUpdateChapter,
   renameChapterError,
+  loading,
+  setIsUpdateChapter,
 }) => {
   return (
     <>
@@ -34,12 +39,24 @@ const UpdateChapterForm: React.FC<UpdateChapterFormProps> = ({
         onChange={(e) => setChapterBrief(e.target.value)}
         className="p-2 ml-2 border rounded"
       />
-      <button
+    {loading ? (
+      <Loading />
+    ) : (
+      <div>
+    <button
         onClick={handleUpdateChapter}
         className="p-2 ml-2 bg-green-500 text-white rounded hover:bg-green-700"
-      >
+    >
         {GeneralTexts.submit}
-      </button>
+    </button>
+    <button
+    onClick={()=>setIsUpdateChapter(false)}
+    className="p-2 ml-2 bg-red-500 text-white rounded hover:bg-red-700"
+>
+    {GeneralTexts.back}
+  </button>
+  </div>
+    )}
       {renameChapterError && <div className="text-red-500">{renameChapterError}</div>}
     </>
   );

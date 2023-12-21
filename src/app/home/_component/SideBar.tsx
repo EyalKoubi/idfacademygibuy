@@ -10,6 +10,7 @@ import {
 } from "../menus";
 
 import {Users} from "@/app/types"
+import { Menu } from "react-daisyui";
 
 interface SidebarProps {
   userType: Users;
@@ -43,6 +44,7 @@ const Sidebar:React.FC<SidebarProps> = ({ userType }) => {
   return (
     <div className={`bg-gray-200 p-4 flex flex-col h-screen ${sidebarClass}`}>
       <ul className="space-y-2">
+
         {menu.map(({ id, href, rowInfo, icon }) => {
           return (
             <RowInMenu key={id} href={href} rowInfo={rowInfo} icon={icon} />

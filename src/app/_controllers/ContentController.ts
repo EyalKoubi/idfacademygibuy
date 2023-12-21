@@ -135,10 +135,10 @@ export async function deleteContent(contentId: string) {
       // Delete content from User Progress
       await deleteContentFromUserProgress(contentId);
   
-      return NextResponse.json({ message: "Content deleted successfully!" });
+      return NextResponse.json({contentId});
     } catch (error) {
       console.error("Error in deleteContent:", error);
-      return handleError(error); // Ensure you have a handleError function
+      return handleError(error); 
     }
   }
 export async function deleteContentFromUserProgress(contentId:string) {

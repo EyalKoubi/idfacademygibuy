@@ -1,4 +1,5 @@
-import React from 'react';
+import ErrorMessage from '@/app/home/_component/ErrorMessage';
+import React, { useEffect } from 'react';
 
 interface AddChapterFormProps {
     newChapterName: string;
@@ -8,8 +9,8 @@ interface AddChapterFormProps {
     handleAddChapter: () => void;
     setIsAddChapterPressed: (isPressed: boolean) => void;
     addChapterError: string;
-    editTexts: any; // Assuming editTexts is a type, you should replace 'any' with that type
-    GeneralTexts: any; // Replace 'any' with the correct type for GeneralTexts
+    editTexts: any; 
+    GeneralTexts: any; 
 }
 
 const AddChapterForm: React.FC<AddChapterFormProps> = ({
@@ -23,7 +24,12 @@ const AddChapterForm: React.FC<AddChapterFormProps> = ({
     editTexts,
     GeneralTexts
 }) => {
+    useEffect(()=>{
+        setNewChapterName("")
+        setNewChapterBrief("")
+    },[])
     return (
+        
         <div className="bg-white p-6 rounded shadow max-w-md mx-auto mt-10 flex flex-col space-y-4">
             <input
                 type="text"
@@ -52,9 +58,8 @@ const AddChapterForm: React.FC<AddChapterFormProps> = ({
                 {GeneralTexts.back}
             </button>
             {addChapterError && (
-                <div className="text-red-500">
-                    Error: {addChapterError}
-                </div>
+                     <ErrorMessage message={addChapterError}/>
+    
             )}
         </div>
     );

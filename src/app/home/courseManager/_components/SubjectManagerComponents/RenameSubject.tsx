@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
 
 interface RenameSubjectFormProps {
@@ -6,6 +6,7 @@ interface RenameSubjectFormProps {
   setSubjectName: (name: string) => void;
   handleRenameSubject: () => void;
   renameSubjectError: string | null;
+  setIsRenameSubject:Dispatch<SetStateAction<boolean>>;
 }
 
 const RenameSubjectForm: React.FC<RenameSubjectFormProps> = ({
@@ -13,6 +14,7 @@ const RenameSubjectForm: React.FC<RenameSubjectFormProps> = ({
   setSubjectName,
   handleRenameSubject,
   renameSubjectError,
+  setIsRenameSubject,
 }) => {
   return (
     <div className="flex items-center ml-1">
@@ -29,6 +31,13 @@ const RenameSubjectForm: React.FC<RenameSubjectFormProps> = ({
       >
         {GeneralTexts.submit}
       </button>
+      <button
+        onClick={()=>{setIsRenameSubject(false)}}
+        className="p-2 ml-2 bg-red-500 text-white rounded hover:bg-red-700"
+      >
+        {GeneralTexts.back}
+      </button>
+
       {renameSubjectError && <div className="text-red-500">{renameSubjectError}</div>}
     </div>
   );

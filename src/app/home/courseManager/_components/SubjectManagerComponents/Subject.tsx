@@ -98,6 +98,7 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
       setSubjectName={setSubjectName}
       handleRenameSubject={handleRenameSubject}
       renameSubjectError={renameSubjectError}
+      setIsRenameSubject={setIsRenameSubject}
     />
   ) : (
     <div className="flex flex-row">
@@ -108,7 +109,7 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
         {editTexts.deleteSubject}
       </button>
       <button
-        onClick={() => setIsRenameSubject(true)}
+        onClick={() => {setIsRenameSubject(true);setRenameSubjectError("")}}
         className="p-2 ml-1 bg-yellow-500 text-white rounded hover:bg-yellow-600"
       >
         {editTexts.rename}
@@ -117,6 +118,7 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
         onClick={() => setIsSelectedSubject(true)}
         className="p-2 ml-1 bg-blue-500 text-white rounded hover:bg-blue-700"
       >
+        
         {editTexts.contents}
       </button>
     </div>

@@ -7,6 +7,7 @@ import useCoursesStore from "@/app/_contexts/courseContext";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/app/_contexts/userContext";
 import { Loading } from "react-daisyui";
+import ErrorMessage from "../_component/ErrorMessage";
 interface ErrorResponse {
   message?: string;
 }
@@ -28,7 +29,7 @@ const AddCoursePage: React.FC = () => {
 
   const handleSubmit = async () => {
     try{
-    //setError(null);
+      setError(null);
       setLoading(true)
       let courseToServer:CourseData= {
           id: "",
@@ -37,6 +38,7 @@ const AddCoursePage: React.FC = () => {
           creationTimestamp:new Date(),
           chapters: []
       }
+      if(fileData){
       let formData = new FormData();
       formData.append("course", JSON.stringify(courseToServer));
       formData.append("userId", user.id);
@@ -57,6 +59,8 @@ const AddCoursePage: React.FC = () => {
         setError(response.data?.message);
         setLoading(false)
     }
+    }else{setError("please upload course page");setLoading(false);}
+
    } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
       setError(error?.response?.data?.message || error.message || "An error occurred while adding the course.");
@@ -82,7 +86,7 @@ const AddCoursePage: React.FC = () => {
         }}
         className="p-2 w-full border rounded-md shadow-sm mb-4"
       />
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <ErrorMessage message={error}/>}
       {!loading?
       <button
         onClick={handleSubmit}

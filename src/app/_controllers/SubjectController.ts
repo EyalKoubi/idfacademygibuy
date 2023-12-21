@@ -88,6 +88,6 @@ export async function editSubject(subjectRenameProps: SubjectRenameProps) {
 
     return NextResponse.json(updatedSubject);
   } catch (error) {
-    handleError(error);
+    return handleError(error);
   }
 }

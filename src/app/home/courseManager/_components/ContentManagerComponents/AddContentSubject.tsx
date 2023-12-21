@@ -1,4 +1,4 @@
-import React, { FormEvent } from "react";
+import React, { FormEvent, useEffect } from "react";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
 import { ContentData } from "@/app/types";
 import { Loading } from "react-daisyui";
@@ -20,6 +20,10 @@ const AddContentForm: React.FC<AddContentFormProps> = ({
   setFile,
   addContentError,
 }) => {
+  useEffect(()=>{
+    setContentData(({ ...contentData, comments:"" }))
+    console.log(contentData)
+  },[])
   return (
     <div>
       <input

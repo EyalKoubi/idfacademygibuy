@@ -12,14 +12,6 @@ const Page = () => {
     const [selectedCourse, setSelectedCourse] = useState<{[userId: string]: string}>({});
     const {userRequestsCourses,removeRequestUserCourse}=useUserRequestCourseStore();
     const {user,addUserCourse}=useUserStore();
-    // useEffect(() => {
-    //     // Fetch pending registrations when component mounts
-    //     axios.get("/api/getPermissionRequests")
-    //         .then(response => {
-    //             setPendingRegistrations(response.data);
-    //         })
-    //         .catch(error => console.error(error));
-    // }, []);
 
     const answerRequestCourse = (userCurrent:any,course:CourseData,answerType:string) => {
         const formData=new FormData();

@@ -1,5 +1,5 @@
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import axios from "axios";
 import { ChapterData,SubjectData } from "@/app/types";
 import useCoursesStore from "@/app/_contexts/courseContext";
@@ -36,6 +36,9 @@ import useCoursesStore from "@/app/_contexts/courseContext";
             setIsAddingSubject(false);
             };
             }
+            useEffect(()=>{
+              setNewSubjectName("")
+            },[])
         return(
             <div className="bg-white p-6 rounded shadow max-w-md mx-auto mt-10 flex flex-col space-y-4">
             <input

@@ -1,5 +1,3 @@
-//A component to handle the addition of chapters to the course
-
 import React, { useState } from 'react';
 import { editTexts, GeneralTexts } from "@/HebrewStrings/Texts";
 

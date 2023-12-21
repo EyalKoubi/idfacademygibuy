@@ -29,7 +29,6 @@ const CourseCatalog: React.FC = () => {
         course.name.toLowerCase().startsWith(searchTerm.toLowerCase())
       );
     } if (filterType === 'date' && dateRange.start && dateRange.end) {
-      // Add your date filtering logic here
       const startDate = new Date(dateRange.start);
       const endDate = new Date(dateRange.end);
       filtered = courses.filter(course => {

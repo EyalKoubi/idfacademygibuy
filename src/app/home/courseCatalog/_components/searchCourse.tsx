@@ -25,16 +25,16 @@ interface SearchCourseProps{
         <div>
           <div>
             <Input
-              className="join-item" // You may need to adjust this class name based on your design library
+              className="join-item" 
               placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
-        <div className="flex flex-col"> {/* Wrap the Select and date range inputs in a flex column */}
+        <div className="flex flex-col"> 
           <Select
-            className="join-item" // You may need to adjust this class name based on your design library
+            className="join-item" 
             onChange={(e) => setFilterType(e.target.value)}
           >
             <Select.Option value={""}>
