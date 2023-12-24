@@ -13,11 +13,10 @@ const ChapterList: React.FC<ChapterListProps> = (props:ChapterListProps) => {
   const { courses } = useCoursesStore();
   
   const courseid =props.params.courseid;
-   //need to fix to zostan
   const courseToPresent = courses.find((course) => course.id === courseid);
   const chaptersToPresent = courseToPresent ? courseToPresent.chapters : [];
   return (
-    <div>
+    <div className='flex flex-col'>
       {chaptersToPresent?.map((chapter: ChapterData) => (
       <Chapter chapter={chapter} courseid={courseid}/>
       ))}

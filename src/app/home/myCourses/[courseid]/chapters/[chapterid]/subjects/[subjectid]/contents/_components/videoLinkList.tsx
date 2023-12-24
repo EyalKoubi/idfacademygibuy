@@ -1,41 +1,92 @@
-"use client"
-import React from 'react';
-import { ContentData, ContentItemProgress, ContentProgress } from '@/app/types';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { ContentData, ContentItemProgress, EnhancedContentData } from '@/app/types';
+import { generateVideoImageThumbnail, getMimeType } from '@/utils/filesUtils';
+import ItemVideoMenu from './itemVideoMenu';
 
-interface VideoLinkListProps  {
-    contents: ContentData[] | undefined;
-    onVideoSelect : (content: ContentData,contentStatus:ContentItemProgress) => void;
-    contentsStatus:ContentItemProgress[]|undefined;
+interface VideoLinkListProps {
+  contents: ContentData[] | undefined;
+  onVideoSelect: (content: ContentData, contentStatus: ContentItemProgress) => void;
+  contentsStatus: ContentItemProgress[] | undefined;
+  subjectTitleName: string | undefined;
 }
-const videoLinkList: React.FC<VideoLinkListProps> = ({ contents, onVideoSelect, contentsStatus}) => {
-    // Define a default contentStatus
-    const defaultContentStatus = { contentId: '', watched: false };
 
-    return (
-        <div>
-            <table>
-            {contents?.map((content, index) => {
-                // Find content status or use the default one
-                const contentStatus = contentsStatus?.find(cs => cs.contentId === content.id) || defaultContentStatus;
+const VideoLinkList: React.FC<VideoLinkListProps> = ({
+  contents,
+  onVideoSelect,
+  contentsStatus,
+  subjectTitleName,
+}) => {
+  const defaultContentStatus = { contentId: '', watched: false };
+  const [contentData, setContentData] = useState<EnhancedContentData[]>([]);
 
-                return (
-                    <div className="flex justify-center border w-36 border-black" key={index}>
-                        <td>
-                            <p onClick={() => onVideoSelect(content, contentStatus)} style={{ cursor: 'pointer' }}>
-                                {content.file_name}
-                            </p>
-                            <input
-                                type="checkbox"
-                                checked={contentStatus.watched}
-                                readOnly 
-                            />
-                        </td>
-                    </div>
-                );
+  useEffect(() => {
+    const fetchMediaInfo = async (content: ContentData) => {
+      try {
+        const response = await axios.get(`/api/getFile/${content.id}`);
+        let presignedUrl = response.data.url;
+
+        const fileExtension = content.file_name.split('.').pop();
+        const mimeType = getMimeType(fileExtension);
+
+        if (mimeType.startsWith('video')) {
+          presignedUrl = await generateVideoImageThumbnail(presignedUrl);
+        }
+        console.log(!contentData.some((updatedContent) => updatedContent.id === content.id))
+        // Check if the content with the same ID already exists in contentData
+          const updatedContent = {
+            ...content,
+            mediaSrc: presignedUrl,
+            mediaType: mimeType,
+          };
+
+          // Update the contentData state
+          setContentData((prevContentData) => {
+            if (!prevContentData.some((content) => content.id === updatedContent.id)) {
+              return [...prevContentData, updatedContent];
+            }
+            return prevContentData;
+          });
+      } catch (error) {
+        console.error('Error fetching media:', error);
+      }
+    };
+
+    if (contents && contents.length > 0) {
+      // Fetch media information for each content
+      contents.forEach((content) => {
+        fetchMediaInfo(content);
+      });
+    }
+
+  }, []);
+  useEffect(()=>{console.log(contentData)},[contentData])
+
+  return (
+    <div className='min-w-full'>
+      <section>
+        <p className="bg-gray-300 p-2 rounded">{subjectTitleName}</p>
+      </section>
+      <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+        <table>
+          <tbody>
+            {contentData?.map((content, index) => {
+              // Find content status or use the default one
+              const contentStatus =
+                contentsStatus?.find((cs) => cs.contentId === content.id) || defaultContentStatus;
+
+              return (
+                <tr key={index}>
+                  <td>
+                    <ItemVideoMenu content={content} contentStatus={contentStatus} onVideoSelect={onVideoSelect} />
+                  </td>
+                </tr>
+              );
             })}
-            </table>
-        </div>
-    );
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 };
-
-export default videoLinkList;
+export default VideoLinkList;

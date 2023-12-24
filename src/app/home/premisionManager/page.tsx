@@ -18,7 +18,6 @@ const Page = () => {
         formData.append("userId",userCurrent.id)
         formData.append("course",JSON.stringify(course))
         formData.append("answerType",answerType)
-        //const courseId = selectedCourse[userId]; // Get the selected course for the userCurrent
         axios.post(`/api/answerRequestCourse`,formData)
             .then(() => {
                 removeRequestUserCourse(userCurrent,course)

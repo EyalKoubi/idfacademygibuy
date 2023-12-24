@@ -9,6 +9,7 @@ import axios from 'axios';
 import { updateContentProgress } from '@/utils/progressfunction';
 
 import { Button,Pagination } from 'react-daisyui';
+import ChevronRightIcon from '@/app/home/_component/icons/ChevronRightIcon';
 
 
 interface ContentListProps {
@@ -24,12 +25,13 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
   const { courses } = useCoursesStore();
   const {user,coursesProgress,markContentAsWatched,ContentsSubjectStatus } = useUserStore();
   const subjectId = params.subjectid;
+
   const chapterId = params.chapterid;
   const courseId = params.courseid;
 
   const courseToPresent = courses.find(course => course.id === courseId);
+  const subjectTitleName=courseToPresent?.chapters.find((chapter)=>chapter.id===chapterId)?.subjects.find((subject)=>subject.id===subjectId)?.name
   const contentsToPresent:ContentData[]|undefined = courseToPresent?.chapters?.find(chapter => chapter.id === chapterId)?.subjects.find(subject => subject.id === subjectId)?.contents;
-
   const userState = useUserStore(); // This is how you access the state
 
   const contentsStatus:ContentItemProgress[]|undefined =ContentsSubjectStatus(userState,courseId, chapterId, subjectId);
@@ -97,50 +99,62 @@ const ContentList: React.FC<ContentListProps> = ({ params }) => {
       setCurrContent(contentsToPresent[contentIndex - 1]);
     }
   };
-
   return (
-    <div className="flex flex-col justify-between items-center h-screen">
-      <h1>תכנים</h1>
-      <div className="flex justify-between items-center mb-4"> {/* Added bottom margin */}
-        <div className="flex-1 flex justify-center items-center ">
+    <div className="flex flex-col h-screen mr-11">
+      <h1>{subjectTitleName}</h1>
+      <div className="flex justify-between items-start m-4 bg-gray-200 p-4 rounded">
+        <div className="flex-1 flex justify-center items-center">
           {currContent ? (
-            <div className="flex justify-center items-center" style={{
-              width: '500px',
-              backgroundColor: 'rgba(128, 128, 128, 0.2)',
-              borderRadius: '5%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 1px 2px rgba(6, 30, 58, 0.1)',
-              overflow: 'hidden',
-            }}>
-              <MediaViewer content={currContent} isPresentMode={true}/>
+            <div
+              className="flex justify-center items-center"
+              style={{
+                width: '500px',
+                backgroundColor: 'rgba(128, 128, 128, 0.2)',
+                borderRadius: '5%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                boxShadow: '0 1px 2px rgba(6, 30, 58, 0.1)',
+                overflow: 'hidden',
+              }}
+            >
+              <MediaViewer content={currContent} isPresentMode={true} />
             </div>
           ) : (
-            <div className="text-white">
-              No content selected or available
-            </div>
+            <div className="text-white">No content selected or available</div>
           )}
         </div>
-        <div className="flex justify-start md:block" style={{width:'150px'}}>
-         <VideoLinkList contents={contentsToPresent} onVideoSelect={onVideoSelect} contentsStatus={contentsStatus} />
-        </div>
-      </div>
-  
-      <div className="mt-4"> 
-        
-        <Pagination >
-      <Button variant="outline" className="join-item" onClick={goToPreviousContent} disabled={contentIndex === 0}>
-      Previous 
-      </Button>
-      <Button variant="outline" className="join-item" onClick={goToNextContent}  disabled={!contentsToPresent || contentIndex === contentsToPresent.length - 1}>
-      Next
-      </Button>
-    </Pagination>
+        <div className="flex flex-col items-center" style={{ width: '250px'   }}>
+          <VideoLinkList
+            contents={contentsToPresent}
+            onVideoSelect={onVideoSelect}
+            contentsStatus={contentsStatus}
+            subjectTitleName={subjectTitleName}
+          />
+             <div className="mt-4">
+        <Pagination>
+        <Button
+  variant="outline"
+  className="join-item"
+  onClick={goToPreviousContent}
+  disabled={contentIndex === 0}
+>
+  next
+</Button>
+<Button
+  variant="outline"
+  className="join-item"
+  onClick={goToNextContent}
+  disabled={!contentsToPresent || contentIndex === contentsToPresent.length - 1}
+>
+ back
+</Button>
 
+        </Pagination>
+      </div>
+        </div>
       </div>
     </div>
   );
-          }  
-
+          }
 export default ContentList;

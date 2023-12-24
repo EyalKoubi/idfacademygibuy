@@ -16,7 +16,7 @@ export const createInitialContentProgress = (course: CourseData): ContentProgres
 };
 
 // Function to find the first chapter with any unwatched content and create content progress
-export const findFirstUnwatched = (course: CourseData,router:any,coursesProgress:UserCourseProgress[]): void => {
+export const findFirstUnwatched = (course: CourseData, router: any, coursesProgress: UserCourseProgress[]): boolean => {
   let firstUnwatchedChapterId = '';
   let firstUnwatchedSubjectId = '';
   let firstUnwatchedContentId = '';
@@ -40,15 +40,14 @@ export const findFirstUnwatched = (course: CourseData,router:any,coursesProgress
           firstUnwatchedContentId = content.id;
           router.push(`/home/myCourses/${course.id}/chapters/${firstUnwatchedChapterId}/subjects/${firstUnwatchedSubjectId}/contents/${firstUnwatchedContentId}`);
 
-        
-          
           break outerLoop; // Break out of all loops
-        }
         }
       }
     }
-    console.log("you finish the course ")
   }
+
+  return firstUnwatchedChapterId !== '' && firstUnwatchedSubjectId !== '' && firstUnwatchedContentId !== '';
+}
  export function updateContentProgress(updatedContentProgress:ContentProgress[], subjectId:string, chapterId:string,contentId:string) {
     let found = false;
 

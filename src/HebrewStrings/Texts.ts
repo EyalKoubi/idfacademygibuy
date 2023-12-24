@@ -115,6 +115,10 @@ export const CourseCardTexts={
   requestContinueToApprove:"הבקשה ממתינה לאישור מנהל",
   createOn:"נוצר ב:"
 }
+
+export const messagesText = {
+  finishCourse: "סיימת את הקורס לכן כפתור לא פעיל",
+};
 /*
 
 אודותינו,

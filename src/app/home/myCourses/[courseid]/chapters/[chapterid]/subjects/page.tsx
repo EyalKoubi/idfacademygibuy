@@ -13,24 +13,16 @@ interface SubjectListProps{
   }
 }
 const SubjectList: React.FC<SubjectListProps>= (props:SubjectListProps) => {
-  // const router = useRouter(); // Initialize the router
-
   const { courses } = useCoursesStore();
   const chapterId = props.params.chapterid;
   const courseId = props.params.courseid;
-  // Find the course with the specified ID
   const courseToPresent = courses.find((course) => course.id === courseId);
 
-  // Get the subjects for the selected course, or an empty array if the course is not found
   const subjectsToPresent = courseToPresent?.chapters?.find((chapter)=>chapter.id===chapterId)?.subjects;
 
-  const navigateToSubject = (subjectId: string) => {
-    // Navigate to the subject page using the subjectId and courseId if needed
-    // For example: router.push(`/courses/${courseId}/subjects/${subjectId}`);
-  };
 
   return (
-    <div>
+    <div className='flex flex-col'>
       {subjectsToPresent?.map((subject: SubjectData) => (
         <Subject subject={subject} chapterid={chapterId} courseid={courseId}/>
       ))}

@@ -3,13 +3,14 @@ import { Alert } from 'react-daisyui';
 
 interface ErrorMessageProps {
     message: string;
+    warning?:boolean;
 }
 
-const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
+const ErrorMessage: React.FC<ErrorMessageProps> = ({ message,warning }) => {
     if (!message) return null;
 
     return (
-        <div className='flex items-center flex-row bg-red-600 border rounded-xl'>
+        <div className={`flex items-center flex-rowborder rounded-xl ${warning?'bg-green-200':'bg-red-600' }`}>
             <Alert
                 className='flex flex-row py-1 '
                 icon={

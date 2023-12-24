@@ -83,10 +83,11 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
       setIsAddingContent(false);
       addContent(courseId, chapterId, subject.id, newCont);
       }
-      setLoading(false)
     } catch (error) {
+
       console.log("🚀 ~ file: Subject.tsx:38 ~ submitFile ~ error:", error);
     }
+    setLoading(false)
   };
   return (
 <div key={subject.name} className="p-4 bg-gray-300 rounded shadow mb-3">

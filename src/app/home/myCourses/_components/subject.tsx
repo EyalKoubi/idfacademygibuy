@@ -17,9 +17,9 @@ const Subject: React.FC<SubjectProps> = ({subject,courseid,chapterid}) => {
     router.push(currpath+`/${subjectId}/contents/${subject.contents[0].id}`);
    };
   return (
-    <p  onClick={() => navigateToChapter(subject.id,currpath)}>
+    <button  onClick={() => navigateToChapter(subject.id,currpath)}>
       {subject.name}
-    </p>
+    </button>
   );
 };
 

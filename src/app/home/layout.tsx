@@ -48,10 +48,6 @@ export default function RootLayout({
   useEffect(() => {
     getData();
   }, []);
-  // useEffect(() => {
-  //   getData();
-  // }, [userCourses,adminCourses,coursesProgress]);
-
   return (
     <html>
       <body className={inter.className}>
@@ -61,7 +57,6 @@ export default function RootLayout({
             {children}
             {/* need to fix */}
             {user&&<Sidebar userType={Users.Admin}/>}
-            {/* if have admin courses do admin menu (1 enum ) else (4) */}
           </div>
         </div>
       </body>

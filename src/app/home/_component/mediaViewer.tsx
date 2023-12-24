@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ContentData } from '@/app/types';
 import { Loading } from 'react-daisyui';
+import { getMimeType } from "@/utils/filesUtils"
 interface MediaViewerProps{
   content: ContentData 
   isPresentMode:boolean;
@@ -17,21 +18,7 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content,isPresentMode }) => {
         }
     };
 
-    const getMimeType = (extension: string | undefined) => {
-        if (!extension) return '';
 
-        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'svg'];
-        const videoExtensions = ['mp4', 'webm', 'ogv'];
-        const audioExtensions = ['mp3', 'wav', 'ogg'];
-        const textExtensions = ['txt', 'csv', 'log'];
-
-        if (imageExtensions.includes(extension.toLowerCase())) return `image/${extension.toLowerCase()}`;
-        if (videoExtensions.includes(extension.toLowerCase())) return `video/${extension.toLowerCase()}`;
-        if (audioExtensions.includes(extension.toLowerCase())) return `audio/${extension.toLowerCase()}`;
-        if (textExtensions.includes(extension.toLowerCase())) return 'text/plain';
-
-        return 'application/octet-stream';
-    };
 
     useEffect(() => {
         setLoading(true);
@@ -84,7 +71,7 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content,isPresentMode }) => {
           }
           case mediaType.startsWith('video'):
             return (
-              <video className="w-screen max-h-full object-contain" controls>
+              <video className="w-screen max-h-full object-contain" controls >
                 <source src={mediaSrc} type={mediaType} />
                 Your browser does not support the video tag.
               </video>

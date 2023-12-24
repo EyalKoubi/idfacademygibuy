@@ -81,6 +81,12 @@ export type UserRequestCourseState={
   userRequestsCourses:UserRequestsCourse[];
 }
 
+export type EnhancedContentData = ContentData & {
+  mediaSrc: string;
+  mediaType: string;
+};
+
+
 //for the fiture of continue standing 
 
 
