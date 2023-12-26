@@ -8,14 +8,21 @@ interface VideoListItemProps {
 }
 
 const ItemVideoMenu: React.FC<VideoListItemProps> = ({ content, contentStatus, onVideoSelect }) => {
+  console.log(content.mediaSrc)
+  const hasValidMediaSrc = content.mediaSrc;
+
+  // Define the default image source
+  const defaultImageSrc = '@/app/src/assets/default-image-playlist.jpg'; 
   return (
     <div
-      className="flex justify-between items-center min-w-full bg-gray-100 p-2 rounded-md my-2 cursor-pointer hover:bg-gray-300 transition duration-200"
+      className={`flex justify-between items-center min-w-full p-2 rounded-md my-2 cursor-pointer hover:bg-gray-300 transition duration-200 ${
+        hasValidMediaSrc ? '' : 'bg-gray-200' 
+      }`}
       onClick={() => onVideoSelect(content, contentStatus)}
     >
       <div className="flex items-center">
         <img
-          src={content.mediaSrc} // Use the media URL received from the API
+          src={hasValidMediaSrc ? content.mediaSrc : defaultImageSrc} 
           alt={content.file_name}
           className="w-16 h-16 rounded mr-2"
         />

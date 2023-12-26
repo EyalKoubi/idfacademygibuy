@@ -68,7 +68,6 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
     if (!file) return;
     const formData: any = new FormData();
     formData.append("file", file, file.name);
-    formData.append("bucket", courseId);
     formData.append("comments", contentData.comments);
     formData.append("subjectId", subject.id);
     try {

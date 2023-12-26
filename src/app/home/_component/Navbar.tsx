@@ -1,7 +1,7 @@
 import HamburgerMenu from "./icons/HamburgerMenu";
 import { HomeTexts } from "@/HebrewStrings/Texts";
 import useAppState from "@/app/_contexts/globalContext";
-import tikshuvPicture from "../../../assets/tikshuv.png";
+import tikshuvPicture from "@/../public/assets/tikshuv.png";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 

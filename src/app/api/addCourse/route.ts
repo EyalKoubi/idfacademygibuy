@@ -6,7 +6,7 @@ import { ZodError } from "zod";
 import { ContentData, CourseData } from "@/app/types";
 
 import { createCourse } from "@/app/_controllers/CourseController"; // Adjust the import path as needed
-import { addContent, addContentWithoutResponse } from "@/app/_controllers/ContentController";
+import { addContent, addContentWithoutResponse, addDefaultCourseImageContent, getDefaultImageCourseContent } from "@/app/_controllers/ContentController";
 interface CourseRequest extends NextRequest {
  course?: CourseData;
  userId?:string;
@@ -16,12 +16,25 @@ interface CourseRequest extends NextRequest {
 
 export async function POST(req:CourseRequest, res: NextApiResponse) {
   try {
+    
     const data = await req.formData();
     const course = JSON.parse(data.get("course") as string);
     const userId = data.get("userId") as string;
-    const file = data.get("file") as unknown as File;
+    let file=undefined;
     const comments = data.get("comments") as string;
-    const course_image:ContentData|undefined=await addContentWithoutResponse({ file, comments, subjectId:"" });
+    let course_image:ContentData|undefined;
+
+    if( data.get("file")){
+     file = data.get("file") as unknown as File;
+     console.log("have file")
+     course_image=await addContentWithoutResponse({ file, comments, subjectId:"" });
+    }
+    else{
+      let contentDefaultImage =await getDefaultImageCourseContent();
+      if (!contentDefaultImage) {
+        course_image= await addDefaultCourseImageContent();
+      }
+  }
     if(course_image)
     return createCourse({
       name: course.name,
@@ -29,8 +42,6 @@ export async function POST(req:CourseRequest, res: NextApiResponse) {
       creationTimestamp: course.creationTimestamp,
       userId
     });
-    else{
-    }
   } catch (error) {
     return handleError(error);
   }

@@ -17,42 +17,48 @@ export const getMimeType = (extension: string | undefined) => {
 
 
 export const generateVideoImageThumbnail = async (videoUrl: string): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const video = document.createElement('video');
-      video.src = videoUrl;
-  
-      // Listen for the "loadeddata" event to ensure the video has loaded its data
-      video.addEventListener('loadeddata', () => {
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-  
-        if (!context) {
-          reject('Canvas 2D context not available');
-          return;
-        }
-  
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-  
+  return new Promise((resolve, reject) => {
+    const video = document.createElement('video');
+    video.src = videoUrl;
+
+    video.addEventListener('loadeddata', () => {
+      const canvas = document.createElement('canvas');
+      const context = canvas.getContext('2d');
+
+      if (!context) {
+        reject('Canvas 2D context not available');
+        return;
+      }
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      console.log(`Video dimensions: ${canvas.width}x${canvas.height}`);
+
+      try {
         // Draw the video frame on the canvas
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
-  
+
         // Convert the canvas content to a data URI
         const thumbnailDataUri = canvas.toDataURL('image/jpeg');
-  
+        
         // Clean up and resolve the promise
         video.pause();
         video.removeAttribute('src');
         video.load();
         resolve(thumbnailDataUri);
-      });
-  
-      video.addEventListener('error', (error) => {
+      } catch (error) {
         reject(error);
-      });
-  
-      // Start loading the video
-      video.load();
+      }
     });
-  };
+
+    video.addEventListener('error', (error) => {
+      reject(`Video error: ${error}`);
+    });
+
+    // Start loading the video
+    video.load();
+  });
+};
+
   

@@ -6,6 +6,7 @@ const Login = () => {
   const { data: sessionData } = useSession();
   const handleButtonClick = async () => {
     if (!sessionData?.user) signIn("auth0", { callbackUrl: "/home" });
+
     else signOut();
   };
 

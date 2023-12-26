@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import useCoursesStore from "../_contexts/courseContext";
 import axios from "axios";
 import useUserStore from "../_contexts/userContext";
-import { findFirstUnwatched } from "@/utils/progressfunction";
+import { findFirstUnwatched } from "@/utils/progressUtils";
 import { CourseData, UserCourseProgress } from "../types";
 import { useRouter } from "next/navigation";
 

@@ -53,7 +53,6 @@ const VideoLinkList: React.FC<VideoLinkListProps> = ({
     };
 
     if (contents && contents.length > 0) {
-      // Fetch media information for each content
       contents.forEach((content) => {
         fetchMediaInfo(content);
       });
@@ -71,7 +70,6 @@ const VideoLinkList: React.FC<VideoLinkListProps> = ({
         <table>
           <tbody>
             {contentData?.map((content, index) => {
-              // Find content status or use the default one
               const contentStatus =
                 contentsStatus?.find((cs) => cs.contentId === content.id) || defaultContentStatus;
 

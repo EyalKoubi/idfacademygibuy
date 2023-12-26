@@ -7,6 +7,8 @@ import * as Minio from "minio";
 import { uploadFileToS3Service, bucket,s3Client } from "@/app/_minio/minio";
 import { ContentData, ContentItemProgress } from "../types";
 
+import defaultImageCourse from "@/../public/assets/default-course-image.png";
+import fs from "fs/promises";
 interface ContentDataProps{
   file: File;
   comments: string;
@@ -36,6 +38,19 @@ export async function getContent(contentId:string):Promise<ContentData>{
     .selectAll()
     .executeTakeFirstOrThrow();
     return contentFromDb;
+}
+export async function getContentByName(contentName:string):Promise<ContentData|undefined>{
+  try{
+  const contentFromDb=await db
+  .selectFrom("Content")
+  .where("file_name", "=", contentName)
+  .selectAll()
+  .executeTakeFirstOrThrow();
+  return contentFromDb;}
+  catch{return undefined;}
+}
+export async function getDefaultImageCourseContent(){
+    return getContentByName("default-course-image.png")
 }
 export async function processContent(contentData: ContentDataProps) {
     const { file, comments, subjectId } = contentData;
@@ -119,6 +134,38 @@ export async function addContent(contentData: ContentDataProps){
   } catch (error) {
     console.error("Error in addContent:", error);
     return handleError(error);
+  }
+}
+
+
+export async function addDefaultCourseImageContent() {
+  try {
+    // Convert the imported image to a string URL
+    const imageUrl = '/public/assets/default-course-image.png'; // Relative path
+
+    // Fetch the file from the URL
+    const response = await fetch(imageUrl);
+    const arrayBuffer = await response.arrayBuffer();
+
+    // Create a Blob object from the array buffer
+    const blob = new Blob([arrayBuffer]);
+
+    // Create a File object with all properties
+    const file = new File([blob], "default-course-image.png", { type: "image/png" });
+
+    // Upload the file to Minio
+    const contentData = {
+      file: file,
+      comments: "תמונת קורס ברירת מחדל",
+      subjectId: "",
+    };
+
+    const newContent = await addContent(contentData);
+    console.log("Default Course Image uploaded to Minio and database.");
+    return newContent as ContentData;
+  } catch (error) {
+    console.error("Error adding Default Course Image:", error);
+    throw error;
   }
 }
 export async function deleteContent(contentId: string) {

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { ContentData,CourseData,CoursesState,SubjectData,ChapterData, UserState,UserCourseProgress, ContentItemProgress, ContentProgress} from "@/app/types";
-import {createInitialContentProgress} from '@/utils/progressfunction'
+import {createInitialContentProgress} from '@/utils/progressUtils'
 
 
 

@@ -1,4 +1,4 @@
-
+"use client"
 import { useEffect, useReducer, useState } from "react";
 import { CourseData } from "@/app/types";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,7 @@ import useUserStore from "@/app/_contexts/userContext";
 import axios from "axios";
 import {Users} from "@/app/types"
 import useUserRequestCourseStore from "@/app/_contexts/requestsCoursesContext";
-import { calculateProgress, findFirstUnwatched } from "@/utils/progressfunction";
+import { calculateProgress, findFirstUnwatched } from "@/utils/progressUtils";
 import { Progress, RadialProgress } from "react-daisyui";
 import ProgressBar from "../myCourses/_components/ProgressBar";
 interface CourseCardProps {

@@ -14,6 +14,7 @@ interface ErrorResponse {
 const AddCoursePage: React.FC = () => {
   const { addCourse,initinalCourse } = useCoursesStore();
   const {addNewCourseProcess}=useUserStore()
+  const [isDefaultImage, setIsDefaultImage] = useState(false);
   const [courseData, setCourseData] = useState<CourseData>({
     id: "",
     name: "",
@@ -38,13 +39,14 @@ const AddCoursePage: React.FC = () => {
           creationTimestamp:new Date(),
           chapters: []
       }
-      if(fileData){
+   
       let formData = new FormData();
       formData.append("course", JSON.stringify(courseToServer));
       formData.append("userId", user.id);
-      formData.append("file", fileData, fileData.name);
       formData.append("comments",courseData.name);
-
+      if(fileData&&!isDefaultImage){
+        formData.append("file", fileData, fileData.name);
+      }
       const response = await axios.post("/api/addCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -54,18 +56,18 @@ const AddCoursePage: React.FC = () => {
         addNewCourseProcess(response.data)
         setLoading(false)
         router.push(`/home/courseManager/${response.data.id}`);
-     await setCourseData(response.data)
+        await setCourseData(response.data)
       } else {
         setError(response.data?.message);
         setLoading(false)
-    }
-    }else{setError("please upload course page");setLoading(false);}
+  }
 
    } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
       setError(error?.response?.data?.message || error.message || "An error occurred while adding the course.");
     }
   };
+
 
   return (
     <div className="bg-gray-50 p-6 rounded-xl shadow-lg max-w-md mx-auto mt-10">
@@ -77,27 +79,46 @@ const AddCoursePage: React.FC = () => {
         onChange={(e) => setCourseData({ ...courseData, name: e.target.value })}
         className="p-2 w-full border rounded-md shadow-sm mb-4"
       />
-      <input
-        type="file"
-        onChange={(e) => {
-          if (e.target.files && e.target.files.length > 0) {
-            setFileData(e.target.files[0]);
-          }
-        }}
-        className="p-2 w-full border rounded-md shadow-sm mb-4"
-      />
-      {error && <ErrorMessage message={error}/>}
-      {!loading?
-      <button
-        onClick={handleSubmit}
-        className="p-2 w-full bg-blue-600 text-white rounded-md hover:bg-blue-800 shadow-sm"
-      >
-        {adminTexts.adminAddCourse}
-      </button> :
+     
+      {isDefaultImage ? (
+        <div>
+        </div>
+      ) : (
+        <div>
+          <label className="block text-gray-600 mb-2">תמונה הקורס:</label>
+          <input
+            type="file"
+            onChange={(e) => {
+              if (e.target.files && e.target.files.length > 0) {
+                setFileData(e.target.files[0]);
+              }
+            }}
+            className="p-2 w-full border rounded-md shadow-sm mb-4"
+          />
+        </div>
+      )}
+       <label className="block text-gray-600 mb-2">
+        <input
+          type="checkbox"
+          checked={isDefaultImage}
+          onChange={(e) => setIsDefaultImage(e.target.checked)}
+          className="mr-2"
+        />
+        תמונת ברירת מחדל
+      </label>
+      {error && <ErrorMessage message={error} />}
+      {!loading ? (
+        <button
+          onClick={handleSubmit}
+          className="p-2 w-full bg-blue-600 text-white rounded-md hover:bg-blue-800 shadow-sm"
+        >
+          {adminTexts.adminAddCourse}
+        </button>
+      ) : (
         <Loading />
-}
+      )}
     </div>
   );
-};
+}
 
 export default AddCoursePage;
