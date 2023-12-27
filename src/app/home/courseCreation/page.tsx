@@ -1,73 +1,106 @@
 "use client"
 import { FormEvent, useState } from "react";
 import { AddCourseTexts, adminTexts } from "@/HebrewStrings/Texts";
-import { CourseData,ContentData } from "@/app/types";
+import { CourseData, ContentData } from "@/app/types";
 import axios, { AxiosError } from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/app/_contexts/userContext";
 import { Loading } from "react-daisyui";
 import ErrorMessage from "../_component/ErrorMessage";
+import fdgd from '../../../../public/assets/default-course-image.png';
+
 interface ErrorResponse {
   message?: string;
 }
+
 const AddCoursePage: React.FC = () => {
-  const { addCourse,initinalCourse } = useCoursesStore();
-  const {addNewCourseProcess}=useUserStore()
+  const { addCourse, initinalCourse } = useCoursesStore();
+  const { addNewCourseProcess } = useUserStore();
   const [isDefaultImage, setIsDefaultImage] = useState(false);
   const [courseData, setCourseData] = useState<CourseData>({
     id: "",
     name: "",
-    img_id:null,
-    creationTimestamp:null,
-    chapters: []
+    img_id: null,
+    creationTimestamp: null,
+    chapters: [],
   });
   const [fileData, setFileData] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading,setLoading]=useState<boolean>(false)
+  const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
-  const {user,addAdminCourse}=useUserStore();
+  const { user, addAdminCourse } = useUserStore();
+
+  const handleIsDefaultImageChange = (isChecked: boolean) => {
+    setIsDefaultImage(isChecked);
+    
+    if (isChecked) {
+      const defaultImageFilePath = '/default-course-image.png'
+      
+      const reader = new FileReader();
+  
+      reader.onload = (event) => {
+        const result = event.target?.result;
+  
+        if (result instanceof ArrayBuffer) {
+          const blob = new Blob([result], { type: 'image/png' });
+          const file = new File([blob], 'default-image-course.png', { type: 'image/png' });
+          console.log(file)
+          setFileData(file);
+        }
+      };
+  
+      fetch(defaultImageFilePath)
+        .then((response) => response.arrayBuffer())
+        .then((arrayBuffer) => {
+          reader.readAsArrayBuffer(new Blob([arrayBuffer]));
+        });
+    } else {
+      setFileData(null);
+    }
+  };
 
   const handleSubmit = async () => {
-    try{
+    try {
       setError(null);
-      setLoading(true)
-      let courseToServer:CourseData= {
-          id: "",
-          name: courseData.name,
-          img_id:null,
-          creationTimestamp:new Date(),
-          chapters: []
-      }
-   
+      setLoading(true);
+      let courseToServer: CourseData = {
+        id: "",
+        name: courseData.name,
+        img_id: null,
+        creationTimestamp: new Date(),
+        chapters: [],
+      };
+
       let formData = new FormData();
       formData.append("course", JSON.stringify(courseToServer));
       formData.append("userId", user.id);
-      formData.append("comments",courseData.name);
-      if(fileData&&!isDefaultImage){
-        formData.append("file", fileData, fileData.name);
-      }
+      formData.append("comments", courseData.name);
+      formData.append("file", fileData, fileData.name);
+      console.log(fileData)
       const response = await axios.post("/api/addCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       if (response.data?.id) {
         addCourse(response.data);
-        addAdminCourse(response.data)
-        addNewCourseProcess(response.data)
-        setLoading(false)
+        addAdminCourse(response.data);
+        addNewCourseProcess(response.data);
+        setLoading(false);
         router.push(`/home/courseManager/${response.data.id}`);
-        await setCourseData(response.data)
+        await setCourseData(response.data);
       } else {
         setError(response.data?.message);
-        setLoading(false)
-  }
-
-   } catch (err) {
+        setLoading(false);
+      }
+    } catch (err) {
       const error = err as AxiosError<ErrorResponse>;
-      setError(error?.response?.data?.message || error.message || "An error occurred while adding the course.");
+      setError(
+        error?.response?.data?.message ||
+          error.message ||
+          "An error occurred while adding the course."
+      );
     }
   };
-
 
   return (
     <div className="bg-gray-50 p-6 rounded-xl shadow-lg max-w-md mx-auto mt-10">
@@ -79,10 +112,9 @@ const AddCoursePage: React.FC = () => {
         onChange={(e) => setCourseData({ ...courseData, name: e.target.value })}
         className="p-2 w-full border rounded-md shadow-sm mb-4"
       />
-     
+
       {isDefaultImage ? (
-        <div>
-        </div>
+        <div></div>
       ) : (
         <div>
           <label className="block text-gray-600 mb-2">תמונה הקורס:</label>
@@ -97,11 +129,11 @@ const AddCoursePage: React.FC = () => {
           />
         </div>
       )}
-       <label className="block text-gray-600 mb-2">
+      <label className="block text-gray-600 mb-2">
         <input
           type="checkbox"
           checked={isDefaultImage}
-          onChange={(e) => setIsDefaultImage(e.target.checked)}
+          onChange={(e) => handleIsDefaultImageChange(e.target.checked)}
           className="mr-2"
         />
         תמונת ברירת מחדל
@@ -119,6 +151,6 @@ const AddCoursePage: React.FC = () => {
       )}
     </div>
   );
-}
+};
 
 export default AddCoursePage;

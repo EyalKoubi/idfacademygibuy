@@ -7,6 +7,7 @@ import { ContentData, CourseData } from "@/app/types";
 
 import { createCourse } from "@/app/_controllers/CourseController"; // Adjust the import path as needed
 import { addContent, addContentWithoutResponse, addDefaultCourseImageContent, getDefaultImageCourseContent } from "@/app/_controllers/ContentController";
+import { error } from "console";
 interface CourseRequest extends NextRequest {
  course?: CourseData;
  userId?:string;
@@ -23,18 +24,16 @@ export async function POST(req:CourseRequest, res: NextApiResponse) {
     let file=undefined;
     const comments = data.get("comments") as string;
     let course_image:ContentData|undefined;
-
-    if( data.get("file")){
      file = data.get("file") as unknown as File;
-     console.log("have file")
-     course_image=await addContentWithoutResponse({ file, comments, subjectId:"" });
-    }
-    else{
-      let contentDefaultImage =await getDefaultImageCourseContent();
-      if (!contentDefaultImage) {
-        course_image= await addDefaultCourseImageContent();
-      }
-  }
+     console.log(file)
+    course_image=await addContentWithoutResponse({ file, comments, subjectId:"" });
+  //   }
+  //   else{
+  //     let contentDefaultImage =await getDefaultImageCourseContent();
+  //     if (!contentDefaultImage) {
+  //       course_image= await addDefaultCourseImageContent();
+  //     }
+  // }
     if(course_image)
     return createCourse({
       name: course.name,
@@ -42,6 +41,9 @@ export async function POST(req:CourseRequest, res: NextApiResponse) {
       creationTimestamp: course.creationTimestamp,
       userId
     });
+    else {
+      throw new Error("dont have picture course");
+    }
   } catch (error) {
     return handleError(error);
   }

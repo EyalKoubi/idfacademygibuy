@@ -6,6 +6,7 @@ import { ContentSchema, EditContentSchema, handleError } from "@/utils/validatio
 import * as Minio from "minio";
 import { uploadFileToS3Service, bucket,s3Client } from "@/app/_minio/minio";
 import { ContentData, ContentItemProgress } from "../types";
+import imageUrl from '../../../public/assets/default-course-image.png';
 
 import defaultImageCourse from "@/../public/assets/default-course-image.png";
 import fs from "fs/promises";
@@ -140,20 +141,20 @@ export async function addContent(contentData: ContentDataProps){
 
 export async function addDefaultCourseImageContent() {
   try {
-    // Convert the imported image to a string URL
-    const imageUrl = '/public/assets/default-course-image.png'; // Relative path
+    // Get the URL of the image using the next/image component
+    const imageUrl = '/_next/static/media/default-course-image.cc99bfe3.png';
 
-    // Fetch the file from the URL
+   // Fetch the file from the URL (optional)
     const response = await fetch(imageUrl);
     const arrayBuffer = await response.arrayBuffer();
 
-    // Create a Blob object from the array buffer
+    //Create a Blob object from the array buffer (optional)
     const blob = new Blob([arrayBuffer]);
 
-    // Create a File object with all properties
+   // Create a File object with all properties (optional)
     const file = new File([blob], "default-course-image.png", { type: "image/png" });
 
-    // Upload the file to Minio
+   // Upload the file to Minio (optional)
     const contentData = {
       file: file,
       comments: "תמונת קורס ברירת מחדל",
@@ -168,6 +169,7 @@ export async function addDefaultCourseImageContent() {
     throw error;
   }
 }
+
 export async function deleteContent(contentId: string) {
     try {
       // Delete content from the database
