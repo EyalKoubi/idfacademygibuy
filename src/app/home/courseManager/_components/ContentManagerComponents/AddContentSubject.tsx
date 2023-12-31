@@ -1,7 +1,13 @@
-import React, { FormEvent, useEffect } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
+import { Loading } from "react-daisyui";
+import { EditorState, convertToRaw } from "draft-js";
+import "react-quill/dist/quill.snow.css"; // Import Quill styles
+import ReactQuill from "react-quill";
+import { Toggle } from "react-daisyui";
 import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
 import { ContentData } from "@/app/types";
-import { Loading } from "react-daisyui";
+
+// ... Other imports
 
 interface AddContentFormProps {
   contentData: ContentData;
@@ -20,39 +26,80 @@ const AddContentForm: React.FC<AddContentFormProps> = ({
   setFile,
   addContentError,
 }) => {
-  useEffect(()=>{
-    setContentData(({ ...contentData, comments:"" }))
-    console.log(contentData)
-  },[])
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [editorValue, setEditorValue] = useState("");
+  const [isTextContent, setIsTextContent] = useState(false);
+
+  const handleToggle = () => {
+    setIsTextContent(!isTextContent);
+    setEditorState(EditorState.createEmpty());
+    setEditorValue("");
+    setContentData({ ...contentData, comments: "" });
+    setFile(null);
+  };
+
+  const handleEditorChange = (newEditorValue:string) => {
+    setEditorValue(newEditorValue);
+  };
+
+  useEffect(() => {
+    setContentData({
+      ...contentData,
+      comments: isTextContent ? editorValue : "",
+    });
+    console.log(editorValue)
+  }, [editorValue, isTextContent]);
+
   return (
-    <div>
-      <input
-        type="text"
-        placeholder={editTexts.comments}
-        value={contentData.comments}
-        onChange={(e) =>
-          setContentData({ ...contentData, comments: e.target.value })
-        }
-        className="p-2 w-full border rounded-md shadow-sm mb-4"
-      />
+    <div className="flex flex-col">
+      <div>
+    <Toggle
+    checked={isTextContent}
+    onChange={handleToggle}
+  // label={isTextContent ? "Switch to File Upload" : "Switch to Text Content"}
+    />
+    </div>
+      {isTextContent ? (
+        <div>
+        <ReactQuill
+          value={editorValue}
+          onChange={handleEditorChange}
+          modules={{ toolbar: true }}
+        />
+        </div>
+      ) : (
+        <div>
+          <input
+            type="file"
+            name="file"
+            onChange={(e) => {
+              if (e.target.files && e.target.files.length > 0) {
+                setFile(e.target.files[0]);
+              }
+            }}
+            className="p-2 border rounded-md shadow-sm"
+          />
+          <input
+            type="text"
+            placeholder={editTexts.comments}
+            value={contentData.comments}
+            onChange={(e) =>
+              setContentData({ ...contentData, comments: e.target.value })
+            }
+            className="p-2 w-full border rounded-md shadow-sm mb-4"
+          />
+        </div>
+      )}
 
       <form onSubmit={submitFile} className="flex flex-col space-y-4">
-        <input
-          type="file"
-          name="file"
-          onChange={(e) => {
-            if (e.target.files && e.target.files.length > 0) {
-              setFile(e.target.files[0]);
-            }
-          }}
-          className="p-2 border rounded-md shadow-sm"
-        />
         <button
           type="submit"
           disabled={loading}
-          className={`p-2 ${loading ? 'bg-gray-600' : 'bg-green-600'} text-white rounded-md hover:bg-green-800 shadow-sm`}
+          className={`p-2 ${
+            loading ? "bg-gray-600" : "bg-green-600"
+          } text-white rounded-md hover:bg-green-800 shadow-sm`}
         >
-          {loading ?  <Loading /> : GeneralTexts.submit}
+          {loading ? <Loading /> : GeneralTexts.submit}
         </button>
       </form>
       {addContentError && <div className="text-red-500">{addContentError}</div>}

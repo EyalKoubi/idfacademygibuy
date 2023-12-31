@@ -65,9 +65,10 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
   const submitFile = async (event: FormEvent) => {
     setLoading(true)
     event?.preventDefault();
-    if (!file) return;
     const formData: any = new FormData();
-    formData.append("file", file, file.name);
+    if (file){
+      formData.append("file", file, file.name);
+    }
     formData.append("comments", contentData.comments);
     formData.append("subjectId", subject.id);
     try {

@@ -13,5 +13,6 @@ export async function POST(req:DeleteCourseRequest, res: NextApiResponse) {
     return NextResponse.json({ message: "There is no course data!" });
   }
   const courseId = data.get("courseId") as string;
-  return deleteCourse(courseId);
+  const img_id =data.get("courseImageId") as string
+  return deleteCourse(courseId,img_id);
 }

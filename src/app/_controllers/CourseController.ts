@@ -5,7 +5,7 @@ import { db } from "@/db/database"; // Adjust the import path as needed
 import { CourseSchema, handleError } from "@/utils/validation";
 import { ContentData, CourseData } from "@/app/types";
 import { deleteChapter } from "@/app/_controllers/ChapterController"; 
-import { getContent } from "./ContentController";
+import { deleteContent, getContent } from "./ContentController";
 
 interface CourseCreationData {
   name: string;
@@ -52,7 +52,7 @@ export async function createCourse(courseData: CourseCreationData) {
   }
 }
 
-export async function deleteCourse(courseId: string) {
+export async function deleteCourse(courseId: string,img_id:string) {
   try {
     // Fetch and delete related chapters
     const chapters = await db
@@ -71,7 +71,7 @@ export async function deleteCourse(courseId: string) {
       .deleteFrom("Course")
       .where("Course.id", "=", courseId)
       .executeTakeFirst();
-
+    deleteContent(img_id)
     return NextResponse.json({ message: "Course deleted successfully!" });
   } catch (error) {
     console.error("Error in deleteCourse:", error);

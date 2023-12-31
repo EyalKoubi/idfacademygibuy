@@ -36,6 +36,10 @@ const Course = ({ course }: CourseProps) => {
     try {
       const formData = new FormData();
       formData.append("courseId", course.id);
+      const courseImageId=course.img_id?.id
+      if(courseImageId){
+        formData.append("courseImageId",courseImageId);
+      }
       await axios.post("/api/deleteCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });

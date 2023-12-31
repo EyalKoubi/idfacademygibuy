@@ -3,6 +3,7 @@ import axios from 'axios';
 import { ContentData } from '@/app/types';
 import { Loading } from 'react-daisyui';
 import { getMimeType } from "@/utils/filesUtils"
+import franc from 'franc';
 interface MediaViewerProps{
   content: ContentData 
   isPresentMode:boolean;
@@ -24,18 +25,20 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content,isPresentMode }) => {
         setLoading(true);
     
         if (content) {
+            console.log(content)
             const fetchMedia = async () => {
                 try {
-                    // Fetch the pre-signed URL from the API
+                    if(content.file_name!==""){
                     const response = await axios.get(`/api/getFile/${content.id}`);
                     const presignedUrl = response.data.url; // Assuming the API sends back an object with the url
-                    
+                    console.log
                     const fileExtension = content.file_name.split('.').pop();
                     const mimeType = getMimeType(fileExtension);
-
+                    console.log(mimeType)
                     // Directly use the pre-signed URL, no need for conversion
                     setMediaSrc(presignedUrl);
                     setMediaType(mimeType);
+                    }
                     setLoading(false);
                 } catch (error) {
                     console.error('Error fetching media:', error);
@@ -50,7 +53,10 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content,isPresentMode }) => {
         }
     }, [content]);
 
-   
+    // const detectLanguage = (text:string) => {
+    //   const language = franc(text);
+    //   return language === 'he' ? 'hebrew' : 'english';
+    // };
     const renderLoading = () => (
         <div className="text-center text-white">
            <Loading  />
@@ -64,7 +70,16 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content,isPresentMode }) => {
       const renderMedia = () => {
         if (loading) return renderLoading();
         if (error) return renderError();
-    
+        if (content.file_name === "") {
+    return (
+      <div className="flex items-start bg-white media-container w-screen max-h-full p-4 overflow-y-auto">
+        <div
+          className="w-[700px] h-[400px] max-h-full text-right"
+          dangerouslySetInnerHTML={{ __html: content.comments  }}
+        />
+      </div>
+    );
+  }
         switch (true) {
           case mediaType.startsWith('image'):{
             return <img className="w-full max-h-full object-contain" src={mediaSrc} alt={content.file_name} />;
@@ -89,13 +104,14 @@ const MediaViewer: React.FC<MediaViewerProps> = ({ content,isPresentMode }) => {
             return <a className="text-white bg-black" href={mediaSrc} download>{`Download File ${content.file_name}`}|</a>;
         }
       };
-    
       return (
         <div className={`overflow-hidden flex justify-center items-center ${isPresentMode ? 'w-[700px] h-[500px]' : 'w-[100%] h-[250px]'}`}>
         {renderMedia()}
       </div>
       );
     };
-    
-    export default MediaViewer;
+
+  export default MediaViewer;
+
+
 

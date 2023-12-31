@@ -6,7 +6,7 @@ import { ZodError } from "zod";
 import { ContentData, CourseData } from "@/app/types";
 
 import { createCourse } from "@/app/_controllers/CourseController"; // Adjust the import path as needed
-import { addContent, addContentWithoutResponse, addDefaultCourseImageContent, getDefaultImageCourseContent } from "@/app/_controllers/ContentController";
+import { addContentWithoutResponse, addDefaultCourseImageContent, getDefaultImageCourseContent } from "@/app/_controllers/ContentController";
 import { error } from "console";
 interface CourseRequest extends NextRequest {
  course?: CourseData;
@@ -26,14 +26,12 @@ export async function POST(req:CourseRequest, res: NextApiResponse) {
     let course_image:ContentData|undefined;
      file = data.get("file") as unknown as File;
      console.log(file)
-    course_image=await addContentWithoutResponse({ file, comments, subjectId:"" });
-  //   }
-  //   else{
-  //     let contentDefaultImage =await getDefaultImageCourseContent();
-  //     if (!contentDefaultImage) {
-  //       course_image= await addDefaultCourseImageContent();
-  //     }
-  // }
+     if(file.name!=="default-image-course.png"){
+      course_image=await addContentWithoutResponse({ file, comments, subjectId:"" });
+     }
+    else{
+      course_image =await getDefaultImageCourseContent(file);
+    }
     if(course_image)
     return createCourse({
       name: course.name,

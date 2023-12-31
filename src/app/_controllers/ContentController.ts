@@ -50,8 +50,17 @@ export async function getContentByName(contentName:string):Promise<ContentData|u
   return contentFromDb;}
   catch{return undefined;}
 }
-export async function getDefaultImageCourseContent(){
-    return getContentByName("default-course-image.png")
+export async function getDefaultImageCourseContent(file:File){
+  const defaultfromDb= await getContentByName("default-image-course.png")
+  console.log(defaultfromDb)
+  if(defaultfromDb){
+    console.log("the default page already exist")
+    return defaultfromDb;
+    
+  }
+  else{
+    return await addDefaultCourseImageContent(file);
+  }
 }
 export async function processContent(contentData: ContentDataProps) {
     const { file, comments, subjectId } = contentData;
@@ -99,60 +108,13 @@ export async function addContentWithoutResponse(contentData: ContentDataProps) {
     }
   }
   
-export async function addContent(contentData: ContentDataProps){
-  const { file, comments, subjectId } = contentData;
 
+
+
+export async function addDefaultCourseImageContent(file:File) {
   try {
-    ContentSchema.parse({ file_size: file.size, comments });
-    const newContent = await db
-      .insertInto("Content")
-      .values({ file_name: file.name, comments })
-      .returning(["id", "file_name", "comments"])
-      .executeTakeFirstOrThrow();
-
-    if (subjectId!=='') {
-      await db
-        .insertInto("ContentSubject")
-        .values({ contentId: newContent.id, subjectId })
-        .execute();
-    }
-
-    if (!file) {
-      return NextResponse.json({ success: false });
-    }
-
-    await ensureBucketExists(bucket);
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    await uploadFileToS3Service(file, buffer, bucket, newContent.id);
-
-    if(subjectId!=="")
-        return NextResponse.json(newContent);
-    else{
-        return newContent
-    }
-  } catch (error) {
-    console.error("Error in addContent:", error);
-    return handleError(error);
-  }
-}
-
-
-export async function addDefaultCourseImageContent() {
-  try {
-    // Get the URL of the image using the next/image component
-    const imageUrl = '/_next/static/media/default-course-image.cc99bfe3.png';
-
-   // Fetch the file from the URL (optional)
-    const response = await fetch(imageUrl);
-    const arrayBuffer = await response.arrayBuffer();
-
-    //Create a Blob object from the array buffer (optional)
-    const blob = new Blob([arrayBuffer]);
 
    // Create a File object with all properties (optional)
-    const file = new File([blob], "default-course-image.png", { type: "image/png" });
 
    // Upload the file to Minio (optional)
     const contentData = {
@@ -161,7 +123,7 @@ export async function addDefaultCourseImageContent() {
       subjectId: "",
     };
 
-    const newContent = await addContent(contentData);
+    const newContent = await addContentWithoutResponse(contentData);
     console.log("Default Course Image uploaded to Minio and database.");
     return newContent as ContentData;
   } catch (error) {
@@ -169,17 +131,47 @@ export async function addDefaultCourseImageContent() {
     throw error;
   }
 }
+export async function addTextContent(editorValue: string, subjectId: string) {
+  try {
+    //need to fix validation 
 
+
+    const contentData: ContentDataProps = {
+      file: null as unknown as File, 
+      comments: editorValue,
+      subjectId,
+    };
+    const newContent = await db
+    .insertInto("Content")
+    .values({ file_name: "", comments:editorValue })
+    .returning(["id", "file_name", "comments"])
+    .executeTakeFirstOrThrow();
+
+  if (subjectId!=='') {
+    await db
+      .insertInto("ContentSubject")
+      .values({ contentId: newContent.id, subjectId })
+      .execute();
+  }
+    console.log("Text Content added to the database.");
+    return NextResponse.json(newContent as ContentData);
+  } catch (error) {
+    console.error("Error adding Text Content:", error);
+    throw error;
+  }
+}
 export async function deleteContent(contentId: string) {
     try {
       // Delete content from the database
-      await db
+     const deletedContent= await db
         .deleteFrom("Content")
         .where("Content.id", "=", contentId)
+        .returning(["Content.id","Content.file_name","Content.comments"])
         .executeTakeFirst();
-  
+      if(deletedContent?.file_name!==""){
       // Delete content from Minio
-      await deleteByNameContentFromMinio(bucket, contentId);
+          await deleteByNameContentFromMinio(bucket, contentId);
+      }
   
       // Delete content from User Progress
       await deleteContentFromUserProgress(contentId);
