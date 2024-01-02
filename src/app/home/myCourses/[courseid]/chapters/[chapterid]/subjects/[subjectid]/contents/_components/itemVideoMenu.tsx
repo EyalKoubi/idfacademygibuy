@@ -27,7 +27,7 @@ const ItemVideoMenu: React.FC<VideoListItemProps> = ({ content, contentStatus, o
           className="w-16 h-16 rounded mr-2"
         />
         <div className="flex flex-col">
-          <p className="text-gray-800">{content.comments}</p>
+          <p className="text-gray-800">{content.title}</p>
         </div>
       </div>
       <input type="checkbox" checked={contentStatus.watched} readOnly className="ml-2" />

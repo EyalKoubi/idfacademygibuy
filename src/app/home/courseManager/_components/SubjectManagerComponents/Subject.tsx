@@ -23,6 +23,7 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
   const [isAddingContent, setIsAddingContent] = useState(false);
   const [contentData, setContentData] = useState<ContentData>({
     id: "",
+    title:"",
     file_name: "",
     comments: "",
   });
@@ -69,6 +70,7 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
     if (file){
       formData.append("file", file, file.name);
     }
+    formData.append("title", contentData.title);
     formData.append("comments", contentData.comments);
     formData.append("subjectId", subject.id);
     try {

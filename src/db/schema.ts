@@ -45,6 +45,7 @@ export interface VerificationToken {
 
 export interface ContentTable {
   id: GeneratedAlways<string>;
+  title:string;
   file_name: string;
   comments: string;
 }

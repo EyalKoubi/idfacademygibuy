@@ -99,7 +99,7 @@ export async function getUserCourseRequests(userId: string,courses:CourseData[],
             creationTimestamp: request.creationTimestamp
         }
     }));
-    return userRequestsCoursesDb;
+    return userRequestsCourse;
   }
 
   export async function getUserCourseProgress(userId: string) {

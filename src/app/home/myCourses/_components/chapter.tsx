@@ -17,10 +17,9 @@ const Chapter: React.FC<ChapterProps> = ({ chapter, courseid }) => {
   };
 
   return (
-    <p onClick={() => navigateToChapter(chapter.id, courseid)} >
+    <button onClick={() => navigateToChapter(chapter.id, courseid)} >
       {chapter.name}
-       {/* {chapter.brief} */}
-    </p>
+    </button>
   );
 };
 

@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";
 import { Loading } from "react-daisyui";
+import ErrorMessage from "@/app/home/_component/ErrorMessage";
 
 interface ContentProps {
   content: ContentData;
@@ -16,12 +17,14 @@ const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseI
   const { deleteContent, updateComments } = useCoursesStore();
   const [isChangeCommentsContentPressed, setIsChangeCommentsContentPressed] =
     useState(false);
+  const [title, setTitle] = useState(content.title);
   const [comments, setComments] = useState(content.comments);
-  const [renameContentError,setRenameContentError]=useState("")
+  const [renameContentError,setRenameContentError]=useState(null);
   const [loading,setLoading]=useState(false)
 
   const handleDeleteContent = async () => {
     setLoading(true)
+    setRenameContentError(null)
     const formData: any = new FormData();
     formData.append("contentId", content.id);
     const response =await axios.post("/api/deleteContent", formData, {
@@ -36,12 +39,13 @@ const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseI
     setLoading(false)
   };
 
-  const handleChangeComments = async () => {
+  const handleChangeContent = async () => {
     setLoading(true)
+    setRenameContentError(null)
     const formData: any = new FormData();
-    const editCommentsProps = { contentId: content.id, comments: comments };
-    formData.append("editCommentsProps", JSON.stringify(editCommentsProps));
-    const response =await axios.post("/api/editContentComment", formData, {
+    const editContentProps = { contentId: content.id,title, comments: comments };
+    formData.append("editContentProps", JSON.stringify(editContentProps));
+    const response =await axios.post("/api/editContent", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
     if(response.data?.message){
@@ -49,7 +53,7 @@ const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseI
     }
     else{
     updateComments(
-      { id: content.id, file_name: content.file_name, comments: comments },
+      { id: content.id,title:content.title, file_name: content.file_name, comments: comments },
       subjectId,
       chapterId,
       courseId
@@ -60,7 +64,7 @@ const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseI
   };
   return (
     <div className="p-2 bg-gray-100 rounded flex flex-col">
-      <span className="text-md">{content.file_name}</span>
+      <span className="text-md">{content.title}</span>
       <span className="text-md">
         {editTexts.comments} : {content.comments}
       </span>
@@ -73,8 +77,15 @@ const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseI
             onChange={(e) => setComments(e.target.value)}
             className="p-2 border rounded"
           />
+          <input
+            type="text"
+            placeholder={editTexts.title}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="p-2 border rounded"
+          />
           <button
-            onClick={handleChangeComments}
+            onClick={handleChangeContent}
             className="p-2 ml-2 bg-green-500 text-white rounded hover:bg-green-700"
           >
             {GeneralTexts.submit}
@@ -82,9 +93,7 @@ const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseI
           </button>
           <div>
           {renameContentError && (
-                  <div className="text-red-500">
-                    {renameContentError}
-                  </div>
+                <  ErrorMessage message={renameContentError}/>
                 )}
             </div>
         </div>

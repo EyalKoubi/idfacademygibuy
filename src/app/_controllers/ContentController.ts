@@ -2,7 +2,7 @@
 import { NextApiResponse } from "next";
 import { NextResponse } from "next/server";
 import { db } from "@/db/database";
-import { ContentSchema, EditContentSchema, handleError } from "@/utils/validation";
+import { ContentMediaSchema, ContentTextSchema, EditContentSchema, handleError } from "@/utils/validation";
 import * as Minio from "minio";
 import { uploadFileToS3Service, bucket,s3Client } from "@/app/_minio/minio";
 import { ContentData, ContentItemProgress } from "../types";
@@ -12,11 +12,13 @@ import defaultImageCourse from "@/../public/assets/default-course-image.png";
 import fs from "fs/promises";
 interface ContentDataProps{
   file: File;
+  title:string;
   comments: string;
   subjectId: string;
 }
 interface EditContentProps {
     contentId: string;
+    title:string;
     comments: string;
   }
   
@@ -63,13 +65,13 @@ export async function getDefaultImageCourseContent(file:File){
   }
 }
 export async function processContent(contentData: ContentDataProps) {
-    const { file, comments, subjectId } = contentData;
+    const { file,title, comments, subjectId } = contentData;
   
-    ContentSchema.parse({ file_size: file.size, comments });
+    ContentMediaSchema.parse({title, file_size: file.size, comments });
     const newContent = await db
       .insertInto("Content")
-      .values({ file_name: file.name, comments })
-      .returning(["id", "file_name", "comments"])
+      .values({ title,file_name: file.name, comments })
+      .returning(["id","title", "file_name", "comments"])
       .executeTakeFirstOrThrow();
   
     if (!file) {
@@ -119,6 +121,7 @@ export async function addDefaultCourseImageContent(file:File) {
    // Upload the file to Minio (optional)
     const contentData = {
       file: file,
+      title:"",
       comments: "תמונת קורס ברירת מחדל",
       subjectId: "",
     };
@@ -131,20 +134,21 @@ export async function addDefaultCourseImageContent(file:File) {
     throw error;
   }
 }
-export async function addTextContent(editorValue: string, subjectId: string) {
+export async function addTextContent(title:string,editorValue: string, subjectId: string) {
   try {
-    //need to fix validation 
+    ContentTextSchema.parse({title,comments:editorValue}) 
 
 
     const contentData: ContentDataProps = {
       file: null as unknown as File, 
+      title,
       comments: editorValue,
       subjectId,
     };
     const newContent = await db
     .insertInto("Content")
-    .values({ file_name: "", comments:editorValue })
-    .returning(["id", "file_name", "comments"])
+    .values({title, file_name: "", comments:editorValue })
+    .returning(["id","title", "file_name", "comments"])
     .executeTakeFirstOrThrow();
 
   if (subjectId!=='') {
@@ -166,7 +170,7 @@ export async function deleteContent(contentId: string) {
      const deletedContent= await db
         .deleteFrom("Content")
         .where("Content.id", "=", contentId)
-        .returning(["Content.id","Content.file_name","Content.comments"])
+        .returning(["Content.id","Content.title","Content.file_name","Content.comments"])
         .executeTakeFirst();
       if(deletedContent?.file_name!==""){
       // Delete content from Minio
@@ -234,9 +238,9 @@ export async function deleteContentFromUserProgress(contentId:string) {
   
       const updatedContent = await db
         .updateTable("Content")
-        .set({ comments: editProps.comments })
+        .set({ title:editProps.title,comments: editProps.comments })
         .where("id", "=", editProps.contentId)
-        .returning(["comments"])
+        .returning(["title","comments"])
         .executeTakeFirstOrThrow();
   
       return NextResponse.json(updatedContent);

@@ -13,6 +13,7 @@ export enum Users {
 
 export type ContentData = {
   id: string;
+  title:string;
   file_name: string;
   comments: string;
 };

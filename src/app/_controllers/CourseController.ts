@@ -97,7 +97,7 @@ export async function getAllCourses():Promise<CourseData[]|undefined> {
     const courseContent:ContentData = await db
       .selectFrom("Content")
       .where("id", "=", course.img_id)
-      .select(["id", "file_name", "comments"])
+      .select(["id","title", "file_name", "comments"])
       .executeTakeFirstOrThrow();
 
     const chaptersWithOutSubjects = await db
@@ -120,7 +120,7 @@ export async function getAllCourses():Promise<CourseData[]|undefined> {
           .selectFrom("ContentSubject")
           .innerJoin("Content", "Content.id", "ContentSubject.contentId")
           .where("ContentSubject.subjectId", "=", subjectWithOutContents.id)
-          .select(["Content.id", "Content.file_name", "Content.comments"])
+          .select(["Content.id","Content.title", "Content.file_name", "Content.comments"])
           .execute();
 
         subjects.push({

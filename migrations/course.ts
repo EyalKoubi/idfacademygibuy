@@ -37,6 +37,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   .addColumn("id", "uuid", (col) =>
     col.primaryKey().defaultTo(sql`gen_random_uuid()`)
   )
+  .addColumn("title", "text")
   .addColumn("file_name", "text")
   .addColumn("comments", "text")
   .addUniqueConstraint("unique_content_all_columns", ["id","file_name", "comments"])

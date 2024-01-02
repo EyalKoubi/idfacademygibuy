@@ -1,7 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { db } from "../../../db/database";
 import { NextRequest, NextResponse } from "next/server";
-import { ContentSchema, EditContentSchema, handleError } from "@/utils/validation";
 import { editContentComments } from "@/app/_controllers/ContentController";
 
 interface ContentRequest extends NextRequest {
@@ -11,9 +9,9 @@ interface ContentRequest extends NextRequest {
 
 export async function POST(req:ContentRequest, res: NextApiResponse) {
   const data = await req.formData();
-  if (!data.get("editCommentsProps")) {
+  if (!data.get("editContentProps")) {
     return NextResponse.json({ message: "There is no content input!" });
   }
-  const editCommentsProps: { contentId: string; comments: string } = JSON.parse(data.get("editCommentsProps") as string);
-  return editContentComments(editCommentsProps);
+  const editContentProps: { contentId: string;title:string; comments: string } = JSON.parse(data.get("editCommentsProps") as string);
+  return editContentComments(editContentProps);
 }

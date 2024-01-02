@@ -34,7 +34,7 @@ const AddContentForm: React.FC<AddContentFormProps> = ({
     setIsTextContent(!isTextContent);
     setEditorState(EditorState.createEmpty());
     setEditorValue("");
-    setContentData({ ...contentData, comments: "" });
+    setContentData({ ...contentData,title:"", comments: "" });
     setFile(null);
   };
 
@@ -56,8 +56,18 @@ const AddContentForm: React.FC<AddContentFormProps> = ({
     <Toggle
     checked={isTextContent}
     onChange={handleToggle}
-  // label={isTextContent ? "Switch to File Upload" : "Switch to Text Content"}
     />
+    <div>  
+      <input
+            type="text"
+            placeholder={editTexts.title}
+            value={contentData.title}
+            onChange={(e) =>
+              setContentData({ ...contentData, title: e.target.value })
+            }
+            className="p-2 w-full border rounded-md shadow-sm mb-4"
+          />
+        </div>
     </div>
       {isTextContent ? (
         <div>
@@ -79,6 +89,7 @@ const AddContentForm: React.FC<AddContentFormProps> = ({
             }}
             className="p-2 border rounded-md shadow-sm"
           />
+         
           <input
             type="text"
             placeholder={editTexts.comments}

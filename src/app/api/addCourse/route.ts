@@ -23,11 +23,12 @@ export async function POST(req:CourseRequest, res: NextApiResponse) {
     const userId = data.get("userId") as string;
     let file=undefined;
     const comments = data.get("comments") as string;
+    const title = data.get("title") as string;
     let course_image:ContentData|undefined;
      file = data.get("file") as unknown as File;
      console.log(file)
      if(file.name!=="default-image-course.png"){
-      course_image=await addContentWithoutResponse({ file, comments, subjectId:"" });
+      course_image=await addContentWithoutResponse({ file,title, comments, subjectId:"" });
      }
     else{
       course_image =await getDefaultImageCourseContent(file);

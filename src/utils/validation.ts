@@ -1,8 +1,12 @@
 import { NextResponse } from 'next/server';
 import { ZodError, z } from 'zod';
 
-export const ContentSchema = z.object({
+export const ContentMediaSchema = z.object({
   id: z.string().optional(), // Assuming 'id' should be a string and is not mandatory
+  title: z.string()
+  .min(1, { message: "title cannot be empty" }) // Ensuring comments are not empty
+  .max(1000, { message: "title must be less than 1000 characters" })
+  .regex(/^[\u0590-\u05FF ]+$/, { message: "title must contain only Hebrew characters and spaces" }), 
   file_size: z.number()
     .positive({ message: "File size must be a positive number" }) // Ensuring the number is positive
     .max(2500000000, { message: "File size must be less than 250MB" }), // Assuming the max file size is 50MB for example
@@ -11,6 +15,17 @@ export const ContentSchema = z.object({
     .max(1000, { message: "Comments must be less than 1000 characters" })
     .regex(/^[\u0590-\u05FF ]+$/, { message: "comments must contain only Hebrew characters and spaces" }), // Assuming the max length is 1000 characters
 });
+
+export const ContentTextSchema = z.object({
+  id: z.string().optional(), // Assuming 'id' should be a string and is not mandatory
+  title: z.string()
+  .min(1, { message: "title cannot be empty" }) // Ensuring comments are not empty
+  .max(1000, { message: "title must be less than 1000 characters" })
+  .regex(/^[\u0590-\u05FF ]+$/, { message: "title must contain only Hebrew characters and spaces" }), 
+  comments: z.string()
+    .min(1, { message: "the text cannot be empty" }) // Ensuring comments are not empty
+});
+
 
 export const EditContentSchema = z.object({
   contentId: z.string().min(1,{message:""}), // Assuming 'id' should be a string and is not mandatory

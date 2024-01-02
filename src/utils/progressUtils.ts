@@ -78,9 +78,9 @@ export const findFirstUnwatched = (course: CourseData, router: any, coursesProgr
 export function calculateProgress (course:CourseData,contentProgress:ContentProgress[]|undefined)  {
   // Replace this logic with your own progress calculation
   let courseContentNum=0,completedCourseContentNum=0;
-  for(let chapter of course.chapters){
-    for (let subject of chapter.subjects){
-      courseContentNum+=subject.contents.length;
+  for(let chapter of course?.chapters){
+    for (let subject of chapter?.subjects){
+      courseContentNum+=subject?.contents.length;
     }
   }
   if(contentProgress){

@@ -69,7 +69,7 @@ export const searchCourseTexts={
 }
 export const editTexts = {
   rename: "שנה שם",
-
+  title:"כותרת",
   courses: "קורסים",
   chapters: "פרקים",
   subjects: "נושאים",
