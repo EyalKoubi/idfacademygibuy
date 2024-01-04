@@ -23,7 +23,7 @@ export async function POST(req:CourseRequest, res: NextApiResponse) {
     const userId = data.get("userId") as string;
     let file=undefined;
     const comments = data.get("comments") as string;
-    const title = data.get("title") as string;
+    const title = data.get("fileTitle") as string;
     let course_image:ContentData|undefined;
      file = data.get("file") as unknown as File;
      console.log(file)

@@ -5,6 +5,7 @@ import axios from "axios";
 import useCoursesStore from "@/app/_contexts/courseContext";
 import { Loading } from "react-daisyui";
 import ErrorMessage from "@/app/home/_component/ErrorMessage";
+import ReactQuill from "react-quill";
 
 interface ContentProps {
   content: ContentData;
@@ -65,11 +66,17 @@ const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseI
   return (
     <div className="p-2 bg-gray-100 rounded flex flex-col">
       <span className="text-md">{content.title}</span>
-      <span className="text-md">
+     { (content.file_name !== '') && <span className="text-md">
         {editTexts.comments} : {content.comments}
       </span>
+}
       {isChangeCommentsContentPressed ? (
         <div className="flex items-center ml-1">
+           {(content.file_name === '') ? (
+        <div className="text-md">
+          <ReactQuill value={comments} onChange={setComments} modules={{ toolbar: true }} />
+        </div>
+      ) : (
           <input
             type="text"
             placeholder={editTexts.subjectName}
@@ -77,6 +84,7 @@ const Content:React.FC<ContentProps> = ({ content, chapterId, subjectId, courseI
             onChange={(e) => setComments(e.target.value)}
             className="p-2 border rounded"
           />
+          )}
           <input
             type="text"
             placeholder={editTexts.title}

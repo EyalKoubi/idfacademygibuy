@@ -76,6 +76,7 @@ const AddCoursePage: React.FC = () => {
       formData.append("course", JSON.stringify(courseToServer));
       formData.append("userId", user.id);
       formData.append("comments", courseData.name);
+      formData.append("fileTitle", fileData.name);
       formData.append("file", fileData, fileData.name);
       console.log(fileData)
       const response = await axios.post("/api/addCourse", formData, {

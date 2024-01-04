@@ -27,7 +27,7 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon }) => {
   };
 
   return (
-    <li className="bg-blue-100 p-2 rounded-md">
+    <li className="bg-yellow-200 p-2 rounded-md">
       <button className="w-full text-left" onClick={clickHandeller}>
         <div className="flex justify-between items-center space-x-2">
           {isMenuButtonPressed && (
