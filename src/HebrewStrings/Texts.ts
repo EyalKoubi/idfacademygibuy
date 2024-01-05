@@ -24,7 +24,10 @@ export const SidebarText = {
   aboutUs: "אודותינו",
   logout: "התנתק",
 };
-
+export const NavBarText={
+  AdminMenu: "תפריט ניהול",
+  backToUserMenu:"חזרה לתפריט משתמש",
+}
 export const UserTexts = {
   userWelcome: " ברוכים הבאים",
   userQuis: "שאלות",

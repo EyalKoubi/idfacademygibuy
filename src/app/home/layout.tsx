@@ -52,11 +52,11 @@ export default function RootLayout({
     <html>
       <body className={inter.className}>
         <div>
-          <Navbar />
-          <div className="flex justify-end bg-gray-100">
+          <div className="flex flex-col text-right justify-end">
+          {user&&<Navbar  userType={Users.Admin}/>}
             {children}
             {/* need to fix */}
-            {user&&<Sidebar userType={Users.Admin}/>}
+            
           </div>
         </div>
       </body>

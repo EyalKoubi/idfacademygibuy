@@ -26,7 +26,7 @@ enum Menu {
   CourseManager = 4,
   PremisionManager=5,
   CourseCreation = 6,
-  ContinueStading = 7,
+  MyCourses = 7,
   AboutUs = 8,
   Logout = 9,
 }
@@ -34,11 +34,9 @@ enum Menu {
 const admin_permissions = [
   Menu.HomePage,
   Menu.UserArea,
-  Menu.CourseCatalog,
   Menu.CourseManager,
   Menu.PremisionManager,
   Menu.CourseCreation,
-  Menu.AboutUs,
   Menu.Logout,
 ];
 
@@ -46,7 +44,7 @@ const user_permissions = [
   Menu.HomePage,
   Menu.UserArea,
   Menu.CourseCatalog,
-  Menu.ContinueStading,
+  Menu.MyCourses,
   Menu.AboutUs,
   Menu.Logout,
 ];
@@ -55,7 +53,7 @@ const creator_permissions = [
   Menu.HomePage,
   Menu.UserArea,
   Menu.CourseCreation,
-  Menu.ContinueStading,
+  Menu.MyCourses,
   Menu.AboutUs,
   Menu.Logout,
 ];
@@ -65,12 +63,12 @@ const editor_permissions = [
   Menu.UserArea,
   Menu.CourseCatalog,
   Menu.CourseManager,
-  Menu.ContinueStading,
+  Menu.MyCourses,
   Menu.AboutUs,
   Menu.Logout,
 ];
 
-export const admin_menu: MenuRow[] = [
+export const menu: MenuRow[] = [
   {
     id: 1,
     href: "/home",
@@ -126,15 +124,17 @@ export const admin_menu: MenuRow[] = [
     icon: <ExitIcon />,
   },
 ];
-
-export const creator_menu = admin_menu.filter(({ id, rowInfo, icon }) =>
+export const admin_menu = menu.filter(({ id, rowInfo, icon }) =>
+  admin_permissions.includes(id)
+);
+export const creator_menu = menu.filter(({ id, rowInfo, icon }) =>
   creator_permissions.includes(id)
 );
 
-export const editor_menu = admin_menu.filter(({ id, rowInfo, icon }) =>
+export const editor_menu =menu.filter(({ id, rowInfo, icon }) =>
   editor_permissions.includes(id)
 );
 
-export const user_menu = admin_menu.filter(({ id, rowInfo, icon }) =>
+export const user_menu = menu.filter(({ id, rowInfo, icon }) =>
   user_permissions.includes(id)
 );
