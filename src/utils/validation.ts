@@ -45,6 +45,16 @@ export const CourseSchema = z.object({
   creationTimestamp: z.string()
     .refine(val => !isNaN(Date.parse(val)), { message: "Invalid date format" })
     .refine(val => new Date(val) <= new Date(), { message: "Date cannot be in the future" }),
+    subscribe_num: z.number()
+    .int("Subscribe number must be an integer")
+    .min(0, { message: "Subscribe number cannot be negative" }),
+  description_sub_title: z.string()
+    .min(1, { message: "Description sub-title is required" }),
+  description: z.string()
+    .min(1, { message: "Description is required" }),
+  rate: z.number()
+    .min(0, { message: "Rate cannot be negative" })
+    .max(5, { message: "Rate cannot be greater than 5" }),
   chapters: z.array(z.object({
     title: z.string().min(1, { message: "Chapter title is required" }),
     content: z.string().min(1, { message: "Chapter content is required" }),

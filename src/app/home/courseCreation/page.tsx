@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import useUserStore from "@/app/_contexts/userContext";
 import { Loading } from "react-daisyui";
 import ErrorMessage from "../_component/ErrorMessage";
-import fdgd from '../../../../public/assets/default-course-image.png';
+import ReactQuill from "react-quill";
 
 interface ErrorResponse {
   message?: string;
@@ -19,7 +19,7 @@ const AddCoursePage: React.FC = () => {
   const { addNewCourseProcess } = useUserStore();
   const [isDefaultImage, setIsDefaultImage] = useState(false);
   const [editorValue,setEditorValue]=useState("")
-  const [courseData, setCourseData] = useState<CourseTable>({
+  const [courseData, setCourseData] = useState<CourseData>({
     id: "",
     name: "",
     img_id: null,
@@ -27,7 +27,7 @@ const AddCoursePage: React.FC = () => {
     chapters: [],
     subscribe_num: 0, 
     description_sub_title: "", 
-    description: "",
+    description: "בלבלב",
     rate: 0, 
   });
   const [fileData, setFileData] = useState<any | null>(null);
@@ -64,7 +64,8 @@ const AddCoursePage: React.FC = () => {
       setFileData(null);
     }
   };
-  const handleEditorChange = (value) => {
+  const handleEditorChange = (value:string) => {
+    console.log(value)
     setEditorValue(value);
     setCourseData({ ...courseData, description: value }); // Update the description field in courseData
   };
@@ -73,7 +74,7 @@ const AddCoursePage: React.FC = () => {
     try {
       setError(null);
       setLoading(true);
-      let courseToServer: CourseTable = {
+      let courseToServer: CourseData = {
         id: "",
         name: courseData.name,
         img_id: null,
@@ -143,12 +144,8 @@ const AddCoursePage: React.FC = () => {
           value={editorValue}
           onChange={handleEditorChange}
           modules={{ toolbar: true }}
-          className="mb-4"
         />
       </div>
-  
-    
-      {/* Other input fields */}
       {isDefaultImage ? (
         <div></div>
       ) : (

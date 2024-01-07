@@ -26,13 +26,13 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
   const [isAdminButton,setIsAdminButton]=useState(false);
   const [isAdminMenu,setIsAdminMenu]=useState(false)
   const onClickMenu=()=>{
+    setIsAdminMenu(!isAdminMenu)
     if(isAdminMenu){
       setMenu(admin_menu);
     }
     else{
       setMenu(user_menu);
     }
-    setIsAdminMenu(!isAdminMenu)
   }
   useEffect(() => {
     setIsAdminButton(false)
@@ -73,9 +73,9 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
       })}
     </ul>
     <div className="flex items-center"> {/* Add a new flex container */}
-      <Button onClick={onClickMenu}>
-        {isAdminMenu ? NavBarText.AdminMenu : NavBarText.backToUserMenu}
-      </Button>
+    {isAdminButton&& <Button onClick={onClickMenu}>
+        {isAdminMenu ? NavBarText.backToUserMenu : NavBarText.AdminMenu}
+      </Button>}
       <Image src={tikshuvPicture} alt="Tikshuv" width={35} height={35} />
     </div>
   </div>

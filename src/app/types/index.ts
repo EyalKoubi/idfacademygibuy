@@ -31,14 +31,14 @@ export type ChapterData = {
   subjects: SubjectData[];
 };
 
-export type CourseData = {
-  id: string;
-  name: string;
-  img_id:ContentData|null;
-  creationTimestamp:Date|null;
-  chapters: ChapterData[];
-  subscribe_num:number;
-};
+// export type CourseData = {
+//   id: string;
+//   name: string;
+//   img_id:ContentData|null;
+//   creationTimestamp:Date|null;
+//   chapters: ChapterData[];
+//   subscribe_num:number;
+// };
 
 export type CourseData = {
   id: string;                    // Unique identifier for the course.
@@ -50,8 +50,6 @@ export type CourseData = {
   description: string;     // Names of sub-instructors, if any.
   rate: number;                  // The average rating of the instructor(s).
   chapters: ChapterData[];  
-  // User Experience Considerations:
-  // ...
 };
 
 

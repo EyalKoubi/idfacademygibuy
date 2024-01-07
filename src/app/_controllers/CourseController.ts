@@ -258,7 +258,7 @@ export async function editCourse(courseData: CourseDataWithoutChaptersProps) {
   
       const updatedCourse = await db
         .updateTable("Course")
-        .set({ name: courseData.name,description_sub_title:courseData.description_sub_title,description:courseDate.description })
+        .set({ name: courseData.name,description_sub_title:courseData.description_sub_title,description:courseData.description })
         .where("id", "=", courseData.id)
         .returning(["id", "name", "img_id", "creationTimestamp","subscribe_num","description_sub_title","description","rate"])
         .executeTakeFirstOrThrow();
@@ -269,8 +269,13 @@ export async function editCourse(courseData: CourseDataWithoutChaptersProps) {
         id: updatedCourse.id,
         name: updatedCourse.name,
         img_id: contentImage,
-        creationTimestamp: updatedCourse.creationTimestamp
-        subscribe_num:updatedCourse.
+        creationTimestamp: updatedCourse.creationTimestamp,
+        subscribe_num:updatedCourse.subscribe_num,
+        
+        description_sub_title: updatedCourse.description_sub_title,
+        description: updatedCourse.description,
+        rate: updatedCourse.rate,
+
       });
     } catch (error) {
       console.error("Error in editCourse:", error);

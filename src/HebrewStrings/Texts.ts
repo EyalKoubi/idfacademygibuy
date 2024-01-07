@@ -25,7 +25,7 @@ export const SidebarText = {
   logout: "התנתק",
 };
 export const NavBarText={
-  AdminMenu: "תפריט ניהול",
+  AdminMenu: "לתפריט ניהול",
   backToUserMenu:"חזרה לתפריט משתמש",
 }
 export const UserTexts = {
@@ -48,7 +48,7 @@ export const AddCourseTexts = {
   courseName: "שם קורס",
   courseSubmit: "הוסף קורס",
   description_course_card:"התיאור שיופיע בכרטיס הקורס ",
-  decription_course:"תיאור הקורס באופן מלא:"
+  description_course:"תיאור הקורס באופן מלא:",
   addChapter: "הוספת פרק",
   chapter: {
     chapterName: "שם פרק",

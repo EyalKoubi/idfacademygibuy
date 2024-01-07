@@ -86,11 +86,10 @@ export interface UserCoursesTable{
 }
 
 export interface CourseTable {
-  id: string;
+  id: GeneratedAlways<string>;
   name: string;
   img_id: string | null;
   creationTimestamp: Date | null;
-  chapters: ChapterData[]; // You need to define ChapterData here
   subscribe_num: number;
   description_sub_title: string;
   description: string;

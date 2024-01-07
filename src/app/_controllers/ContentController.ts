@@ -34,7 +34,7 @@ async function ensureBucketExists( bucket: string) {
     throw error;
   }
 }
-export async function getContent(contentId:string):Promise<ContentData>{
+export async function getContent(contentId:string|null):Promise<ContentData>{
     const contentFromDb=await db
     .selectFrom("Content")
     .where("id", "=", contentId)
