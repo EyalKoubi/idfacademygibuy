@@ -47,6 +47,8 @@ export const HomeTexts = {
 export const AddCourseTexts = {
   courseName: "שם קורס",
   courseSubmit: "הוסף קורס",
+  description_course_card:"התיאור שיופיע בכרטיס הקורס ",
+  decription_course:"תיאור הקורס באופן מלא:"
   addChapter: "הוספת פרק",
   chapter: {
     chapterName: "שם פרק",

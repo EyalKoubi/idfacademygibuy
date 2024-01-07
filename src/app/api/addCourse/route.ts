@@ -39,6 +39,10 @@ export async function POST(req:CourseRequest, res: NextApiResponse) {
       img_id: course_image,
       creationTimestamp: course.creationTimestamp,
       userId
+      subscribe_num: course.subscribe_num;
+      description_sub_title:course.description_sub_title;
+      description:course.description;
+      rate: course.rate;
     });
     else {
       throw new Error("dont have picture course");

@@ -27,14 +27,15 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
   const [isAdminMenu,setIsAdminMenu]=useState(false)
   const onClickMenu=()=>{
     if(isAdminMenu){
-      setMenu(user_menu);
+      setMenu(admin_menu);
     }
     else{
-      setMenu(admin_menu);
+      setMenu(user_menu);
     }
     setIsAdminMenu(!isAdminMenu)
   }
   useEffect(() => {
+    setIsAdminButton(false)
     switch (userType) {
       case Users.Admin:
         setIsAdminButton(true)
@@ -55,7 +56,7 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
         setMenu([]); // Provide a default case to handle unexpected values
         break;
     }
-  }, [,userType]); 
+  }, [userType]); 
 
  // const sidebarClass = isMenuButtonPressed ? "w-64" : "w-16";
 

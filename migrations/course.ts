@@ -11,9 +11,12 @@ export async function up(db: Kysely<any>): Promise<void> {
   .addColumn("name", "text")
   .addColumn("img_id", "text")
   .addColumn("creationTimestamp", "timestamp", (col) => col.defaultTo(sql`CURRENT_TIMESTAMP`))
+  .addColumn("subscribe_num", "integer")
+  .addColumn("description_sub_title", "text")
+  .addColumn("description", "text")
+  .addColumn("rate","float4")
   .addUniqueConstraint("unique_course_name", ["name"])
   .execute();
-
   await db.schema
   .createTable("Chapter")
   .addColumn("id", "uuid", (col) =>
