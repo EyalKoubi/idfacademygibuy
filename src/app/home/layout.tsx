@@ -25,26 +25,33 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const { setCourses, courses } = useCoursesStore();
-  const {user,userCourses,adminCourses,coursesProgress, setUser,setUserCourses,setAdminCourses,setCourseProgress}=useUserStore();
-  const {setUserRequestsCourse}=useUserRequestCourseStore()
+  const {
+    user,
+    userCourses,
+    adminCourses,
+    coursesProgress,
+    setUser,
+    setUserCourses,
+    setAdminCourses,
+    setCourseProgress,
+  } = useUserStore();
+  const { setUserRequestsCourse } = useUserRequestCourseStore();
 
-  
-  const getData=async()=>{
-    const response=await axios.get("/api/getData/")
-    if(response.data.message){
-      console.log("error to fetch data")
-    }
-    else{
-      setUser(response.data.user)
-      setCourses(response.data.courses)
-      setUserCourses(response.data.userCourses)
-      setAdminCourses(response.data.adminCourses)
-      setUserRequestsCourse(response.data.userRequestsCourse)
-      setCourseProgress(response.data.userCourseProgress)
+  const getData = async () => {
+    const response = await axios.get("/api/getData/");
+    if (response.data.message) {
+      console.log("error to fetch data");
+    } else {
+      setUser(response.data.user);
+      setCourses(response.data.courses);
+      setUserCourses(response.data.userCourses);
+      setAdminCourses(response.data.adminCourses);
+      setUserRequestsCourse(response.data.userRequestsCourse);
+      setCourseProgress(response.data.userCourseProgress);
 
-      console.log("data from db :",response.data)
+      console.log("data from db :", response.data);
     }
-  }
+  };
   useEffect(() => {
     getData();
   }, []);
@@ -56,7 +63,7 @@ export default function RootLayout({
           <div className="flex justify-end bg-gray-100">
             {children}
             {/* need to fix */}
-            {user&&<Sidebar userType={Users.Admin}/>}
+            {user && <Sidebar userType={Users.Admin} />}
           </div>
         </div>
       </body>
