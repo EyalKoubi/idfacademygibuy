@@ -27,7 +27,7 @@ const AddCoursePage: React.FC = () => {
     chapters: [],
     subscribe_num: 0, 
     description_sub_title: "", 
-    description: "בלבלב",
+    description: "תיאור ברירת מחדל ",
     rate: 0, 
   });
   const [fileData, setFileData] = useState<any | null>(null);

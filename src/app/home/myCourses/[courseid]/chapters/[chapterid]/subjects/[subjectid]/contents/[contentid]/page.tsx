@@ -9,8 +9,8 @@
   import { updateContentProgress } from '@/utils/progressUtils';
 
   import { Button,Pagination } from 'react-daisyui';
-  import ChevronRightIcon from '@/app/home/_component/icons/ChevronRightIcon';
-  import ChevronLeftIcon from '@/app/home/_component/icons/ChevronLeftIcon';
+  import ChevronRightIcon from '@/app/assets/icons/ChevronRightIcon';
+  import ChevronLeftIcon from '@/app/assets/icons/ChevronLeftIcon';
 
 
   interface ContentListProps {

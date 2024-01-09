@@ -27,16 +27,17 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon }) => {
   };
 
   return (
-    <li className="hover:bg-green-400 p-2 rounded-md">
-      <button className="w-full text-left" onClick={clickHandeller}>
+    <div>
+      <button className="text-xl text-slate-900 hover:text-slate-600 font-assistant" onClick={clickHandeller}>
         <div className="flex justify-between items-center space-x-2">
-            <>
+          
+            <div className="min-w-32">
               <i className="fas fa-home"></i> {rowInfo}
-            </>
-          {icon}
+            </div>
+           {icon}
         </div>
       </button>
-    </li>
+    </div>
   );
 };
 

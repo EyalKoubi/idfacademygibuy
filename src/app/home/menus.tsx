@@ -9,7 +9,7 @@ import {
   ExitIcon,
   HomePageIcon,
   PersonalAreaIcon,
-} from "./_component/icons";
+} from "../assets/icons";
 
 
 export interface MenuRow {

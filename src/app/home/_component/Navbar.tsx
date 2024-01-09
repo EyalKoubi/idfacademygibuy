@@ -1,10 +1,11 @@
-import HamburgerMenu from "./icons/HamburgerMenu";
+import HamburgerMenu from "../../assets/icons/HamburgerMenu";
 import { HomeTexts,NavBarText } from "@/HebrewStrings/Texts";
 import useAppState from "@/app/_contexts/globalContext";
 import tikshuvPicture from "@/app/assets/tikshuv.png";
 import { Users } from "@/app/types";
 import Image from "next/image";
 import { useRouter } from "next/router"; // Use "next/router" instead of "next/navigation"
+import ContinueStudyingIcon from "@/app/assets/icons/ContinueStudyingIcon"
 import {
   admin_menu,
   user_menu,
@@ -61,26 +62,35 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
  // const sidebarClass = isMenuButtonPressed ? "w-64" : "w-16";
 
   return (
-   <header className={`bg-green-200 p-4 w-screen items-center`}>
-  <div className={`p-4 flex flex-row justify-between`}>
-    <ul className="flex flex-row-reverse space-x-2" style={{ listStyle: 'none', padding: 0 }}>
-      {menu.map(({ id, href, rowInfo, icon }) => {
+    <nav className="flex justify-evenly items-center w-full py-5 px-20">
+    <div className="flex items-center w-full">
+      <a href="/" className="text-slate-900 text-4xl font-leagueGothic">
+        <span>IDF</span>
+        <span className="text-emerald-700">A</span>
+      </a>
+    </div>
+    <div className="flex justify-center gap-10 items-center w-full">
+  
+      {menu.slice() 
+    .reverse().map(({ id, href, rowInfo, icon }) => {
         return (
-          <li key={id} style={{ display: 'inline-block' }}>
             <RowInMenu href={href} rowInfo={rowInfo} icon={icon} />
-          </li>
         );
       })}
-    </ul>
-    <div className="flex items-center"> {/* Add a new flex container */}
+    </div>
+    <div>
     {isAdminButton&& <Button onClick={onClickMenu}>
         {isAdminMenu ? NavBarText.backToUserMenu : NavBarText.AdminMenu}
       </Button>}
-      <Image src={tikshuvPicture} alt="Tikshuv" width={35} height={35} />
-    </div>
-  </div>
-  <h1 className="text-white text-2xl font-semibold">IDF ACADEMY</h1>
-</header>
+
+      </div>
+      <div className="flex items-center w-full justify-end">
+          <button className="btn bg-emerald-700 hover:bg-emerald-800 text-sm text-white px-5 rounded-md font-assistant">
+            {NavBarText.startLearning}
+            <ContinueStudyingIcon />
+          </button>
+        </div>
+      </nav>
   );
 };
 

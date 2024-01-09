@@ -36,6 +36,11 @@ export async function processCourseUserRequest(requestData: CourseUserRequestDat
         .values({ courseId: course.id, userId, role: roleType })
         .returning(["userId", "courseId", "role"])
         .executeTakeFirstOrThrow();
+      
+        await db.updateTable("Course")
+        .set({ subscribe_num: (course.subscribe_num+1) })
+        .where("id", "=", course.id)
+        .execute();
         //if null take the []
         const [firstChapter] = course.chapters || [];
         const [firstSubject] = firstChapter?.subjects || [];

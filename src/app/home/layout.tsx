@@ -52,12 +52,14 @@ export default function RootLayout({
     <html>
       <body className={inter.className}>
         <div>
-          <div className="flex flex-col text-right justify-end">
+        <main className="h-screen bg-gradient-to-b from-sky-100 to-transparent">
+      <div className="flex flex-col justify-between items-center gap-10">
           {user&&<Navbar  userType={Users.Admin}/>}
             {children}
             {/* need to fix */}
             
           </div>
+          </main>
         </div>
       </body>
     </html>
