@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import useCoursesStore from '@/app/_contexts/courseContext';
 import Chapter from '../ChapterManagerComponents/Chapter';
-import RenameCourse from './RenameCourse';
+import EditCourse from './EditCourse';
 import ErrorMessage from '../../../_component/ErrorMessage';
 import AddChapter from '../ChapterManagerComponents/AddChapter';
 import { CourseData } from '@/app/types';
@@ -14,25 +14,25 @@ interface CourseProps {
 }
 
 const Course = ({ course }: CourseProps) => {
-  const { deleteCourse, renameCourse, addChapter } = useCoursesStore();
+  const { deleteCourse, editCourse, addChapter } = useCoursesStore();
   const {userCourses,deleteCourseFromUser}=useUserStore();
-  const [isRenameCourse, setIsRenameCourse] = useState(false);
-  const [courseName, setCourseName] = useState(course.name);
+  const [isEditCourse, setIsEditCourse] = useState(false);
   const [isSelectedCourse, setIsSelectedCourse] = useState(false);
   const [isAddChapterPressed, setIsAddChapterPressed] = useState(false);
   const [newChapterName, setNewChapterName] = useState("");
   const [newChapterBrief, setNewChapterBrief] = useState("");
   const [addChapterError, setAddChapterError] = useState('');
-  const [renameCourseError, setRenameCourseError] = useState('');
+  const [editCourseError, setEditCourseError] = useState('');
 
   useEffect(() => {
     return () => {
       setAddChapterError('');
-      setRenameCourseError('');
+      setEditCourseError('');
     };
   }, [course]);
 
   const handleDeleteCourse = async () => {
+    setEditCourseError('');
     try {
       const formData = new FormData();
       formData.append("courseId", course.id);
@@ -50,28 +50,31 @@ const Course = ({ course }: CourseProps) => {
     }
   };
 
-  const handleRenameCourse = async () => {
+  const handleEditCourse = async (newcourse:CourseData) => {
+    setEditCourseError('');
     try {
       const formData = new FormData();
-      const newcourse= JSON.stringify({...course,name: courseName})
+     const newcourseStringify= JSON.stringify(newcourse)
  
-      formData.append("courseRename", newcourse);
+      formData.append("courseEdited", newcourseStringify);
       const response = await axios.post("/api/editCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
+      console.log(response.data)
       if (response.data?.message) {
-        setRenameCourseError(response.data.message);
+        setEditCourseError(response.data.message);
       } else {
-        renameCourse({ ...course, name: courseName });
-        setIsRenameCourse(false);
+        editCourse(newcourse);
+        setIsEditCourse(false);
       }
     } catch (error) {
-      setRenameCourseError('Error occurred while renaming the course.');
+      setEditCourseError('Error occurred while renaming the course.');
       console.error('Error renaming course:', error);
     }
   };
 
   const handleAddChapter = async () => {
+    setAddChapterError('');
     try {
       const formData = new FormData();
       formData.append("courseAddChapter", JSON.stringify({
@@ -108,12 +111,11 @@ const Course = ({ course }: CourseProps) => {
         <div className="flex flex-row">
           <button
             onClick={() => {
-              setIsRenameCourse(true);
-              setCourseName(course.name);
+              setIsEditCourse(true);
             }}
             className="p-2 ml-4 bg-yellow-500 text-white rounded hover:bg-yellow-600"
           >
-            {editTexts.rename}
+            {editTexts.edit}
           </button>
           <button
             onClick={handleDeleteCourse}
@@ -130,10 +132,10 @@ const Course = ({ course }: CourseProps) => {
         </div>
       </div>
 
-      {isRenameCourse && (
+      {isEditCourse && (
         <>
-          <RenameCourse course={course} courseName={ courseName} setCourseName={setCourseName} handleRenameCourse={handleRenameCourse}/>
-          <ErrorMessage message={renameCourseError} />
+          <EditCourse course={course}  handleEditCourse={handleEditCourse}/>
+          <ErrorMessage message={editCourseError} />
         </>
       )}
 

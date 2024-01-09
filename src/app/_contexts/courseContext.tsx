@@ -32,7 +32,7 @@ type CoursesActions = {
     chapterId: string,
     courseId: string
   ) => void;
-  renameCourse: (course: CourseData) => void;
+  editCourse: (course: CourseData) => void;
   updateChapter: (chapter: ChapterData, courseId: string) => void;
   updateSubject: (
     subject: SubjectData,
@@ -61,6 +61,10 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
     name: "",
     img_id:null,
     creationTimestamp: null,
+    subscribe_num:0,
+    description_sub_title:"",
+    description:"",
+    rate:0,
     chapters: [],
   },
   addCourse: (course) =>
@@ -127,6 +131,10 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             name: curCourse.name,
             img_id:curCourse.img_id,
             creationTimestamp:curCourse.creationTimestamp,
+            subscribe_num:curCourse.subscribe_num,
+            description_sub_title:curCourse.description_sub_title,
+            description:curCourse.description,
+            rate:curCourse.rate,
             chapters: newChapters,
           };
         }
@@ -155,6 +163,10 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             name: curCourse.name,
             img_id:curCourse.img_id,
             creationTimestamp:curCourse.creationTimestamp,
+             subscribe_num:curCourse.subscribe_num,
+            description_sub_title:curCourse.description_sub_title,
+            description:curCourse.description,
+            rate:curCourse.rate,
             chapters: updatedChapter,
           };
         }
@@ -186,6 +198,10 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             name: curCourse.name,
             img_id:curCourse.img_id,
             creationTimestamp:curCourse.creationTimestamp,
+            subscribe_num:curCourse.subscribe_num,
+            description_sub_title:curCourse.description_sub_title,
+            description:curCourse.description,
+            rate:curCourse.rate,
             chapters: updatedChapters,
           };
         }
@@ -232,6 +248,10 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             name: curCourse.name,
             img_id:curCourse.img_id,
             creationTimestamp:curCourse.creationTimestamp,
+            subscribe_num:curCourse.subscribe_num,
+            description_sub_title:curCourse.description_sub_title,
+            description:curCourse.description,
+            rate:curCourse.rate,
             chapters: newChapters,
           };
         }
@@ -240,7 +260,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
       return { ...state };
     }),
 
-  renameCourse: (course: CourseData) =>
+  editCourse: (course: CourseData) =>
     set((state) => {
       state.courses = state.courses.map((curCourse) => {
         if (course.id === curCourse.id)
@@ -249,6 +269,10 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             name: course.name,
             img_id:curCourse.img_id,
             creationTimestamp:curCourse.creationTimestamp,
+            subscribe_num:curCourse.subscribe_num,
+            description_sub_title:curCourse.description_sub_title,
+            description:curCourse.description,
+            rate:curCourse.rate,
             chapters: curCourse.chapters,
           };
         return curCourse;
@@ -276,6 +300,10 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             name: curCourse.name,
             img_id:curCourse.img_id,
             creationTimestamp:curCourse.creationTimestamp,
+            subscribe_num:curCourse.subscribe_num,
+            description_sub_title:curCourse.description_sub_title,
+            description:curCourse.description,
+            rate:curCourse.rate,
             chapters: updatedChapter,
           };
         }
@@ -313,6 +341,10 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             name: curCourse.name,
             img_id:curCourse.img_id,
             creationTimestamp:curCourse.creationTimestamp,
+            subscribe_num:curCourse.subscribe_num,
+            description_sub_title:curCourse.description_sub_title,
+            description:curCourse.description,
+            rate:curCourse.rate,
             chapters: updatedChapters,
           };
         }
@@ -360,6 +392,10 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             name: curCourse.name,
             img_id:curCourse.img_id,
             creationTimestamp:curCourse.creationTimestamp,
+            subscribe_num:curCourse.subscribe_num,
+            description_sub_title:curCourse.description_sub_title,
+            description:curCourse.description,
+            rate:curCourse.rate,
             chapters: newChapters,
           };
         }

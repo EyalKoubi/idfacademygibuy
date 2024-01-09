@@ -11,17 +11,20 @@ interface CourseRequest extends NextRequest {
 
 export async function POST(req: CourseRequest, res: NextApiResponse) {
   const data = await req.formData();
-  if (!data.get("courseRename"))
+  if (!data.get("courseEdited"))
     return NextResponse.json({ message: "There is no course input!" });
   const courseRenameProps:CourseData = JSON.parse(
-    data.get("courseRename") as string
+    data.get("courseEdited") as string
   );
   const courseToDb={
     id: courseRenameProps.id,
     name: courseRenameProps.name,
     img_id:courseRenameProps.img_id?.id,
     creationTimestamp:courseRenameProps.creationTimestamp,
-    
+    subscribe_num:courseRenameProps.subscribe_num,
+    description_sub_title:courseRenameProps.description_sub_title,
+    description:courseRenameProps.description,
+    rate:courseRenameProps.rate,
   }
   return editCourse(courseToDb);
 

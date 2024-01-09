@@ -83,12 +83,19 @@ export function calculateProgress (course:CourseData,contentProgress:ContentProg
       courseContentNum+=subject?.contents.length;
     }
   }
+  if (courseContentNum === 0) {
+    // Handle the case where courseContentNum is zero (avoid division by zero)
+    return 0;
+  }
+
   if(contentProgress){
+    console.log("Addad")
   for(let cp of contentProgress){
     completedCourseContentNum+=cp.contents.length;
     }
   }
-
+  console.log((completedCourseContentNum/courseContentNum))
+  console.log(courseContentNum)
  return ((completedCourseContentNum/courseContentNum)*100)
 }
 

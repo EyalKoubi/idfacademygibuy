@@ -271,7 +271,6 @@ export async function editCourse(courseData: CourseDataWithoutChaptersProps) {
         img_id: contentImage,
         creationTimestamp: updatedCourse.creationTimestamp,
         subscribe_num:updatedCourse.subscribe_num,
-        
         description_sub_title: updatedCourse.description_sub_title,
         description: updatedCourse.description,
         rate: updatedCourse.rate,

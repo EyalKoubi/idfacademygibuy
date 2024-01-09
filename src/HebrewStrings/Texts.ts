@@ -72,8 +72,19 @@ export const AddCourseTexts = {
 export const searchCourseTexts={
   hideRegisterCourses:"הסתר קורסים שאתה רשום כבר ",
 }
+
+export const presentCourseDetailTexts={
+  descripitonOfCourse:"תיאור הקורס:",
+  rateOfCourse:"דירוג הקורס:",
+  subscribeNum:"מספר מינויים:",
+  chaptersOfCourse:"פרקי הקורס"
+}
 export const editTexts = {
-  rename: "שנה שם",
+  edit: "ערוך",
+  courseDescription:"ערוך תיאור:",
+  descripiton:"תיאור",
+  courseDescriptionSubTitle:"ערוך תקציר הקורס",
+  descriptionSubTitleCourse:"תקציר הקורס",
   title:"כותרת",
   courses: "קורסים",
   chapters: "פרקים",

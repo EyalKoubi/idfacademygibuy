@@ -17,7 +17,7 @@ const Chapter: React.FC<ChapterProps> = ({ chapter, courseid }) => {
   };
 
   return (
-    <button onClick={() => navigateToChapter(chapter.id, courseid)} >
+    <button className='bg-gray-500 min-w-90% text-center my-1' onClick={() => navigateToChapter(chapter.id, courseid)} >
       {chapter.name}
     </button>
   );
