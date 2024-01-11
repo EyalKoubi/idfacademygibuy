@@ -1,11 +1,14 @@
+"use client"
 import HamburgerMenu from "../../assets/icons/HamburgerMenu";
-import { HomeTexts,NavBarText } from "@/HebrewStrings/Texts";
+import { HomeTexts,NavBarText, SidebarText } from "@/HebrewStrings/Texts";
 import useAppState from "@/app/_contexts/globalContext";
 import tikshuvPicture from "@/app/assets/tikshuv.png";
 import { Users } from "@/app/types";
 import Image from "next/image";
-import { useRouter } from "next/router"; // Use "next/router" instead of "next/navigation"
+import { useRouter } from "next/navigation";
 import ContinueStudyingIcon from "@/app/assets/icons/ContinueStudyingIcon"
+
+import AvatarImg from "@/app/assets/default-image-playlist.jpg"
 import {
   admin_menu,
   user_menu,
@@ -15,7 +18,7 @@ import {
 } from "../menus";
 import { useEffect, useState } from "react";
 import RowInMenu from "./RowInMenu";
-import { Button } from "react-daisyui";
+import { Avatar, Button, Link } from "react-daisyui";
 
 interface NavbarProps {
   userType: Users;
@@ -26,9 +29,11 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
   const [menu, setMenu] = useState<MenuRow[]>([]);
   const [isAdminButton,setIsAdminButton]=useState(false);
   const [isAdminMenu,setIsAdminMenu]=useState(false)
-  const onClickMenu=()=>{
+  const router=useRouter()
+  const onClickChangePremmisionMenu=()=>{
     setIsAdminMenu(!isAdminMenu)
-    if(isAdminMenu){
+    const bool=!isAdminMenu
+    if(bool){
       setMenu(admin_menu);
     }
     else{
@@ -63,12 +68,14 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
 
   return (
     <nav className="flex justify-evenly items-center w-full py-5 px-20">
-    <div className="flex items-center w-full">
-      <a href="/" className="text-slate-900 text-4xl font-leagueGothic">
+    <div className="flex items-center w-full ">
+      <a href="/home" className="text-slate-900 text-4xl font-leagueGothic">
         <span>IDF</span>
         <span className="text-emerald-700">A</span>
       </a>
+      <Avatar className="ml-3 w-12 h-12 rounded-full overflow-hidden" src={AvatarImg.src} onClick={()=>router.push("/home/userArea")} />
     </div>
+   
     <div className="flex justify-center gap-10 items-center w-full">
   
       {menu.slice() 
@@ -79,15 +86,15 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
       })}
     </div>
     <div>
-    {isAdminButton&& <Button onClick={onClickMenu}>
-        {isAdminMenu ? NavBarText.backToUserMenu : NavBarText.AdminMenu}
-      </Button>}
+ 
 
       </div>
       <div className="flex items-center w-full justify-end">
-          <button className="btn bg-emerald-700 hover:bg-emerald-800 text-sm text-white px-5 rounded-md font-assistant">
-            {NavBarText.startLearning}
-            <ContinueStudyingIcon />
+      {isAdminButton&& <Button onClick={onClickChangePremmisionMenu}>
+        {isAdminMenu ? NavBarText.backToUserMenu : NavBarText.AdminMenu}
+      </Button>}  
+          <button className="btn ml-2 bg-emerald-700 hover:bg-emerald-800 text-sm text-white px-5 rounded-md font-assistant" >
+          <RowInMenu href={"/home/myCourses"} rowInfo={ SidebarText.myCourses} icon={ <ContinueStudyingIcon /> } />
           </button>
         </div>
       </nav>

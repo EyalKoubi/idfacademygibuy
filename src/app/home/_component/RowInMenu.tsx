@@ -28,9 +28,8 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon }) => {
 
   return (
     <div>
-      <button className="text-xl text-slate-900 hover:text-slate-600 font-assistant" onClick={clickHandeller}>
-        <div className="flex justify-between items-center space-x-2">
-          
+      <button  onClick={clickHandeller}>
+        <div className="flex justify-between items-center space-x-1">  
             <div className="min-w-32">
               <i className="fas fa-home"></i> {rowInfo}
             </div>

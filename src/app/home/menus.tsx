@@ -32,40 +32,29 @@ enum Menu {
 }
 
 const admin_permissions = [
-  Menu.HomePage,
-  Menu.UserArea,
+
   Menu.CourseManager,
   Menu.PremisionManager,
   Menu.CourseCreation,
-  Menu.Logout,
 ];
 
 const user_permissions = [
-  Menu.HomePage,
-  Menu.UserArea,
   Menu.CourseCatalog,
-  Menu.MyCourses,
   Menu.AboutUs,
-  Menu.Logout,
+
 ];
 
 const creator_permissions = [
-  Menu.HomePage,
-  Menu.UserArea,
   Menu.CourseCreation,
   Menu.MyCourses,
   Menu.AboutUs,
-  Menu.Logout,
 ];
 
 const editor_permissions = [
-  Menu.HomePage,
-  Menu.UserArea,
   Menu.CourseCatalog,
   Menu.CourseManager,
   Menu.MyCourses,
   Menu.AboutUs,
-  Menu.Logout,
 ];
 
 export const menu: MenuRow[] = [
