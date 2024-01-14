@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import PresentCourseDetail from '../_components/PresentCourseDetail';
 import { CourseData } from '@/app/types';
+import useCoursesStore from '@/app/_contexts/courseContext';
 interface  PresentCourseDetailsProps{
     params:{
         courseid:string;
@@ -9,9 +10,11 @@ interface  PresentCourseDetailsProps{
     course:CourseData;
 }
   const PresentCourse: React.FC<PresentCourseDetailsProps> = (props) => {
+    const {courses}=useCoursesStore();
+    const course=courses.find((course)=>course.id===props.params.courseid);
     return (
         <div>
-            <PresentCourseDetail courseid={props.params.courseid}/>
+           {course&& <PresentCourseDetail course={course}/>}
         </div>
     );
                 }

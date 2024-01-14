@@ -103,7 +103,6 @@ export async function getAllCourses():Promise<CourseData[]|undefined> {
     .selectAll()
     .execute();
   
-
   const result:CourseData[] = [];
   for (const course of coursesWithChapters) {
     const courseContent:ContentData = await db
@@ -148,6 +147,7 @@ export async function getAllCourses():Promise<CourseData[]|undefined> {
         subjects: subjects,
       });
     }
+    console.log("course to push:",course)
     result.push({
       id: course.id,
       name: course.name,
@@ -159,8 +159,8 @@ export async function getAllCourses():Promise<CourseData[]|undefined> {
       rate:course.rate,
       chapters: chapters,
     });
+    }
     return result;
-  }
 }
 // export async function getAllCourses(): Promise<CourseData[] | undefined> {
 //   try {
