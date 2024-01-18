@@ -46,40 +46,42 @@ const registerCourse=async ()=> {
 
 
     return (
-      <div className="flex flex-col">
-    
-        {course && (
-          <>
-           <div>
-            <span>{editTexts.courseName}</span>
-           <h1> {course.name}</h1>
-          </div>
-          <span>{presentCourseDetailTexts.descripitonOfCourse}</span>
-          <div className="w-[700px] h-[400px] max-h-full text-right">
-            <div dangerouslySetInnerHTML={{ __html: course.description }} />
-  
-          </div>
-          <div>
-            <span>{presentCourseDetailTexts.subscribeNum}</span>
-            {course.subscribe_num}
-          </div>
-          <div>
-            <span>{presentCourseDetailTexts.rateOfCourse}</span>
-            {course.rate}
-          </div>
-                  </>
-        )}
-        <br/>
-        <span>{presentCourseDetailTexts.chaptersOfCourse}</span>
-        <div className="flex flex-col">
-          {chaptersToPresent?.map((chapter: ChapterData) => (
-            <Chapter chapter={chapter} courseid={course.id} isRegister={isRegister} setRegistererror={setRegistererror} />
-          ))}
-          <ErrorMessage message={registererror}/>
+      <div className="max-w-md text-right rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-slate-200 m-4">
+      <div className="p-4 text-right"></div>
+      {course && (
+        <>
+         <div>
+         <div className="font-bold text-xl mb-2">{course.name}</div>
+            <div className="text-gray-700 text-base" dangerouslySetInnerHTML={{ __html: course.description }} />
+          <span>{editTexts.courseName}</span>
+         <h1> {course.name}</h1>
         </div>
-        {(!isRegister && !isRequested) && <button className="p-2 ml-1 bg-pink-500 text-white rounded hover:bg-yellow-600"onClick={registerCourse}>{LoginTexts.register}</button>}
-      {isRequested && <p className="text-blue-700">{CourseCardTexts.requestContinueToApprove}</p>}
+        <span>{presentCourseDetailTexts.descripitonOfCourse}</span>
+        <div className="w-[700px] h-[400px] max-h-full text-right">
+          <div dangerouslySetInnerHTML={{ __html: course.description }} />
+
+        </div>
+        <div>
+          <span>{presentCourseDetailTexts.subscribeNum}</span>
+          {course.subscribe_num}
+        </div>
+        <div>
+          <span>{presentCourseDetailTexts.rateOfCourse}</span>
+          {course.rate}
+        </div>
+                </>
+      )}
+      <br/>
+      <span>{presentCourseDetailTexts.chaptersOfCourse}</span>
+      <div className="flex flex-col">
+        {chaptersToPresent?.map((chapter: ChapterData) => (
+          <Chapter chapter={chapter} courseid={course.id} isRegister={isRegister} setRegistererror={setRegistererror} />
+        ))}
+        <ErrorMessage message={registererror}/>
       </div>
+      {(!isRegister && !isRequested) && <button className="p-2 ml-1 bg-pink-500 text-white rounded hover:bg-yellow-600"onClick={registerCourse}>{LoginTexts.register}</button>}
+    {isRequested && <p className="text-blue-700">{CourseCardTexts.requestContinueToApprove}</p>}
+    </div>
     );
   };
   

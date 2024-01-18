@@ -37,10 +37,10 @@ export default function RootLayout({
     else{
       setUser(response.data.user)
       setCourses(response.data.courses)
-      setUserCourses(response.data.userCourses)
-      setAdminCourses(response.data.adminCourses)
-      setUserRequestsCourse(response.data.userRequestsCourse)
-      setCourseProgress(response.data.userCourseProgress)
+      // setUserCourses(response.data.userCourses)
+      // setAdminCourses(response.data.adminCourses)
+      // setUserRequestsCourse(response.data.userRequestsCourse)
+      // setCourseProgress(response.data.userCourseProgress)
 
       console.log("data from db :",response.data)
     }
@@ -52,7 +52,7 @@ export default function RootLayout({
     <html>
       <body className={inter.className}>
         <div>
-        <main className="h-screen bg-gradient-to-b from-sky-100 to-transparent">
+        <main className="min-h-screen bg-gradient-to-b from-sky-100 to-transparent">
       <div className="flex flex-col justify-between items-center gap-10">
           {user&&<Navbar  userType={Users.Admin}/>}
             {children}

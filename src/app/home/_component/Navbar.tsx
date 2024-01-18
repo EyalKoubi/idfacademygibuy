@@ -1,6 +1,6 @@
 "use client"
 import HamburgerMenu from "../../assets/icons/HamburgerMenu";
-import { HomeTexts,NavBarText, SidebarText } from "@/HebrewStrings/Texts";
+import { HomeTexts,NavBarText } from "@/HebrewStrings/Texts";
 import useAppState from "@/app/_contexts/globalContext";
 import tikshuvPicture from "@/app/assets/tikshuv.png";
 import { Users } from "@/app/types";
@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import ContinueStudyingIcon from "@/app/assets/icons/ContinueStudyingIcon"
 
-import AvatarImg from "@/app/assets/default-image-playlist.jpg"
+import AvatarImg from "@/app/assets/profile.png"
 import {
   admin_menu,
   user_menu,
@@ -67,21 +67,21 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
  // const sidebarClass = isMenuButtonPressed ? "w-64" : "w-16";
 
   return (
-    <nav className="flex justify-evenly items-center w-full py-5 px-20">
-    <div className="flex items-center w-full ">
+    <nav className="flex justify-evenly items-center w-full py-5 ">
+    <div className="flex items-center mx-3 w-full ">
       <a href="/home" className="text-slate-900 text-4xl font-leagueGothic">
         <span>IDF</span>
         <span className="text-emerald-700">A</span>
       </a>
-      <Avatar className="ml-3 w-12 h-12 rounded-full overflow-hidden" src={AvatarImg.src} onClick={()=>router.push("/home/userArea")} />
     </div>
+
    
-    <div className="flex justify-center gap-10 items-center w-full">
+    <div className="flex justify-center mx-4 gap-10 items-center w-full">
   
       {menu.slice() 
-    .reverse().map(({ id, href, rowInfo, icon }) => {
+    .reverse().map(({ id, href, rowInfo, icon,getRequest }) => {
         return (
-            <RowInMenu href={href} rowInfo={rowInfo} icon={icon} />
+            <RowInMenu href={href} rowInfo={rowInfo}  getRequest={getRequest} icon={icon} />
         );
       })}
     </div>
@@ -89,14 +89,21 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
  
 
       </div>
+      <div className="min-w-fit">
+    <a onClick={()=>router.push("/home/userArea")}>
+      <Avatar className="ml-3 w-12 h-12 rounded-full overflow-hidden" src={AvatarImg.src}  />
+      <span className="text-sm">לאיזור אישי</span>
+      </a>
+    </div>
       <div className="flex items-center w-full justify-end">
       {isAdminButton&& <Button onClick={onClickChangePremmisionMenu}>
         {isAdminMenu ? NavBarText.backToUserMenu : NavBarText.AdminMenu}
       </Button>}  
           <button className="btn ml-2 bg-emerald-700 hover:bg-emerald-800 text-sm text-white px-5 rounded-md font-assistant" >
-          <RowInMenu href={"/home/myCourses"} rowInfo={ SidebarText.myCourses} icon={ <ContinueStudyingIcon /> } />
+          <RowInMenu href={"/home/myCourses"} rowInfo={ NavBarText.myCourses} getRequest={undefined} icon={ <ContinueStudyingIcon /> } />
           </button>
         </div>
+     
       </nav>
   );
 };

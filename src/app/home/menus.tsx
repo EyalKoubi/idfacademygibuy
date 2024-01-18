@@ -1,4 +1,4 @@
-import { SidebarText } from "@/HebrewStrings/Texts";
+import { NavBarText } from "@/HebrewStrings/Texts";
 import {
   AboutUsIcon,
   ContinueStudyingIcon,
@@ -61,55 +61,55 @@ export const menu: MenuRow[] = [
   {
     id: 1,
     href: "/home",
-    rowInfo: SidebarText.homePage,
+    rowInfo: NavBarText.homePage,
     icon: <HomePageIcon />,
   },
   {
     id: 2,
     href: "/home/userArea",
-    rowInfo: SidebarText.userArea,
+    rowInfo: NavBarText.userArea,
     icon: <PersonalAreaIcon />,
   },
   {
     id: 3,
     href: "/home/courseCatalog",
-    rowInfo: SidebarText.courseCatalog,
+    rowInfo: NavBarText.courseCatalog,
     icon: <CourseCatalogIcon />,
   },
   {
     id: 4,
     href: "/home/courseManager",
-    rowInfo: SidebarText.courseManager,
+    rowInfo: NavBarText.courseManager,
     icon: <CourseManagerIcon />,
   },
   {
     id: 5,
     href: "/home/premisionManager",
-    rowInfo: SidebarText.premsionManager,
+    rowInfo: NavBarText.premsionManager,
     icon: <CourseUserRequestsIcon />,
   },
   {
     id: 6,
     href: "/home/courseCreation",
-    rowInfo: SidebarText.courseCreation,
+    rowInfo: NavBarText.courseCreation,
     icon: <CourseCreationIcon />,
   },
   {
     id: 7,
     href: "/home/myCourses",
-    rowInfo: SidebarText.myCourses,
+    rowInfo: NavBarText.myCourses,
     icon: <ContinueStudyingIcon />, 
   },
   {
     id: 8,
     href: "/home/aboutUs",
-    rowInfo: SidebarText.aboutUs,
+    rowInfo: NavBarText.aboutUs,
     icon: <AboutUsIcon />,
   },
   {
     id: 9,
     href: "/",
-    rowInfo: SidebarText.logout,
+    rowInfo: NavBarText.logout,
     icon: <ExitIcon />,
   },
 ];

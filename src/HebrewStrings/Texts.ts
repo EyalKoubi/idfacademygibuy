@@ -13,7 +13,11 @@ export const LoginTexts = {
   register: "הרשמה",
 };
 
-export const SidebarText = {
+
+export const NavBarText={
+  AdminMenu: "לתפריט ניהול",
+  backToUserMenu:"חזרה לתפריט משתמש",
+  startLearning:"התחל ללמוד",
   homePage: "דף הבית",
   userArea: "אזור אישי",
   courseCatalog: "קטלוג קורסים",
@@ -23,11 +27,6 @@ export const SidebarText = {
   myCourses: "הקורסים שלי",
   aboutUs: "אודותינו",
   logout: "התנתק",
-};
-export const NavBarText={
-  AdminMenu: "לתפריט ניהול",
-  backToUserMenu:"חזרה לתפריט משתמש",
-  startLearning:"התחל ללמוד"
 }
 export const UserTexts = {
   userWelcome: " ברוכים הבאים",
