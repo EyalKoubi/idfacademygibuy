@@ -36,6 +36,11 @@ export async function processCourseUserRequest(requestData: CourseUserRequestDat
         .values({ courseId: course.id, userId, role: roleType })
         .returning(["userId", "courseId", "role"])
         .executeTakeFirstOrThrow();
+      
+        await db.updateTable("Course")
+        .set({ subscribe_num: (course.subscribe_num+1) })
+        .where("id", "=", course.id)
+        .execute();
         //if null take the []
         const [firstChapter] = course.chapters || [];
         const [firstSubject] = firstChapter?.subjects || [];
@@ -63,7 +68,7 @@ export async function processCourseUserRequest(requestData: CourseUserRequestDat
   }
 }
 
-export async function getUserCourseRequests(userId: string,courses:CourseData[], adminCourseIds: string[]) {
+export async function getUserCourseRequests(userId: string, adminCourseIds: string[]) {
     const userRequestsCoursesDb = adminCourseIds.length > 0 ? await db
     .selectFrom("UserRequestsCourse")
     .leftJoin("User", "User.id", "UserRequestsCourse.userId")
@@ -77,9 +82,7 @@ export async function getUserCourseRequests(userId: string,courses:CourseData[],
         "User.image as userImage",
 
         "Course.id as id", 
-        "Course.name as name", 
-        "Course.img_id as img_id", 
-        "Course.creationTimestamp as creationTimestamp"
+
     ])
     .execute():[];
     const userRequestsCourse = userRequestsCoursesDb.map(request => ({
@@ -91,13 +94,7 @@ export async function getUserCourseRequests(userId: string,courses:CourseData[],
             emailVerified: request.userEmailVerified,
             image: request.userImage 
         },
-        course: {
-            
-            id: request.id,
-            name: request.name, 
-            img_id:courses.find(course=>course.id===request.id)?.img_id,
-            creationTimestamp: request.creationTimestamp
-        }
+        courseId: request.id
     }));
     return userRequestsCourse;
   }
@@ -124,16 +121,14 @@ export async function getUserCourseRequests(userId: string,courses:CourseData[],
   
   return formattedProgressData;
 }
-export async function filterUserCourses(userId: string, courses: CourseData[], roleIndex: number): Promise<CourseData[]> {
+export async function getUserCoursesIds(userId: string, roleIndex: number): Promise<string[]> {
     const coursesidofuser=  await db.selectFrom("UserCourses")
     .where("userId", "=", userId)
     .where("role", "=", roleIndex)//4 is users courses
     .select(["UserCourses.courseId"])
     .execute();
-    const courseIds = coursesidofuser.map(item => item.courseId);
-    const userCourses=courses.filter((course)=>courseIds.includes(course.id))
-   
-    return userCourses;
+    const coursesId=coursesidofuser.map((courseidfromdb)=> courseidfromdb.courseId);
+    return coursesId;
   }
 
   export async function insertUserRequestForCourse(courseId: string, userId: string) {

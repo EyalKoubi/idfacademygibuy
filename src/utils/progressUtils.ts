@@ -75,20 +75,40 @@ export const findFirstUnwatched = (course: CourseData, router: any, coursesProgr
     }
 }
 
-export function calculateProgress (course:CourseData,contentProgress:ContentProgress[]|undefined)  {
-  // Replace this logic with your own progress calculation
-  let courseContentNum=0,completedCourseContentNum=0;
-  for(let chapter of course?.chapters){
-    for (let subject of chapter?.subjects){
-      courseContentNum+=subject?.contents.length;
-    }
-  }
-  if(contentProgress){
-  for(let cp of contentProgress){
-    completedCourseContentNum+=cp.contents.length;
-    }
+export function calculateProgress(course: CourseData, contentProgress: ContentProgress[] | undefined): number {
+  if (!course || !course.chapters) {
+    // Handle cases where course or chapters are undefined
+    return 0;
   }
 
- return ((completedCourseContentNum/courseContentNum)*100)
+  let courseContentNum = 0;
+  let completedCourseContentNum = 0;
+
+  for (const chapter of course.chapters) {
+    if (!chapter.subjects) {
+  
+      continue;
+    }
+
+    for (const subject of chapter.subjects) {
+      if (!subject.contents) {
+        continue;
+      }
+
+      courseContentNum += subject.contents.length;
+    }
+  }
+  if (courseContentNum === 0) {
+    // Handle the case where courseContentNum is zero (avoid division by zero)
+    return 0;
+  }
+
+  if (contentProgress) {
+    for (const cp of contentProgress) {
+      if (cp.contents) {
+        completedCourseContentNum += cp.contents.length;
+      }
+    }
+  }
+  return (completedCourseContentNum / courseContentNum) * 100;
 }
-

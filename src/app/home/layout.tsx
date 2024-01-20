@@ -44,10 +44,10 @@ export default function RootLayout({
     } else {
       setUser(response.data.user);
       setCourses(response.data.courses);
-      setUserCourses(response.data.userCourses);
-      setAdminCourses(response.data.adminCourses);
-      setUserRequestsCourse(response.data.userRequestsCourse);
-      setCourseProgress(response.data.userCourseProgress);
+      // setUserCourses(response.data.userCourses)
+      // setAdminCourses(response.data.adminCourses)
+      // setUserRequestsCourse(response.data.userRequestsCourse)
+      // setCourseProgress(response.data.userCourseProgress)
 
       console.log("data from db :", response.data);
     }
@@ -59,12 +59,13 @@ export default function RootLayout({
     <html>
       <body className={inter.className}>
         <div>
-          <Navbar />
-          <div className="flex justify-end bg-gray-100">
-            {children}
-            {/* need to fix */}
-            {user && <Sidebar userType={Users.Admin} />}
-          </div>
+          <main className="min-h-screen bg-gradient-to-b from-sky-100 to-transparent">
+            <div className="flex flex-col justify-between items-center gap-10">
+              {user && <Navbar userType={Users.Admin} />}
+              {children}
+              {/* need to fix */}
+            </div>
+          </main>
         </div>
       </body>
     </html>

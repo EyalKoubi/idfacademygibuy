@@ -7,6 +7,12 @@ import useUserStore from "../_contexts/userContext";
 import { findFirstUnwatched } from "@/utils/progressUtils";
 import { CourseData, UserCourseProgress } from "../types";
 import { useRouter } from "next/navigation";
+import Illustration from "@/app/assets/Education-illustration.svg"
+import Image from "next/image"; // Assuming you have imported the Image component correctly
+import PopularCourses from "./_component/popularCourses";
+import SearchCourseHomePage from "./_component/searchCourseHomePage";
+
+
 
 const HomePage = () => {
   
@@ -30,9 +36,19 @@ const HomePage = () => {
   }
 
   return (
-    <div>
-     {user && <h1 className="text-2xl">{` ${user.name}  ${getHebrewGreeting()} `}</h1>}
-    </div>
+  < >
+      <div className="flex flex-col items-center gap-5">
+        <h1 className="text-black text-6xl font-bold font-assistant">
+          !התחילו ללמוד אצלנו היום
+        </h1>
+        <h2 className="text-black text-2xl font-assistant font-semibold">
+          חפשו בין ה{courses.length} קורסים הזמינים ללמידה
+        </h2>
+      </div>
+     <SearchCourseHomePage/>
+      <Image src={Illustration} alt={""} />
+      <PopularCourses/>
+   </>
   );
 };
 

@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 import useUserStore from "@/app/_contexts/userContext";
 import { Loading } from "react-daisyui";
 import ErrorMessage from "../_component/ErrorMessage";
-import fdgd from '../../../../public/assets/default-course-image.png';
+import ReactQuill from "react-quill";
 
 interface ErrorResponse {
   message?: string;
@@ -18,12 +18,17 @@ const AddCoursePage: React.FC = () => {
   const { addCourse, initinalCourse } = useCoursesStore();
   const { addNewCourseProcess } = useUserStore();
   const [isDefaultImage, setIsDefaultImage] = useState(false);
+  const [editorValue,setEditorValue]=useState("")
   const [courseData, setCourseData] = useState<CourseData>({
     id: "",
     name: "",
     img_id: null,
     creationTimestamp: null,
     chapters: [],
+    subscribe_num: 0, 
+    description_sub_title: "", 
+    description: "תיאור ברירת מחדל ",
+    rate: 0, 
   });
   const [fileData, setFileData] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -59,6 +64,11 @@ const AddCoursePage: React.FC = () => {
       setFileData(null);
     }
   };
+  const handleEditorChange = (value:string) => {
+    console.log(value)
+    setEditorValue(value);
+    setCourseData({ ...courseData, description: value }); // Update the description field in courseData
+  };
 
   const handleSubmit = async () => {
     try {
@@ -70,13 +80,18 @@ const AddCoursePage: React.FC = () => {
         img_id: null,
         creationTimestamp: new Date(),
         chapters: [],
+        subscribe_num: courseData.subscribe_num,
+        description_sub_title: courseData.description_sub_title,
+        description: courseData.description,
+        rate: courseData.rate,
       };
-
+  
       let formData = new FormData();
+      console.log(courseData.name)
       formData.append("course", JSON.stringify(courseToServer));
       formData.append("userId", user.id);
       formData.append("comments", courseData.name);
-      formData.append("fileTitle", fileData.name);
+      formData.append("fileTitle", courseData.name);
       formData.append("file", fileData, fileData.name);
       console.log(fileData)
       const response = await axios.post("/api/addCourse", formData, {
@@ -113,7 +128,24 @@ const AddCoursePage: React.FC = () => {
         onChange={(e) => setCourseData({ ...courseData, name: e.target.value })}
         className="p-2 w-full border rounded-md shadow-sm mb-4"
       />
-
+    {/* Textarea for description_sub_title */}
+    <label className="block text-gray-600 mb-2">{AddCourseTexts.description_course_card}</label>
+      <textarea
+        placeholder={AddCourseTexts.description_course_card}
+        value={courseData.description_sub_title}
+        onChange={(e) => setCourseData({ ...courseData, description_sub_title: e.target.value })}
+        className="p-2 w-full border rounded-md shadow-sm mb-4"
+      />
+  
+     
+      <div>
+        <label className="block text-gray-600 mb-2">{AddCourseTexts.description_course}</label>
+        <ReactQuill
+          value={editorValue}
+          onChange={handleEditorChange}
+          modules={{ toolbar: true }}
+        />
+      </div>
       {isDefaultImage ? (
         <div></div>
       ) : (
@@ -152,6 +184,6 @@ const AddCoursePage: React.FC = () => {
       )}
     </div>
   );
-};
+  };
 
 export default AddCoursePage;

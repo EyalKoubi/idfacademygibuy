@@ -22,6 +22,7 @@ interface SearchCourseProps{
   }) => {
     return (
       <Join>
+        <div className="bg-white flex w-full items-center justify-center p-4 rounded-md gap-5">
         <div>
           <div>
             <Input
@@ -34,14 +35,14 @@ interface SearchCourseProps{
         </div>
         <div className="flex flex-col"> 
           <Select
-            className="join-item" 
+            className="join-item btn flex-grow flex-shrink  bg-emerald-700 hover:bg-emerald-800 text-white" 
             onChange={(e) => setFilterType(e.target.value)}
           >
             <Select.Option value={""}>
-              Options
+              חיפוש לפי קטגוריה
             </Select.Option>
-            <Select.Option value={"name"}>Name</Select.Option>
-            <Select.Option value={"date"}>Date</Select.Option>
+            <Select.Option value={"name"}>שם קורס</Select.Option>
+            <Select.Option value={"date"}>תאריך יצירה</Select.Option>
           </Select>
           {filterType === "date" && (
             <div className="flex flex-row items-center">
@@ -69,7 +70,9 @@ interface SearchCourseProps{
             </div>
           )}
         </div>
+        </div>
       </Join>
+      
     );
                 }
   

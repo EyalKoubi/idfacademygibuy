@@ -86,10 +86,14 @@ export interface UserCoursesTable{
 }
 
 export interface CourseTable {
-  id: GeneratedAlways<string>; 
+  id: GeneratedAlways<string>;
   name: string;
-  img_id: string; 
-  creationTimestamp: Date; 
+  img_id: string | null;
+  creationTimestamp: Date | null;
+  subscribe_num: number;
+  description_sub_title: string;
+  description: string;
+  rate: number;
 }
 
 export interface UserRequestsCourseTable {

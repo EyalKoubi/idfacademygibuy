@@ -50,21 +50,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
     }
   };
   useEffect(()=>{console.log("userCourseRequest",userRequestsCourses)},[userRequestsCourses])
-  const registerCourse=async ()=> {
-    
-    let formData = new FormData();
-    formData.append("courseId", course.id);
-    formData.append("userId",user.id);
-    const response=await axios.post("/api/registerCourse",formData)
-    if(response.data?.message){
-      setRegistererror("problem to register please try again")
-    }
-    else{
-      addUserRequestsCourse(user,course)
-      setIsRequested(true)
-    }
-  } 
-
+  
 return (
   <div className={`max-w-sm rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-slate-200 m-4 text-right ${isPresentMode ? 'h-4/5' : ''}`}>
     <div className="p-4">
@@ -83,19 +69,20 @@ return (
       {course.creationTimestamp && (
         <p className="text-sm text-gray-500">{CourseCardTexts.createOn} {formatDate(course.creationTimestamp)}</p>
       )}
-      {(!isRegister && !isRequested) && <button className="p-2 ml-1 bg-pink-500 text-white rounded hover:bg-yellow-600"onClick={registerCourse}>{LoginTexts.register}</button>}
-      {isRequested && <p className="text-blue-700">{CourseCardTexts.requestContinueToApprove}</p>}
-      {(isRegister && isPresentMode) && (
-        <div><button className="p-2 ml-1 bg-green-500 text-white rounded hover:bg-green-600"  onClick={handleContinueButtonClick}>{HomeTexts.continueStanding}</button> 
+
           <button  className="p-2 ml-1 bg-yellow-500 text-white rounded hover:bg-yellow-600" onClick={() => { router.push(`myCourses/${course.id}/chapters`) }}>{editTexts.showCourse}</button>
-         
+          {(isRegister && isPresentMode) && ( 
+            <div>
+              <button className="p-2 ml-1 bg-green-500 text-white rounded hover:bg-green-600"  onClick={handleContinueButtonClick}>{HomeTexts.continueStanding}</button> 
           <div className="flex flex-col items-end gap-y-2">
               <ProgressBar value={calculateProgress(course, currCourseProgress?.contentProgress)} />
           </div>
-        </div>
+          </div>
+
       )}
     </div>
   </div>
 );
 };
+
 export default CourseCard;

@@ -30,13 +30,28 @@ export type ChapterData = {
   brief: string;
   subjects: SubjectData[];
 };
+
+// export type CourseData = {
+//   id: string;
+//   name: string;
+//   img_id:ContentData|null;
+//   creationTimestamp:Date|null;
+//   chapters: ChapterData[];
+//   subscribe_num:number;
+// };
+
 export type CourseData = {
-  id: string;
-  name: string;
-  img_id:ContentData|null;
-  creationTimestamp:Date|null;
-  chapters: ChapterData[];
+  id: string;                    // Unique identifier for the course.
+  name: string;                  // The name or title of the course.
+  img_id: ContentData | null;    // An optional reference to the course's image.
+  creationTimestamp: Date | null; // The date and time when the course was created (nullable if unknown).
+  subscribe_num: number;         // The number of users who have subscribed to this course.
+  description_sub_title: string;            // Name of the primary course instructor.
+  description: string;     // Names of sub-instructors, if any.
+  rate: number;                  // The average rating of the instructor(s).
+  chapters: ChapterData[];  
 };
+
 
 export type UserRequestsCourse={
   user:any;

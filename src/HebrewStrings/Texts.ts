@@ -13,7 +13,11 @@ export const LoginTexts = {
   register: "הרשמה",
 };
 
-export const SidebarText = {
+
+export const NavBarText={
+  AdminMenu: "לתפריט ניהול",
+  backToUserMenu:"חזרה לתפריט משתמש",
+  startLearning:"התחל ללמוד",
   homePage: "דף הבית",
   userArea: "אזור אישי",
   courseCatalog: "קטלוג קורסים",
@@ -23,8 +27,7 @@ export const SidebarText = {
   myCourses: "הקורסים שלי",
   aboutUs: "אודותינו",
   logout: "התנתק",
-};
-
+}
 export const UserTexts = {
   userWelcome: " ברוכים הבאים",
   userQuis: "שאלות",
@@ -44,6 +47,8 @@ export const HomeTexts = {
 export const AddCourseTexts = {
   courseName: "שם קורס",
   courseSubmit: "הוסף קורס",
+  description_course_card:"התיאור שיופיע בכרטיס הקורס ",
+  description_course:"תיאור הקורס באופן מלא:",
   addChapter: "הוספת פרק",
   chapter: {
     chapterName: "שם פרק",
@@ -67,8 +72,19 @@ export const AddCourseTexts = {
 export const searchCourseTexts={
   hideRegisterCourses:"הסתר קורסים שאתה רשום כבר ",
 }
+
+export const presentCourseDetailTexts={
+  descripitonOfCourse:"תיאור הקורס:",
+  rateOfCourse:"דירוג הקורס:",
+  subscribeNum:"מספר מינויים:",
+  chaptersOfCourse:"פרקי הקורס"
+}
 export const editTexts = {
-  rename: "שנה שם",
+  edit: "ערוך",
+  courseDescription:"ערוך תיאור:",
+  descripiton:"תיאור",
+  courseDescriptionSubTitle:"ערוך תקציר הקורס",
+  descriptionSubTitleCourse:"תקציר הקורס",
   title:"כותרת",
   courses: "קורסים",
   chapters: "פרקים",
