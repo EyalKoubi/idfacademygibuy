@@ -11,7 +11,7 @@ const Page = () => {
     const [pendingRegistrations, setPendingRegistrations] = useState<User[]>([]);
     const [selectedCourse, setSelectedCourse] = useState<{[userId: string]: string}>({});
     const {userRequestsCourses,removeRequestUserCourse}=useUserRequestCourseStore();
-    const {user,addUserCourse}=useUserStore();
+    const {user,userCourses,addUserCourse}=useUserStore();
 
     const answerRequestCourse = (userCurrent:any,course:CourseData,answerType:string) => {
         const formData=new FormData();
@@ -23,6 +23,7 @@ const Page = () => {
                 removeRequestUserCourse(userCurrent,course)
                 if(userCurrent.id===user.id&&answerType==="Accept")//if we approve request to my self
                     addUserCourse(course)
+                    console.log(userCourses)
             })
             .catch(error => console.error(error));
     };

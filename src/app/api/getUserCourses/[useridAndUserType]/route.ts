@@ -18,7 +18,7 @@ export async function GET(req: NextRequest, context: getUserCourseProps) {
     const stringsolited= useridAndUserType.split('|')
     const userid=stringsolited[0]
     const userType=parseInt(stringsolited[1],10)
-    let result
+    console.log(userid,userType)
     const coursesIds = await getUserCoursesIds(userid, userType);
     if(userType===4){
       const coursesProgress=await getUserCourseProgress(userid)
@@ -26,6 +26,7 @@ export async function GET(req: NextRequest, context: getUserCourseProps) {
         coursesIds,
         coursesProgress,
       }
+      console.log(data)
       return NextResponse.json(data);
     }
     else{

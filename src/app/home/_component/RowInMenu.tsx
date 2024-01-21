@@ -24,12 +24,16 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon }) => {
   const router = useRouter();
  
   const getCoursesByIds=(ids:string[])=>{
-    return courses.filter((course)=>{ids.includes(course.id)})
+    return courses.filter((course)=>ids.includes(course.id))
   }
-
+  // const getCoursesByIds = (ids:string[]) => {
+  //   console.log(courses);
+  //   return courses.filter((course) => ids.includes(course.id));
+  // };
   const requestHandlerUserCourses=async(formData:FormData,rowInfo:string)=>{
     console.log("reach to user requests")
     const userType:string=rowInfo===NavBarText.myCourses? "4":"1";
+    console.log(userType)
     formData.append("userType", userType);
     // const requestString="/api/getUserCourseRequests/"+user.id+"|"+userType
     const response=await axios.get("/api/getUserCourses/"+user.id+"|"+userType);
@@ -37,7 +41,11 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon }) => {
       console.log("error to fetch data")
     }
     else{
+      console.log(response.data)
       if(userType==="4"){
+        console.log(response.data)
+        const courses=await getCoursesByIds(response.data.coursesIds)
+        console.log(courses)
         setUserCourses(getCoursesByIds(response.data.coursesIds))
         setCourseProgress(response.data.coursesProgress)
       }
