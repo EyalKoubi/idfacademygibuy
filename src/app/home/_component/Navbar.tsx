@@ -79,9 +79,9 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
     <div className="flex justify-center mx-4 gap-10 items-center w-full">
   
       {menu.slice() 
-    .reverse().map(({ id, href, rowInfo, icon,getRequest }) => {
+    .reverse().map(({ id, href, rowInfo, icon}) => {
         return (
-            <RowInMenu href={href} rowInfo={rowInfo}  getRequest={getRequest} icon={icon} />
+            <RowInMenu href={href} rowInfo={rowInfo}  icon={icon} />
         );
       })}
     </div>
@@ -100,8 +100,9 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
         {isAdminMenu ? NavBarText.backToUserMenu : NavBarText.AdminMenu}
       </Button>}  
           <button className="btn ml-2 bg-emerald-700 hover:bg-emerald-800 text-sm text-white px-5 rounded-md font-assistant" >
-          <RowInMenu href={"/home/myCourses"} rowInfo={ NavBarText.myCourses} getRequest={undefined} icon={ <ContinueStudyingIcon /> } />
+          <RowInMenu href={"/home/myCourses"} rowInfo={ NavBarText.myCourses}  icon={ <ContinueStudyingIcon /> } />
           </button>
+          <HamburgerMenu />
         </div>
      
       </nav>

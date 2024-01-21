@@ -22,7 +22,8 @@ const PresentCourseDetails: React.FC<PresentCourseDetailsProps> = ({course}) => 
     //const course= courses.find((course)=>course.id===courseid)
     const chaptersToPresent=course?course.chapters:[];
     useEffect(()=>{
-
+      console.log(course)
+      console.log(chaptersToPresent)
       setIsRegister((userCourses.some(userCourse => userCourse.id === course?.id)))
       setIsRequested((userRequestsCourses.some(userrequestCourse => (userrequestCourse.course?.id ===course?.id)&&(userrequestCourse.user.id === user.id))))
     },[course])

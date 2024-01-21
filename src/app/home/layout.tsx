@@ -9,7 +9,9 @@ import useCoursesStore from "../_contexts/courseContext";
 import { User } from "next-auth";
 import useUserStore from "../_contexts/userContext";
 import useUserRequestCourseStore from "../_contexts/requestsCoursesContext";
-
+import { Loading } from "react-daisyui";
+import Illustration from "@/app/assets/Education-illustration.svg"
+import Image from "next/image"; 
 const inter = Inter({ subsets: ["latin"] });
 
 enum Users {
@@ -28,7 +30,8 @@ export default function RootLayout({
   const {user,userCourses,adminCourses,coursesProgress, setUser,setUserCourses,setAdminCourses,setCourseProgress}=useUserStore();
   const {setUserRequestsCourse}=useUserRequestCourseStore()
 
-  
+  const [isLoading, setIsLoading] = useState(true);
+
   const getData=async()=>{
     const response=await axios.get("/api/getData/")
     if(response.data.message){
@@ -37,10 +40,7 @@ export default function RootLayout({
     else{
       setUser(response.data.user)
       setCourses(response.data.courses)
-      // setUserCourses(response.data.userCourses)
-      // setAdminCourses(response.data.adminCourses)
-      // setUserRequestsCourse(response.data.userRequestsCourse)
-      // setCourseProgress(response.data.userCourseProgress)
+      setIsLoading(false)
 
       console.log("data from db :",response.data)
     }
@@ -48,17 +48,28 @@ export default function RootLayout({
   useEffect(() => {
     getData();
   }, []);
+
   return (
     <html>
       <body className={inter.className}>
         <div>
-        <main className="min-h-screen bg-gradient-to-b from-sky-100 to-transparent">
-      <div className="flex flex-col justify-between items-center gap-10">
-          {user&&<Navbar  userType={Users.Admin}/>}
-            {children}
-            {/* need to fix */}
-            
-          </div>
+          <main className="min-h-screen bg-gradient-to-b from-sky-100 to-transparent">
+              {isLoading ? (
+                // Loading indicator while data is being fetched
+                <div  className="flex flex-col justify-between items-center gap-10">
+                  <div className="m-8">
+               <Loading size="lg"/>
+               </div>
+               <Image src={Illustration} alt={""} />
+               </div>
+              ) : (
+                <div className="flex flex-col justify-between items-center gap-10">
+                {user&&<Navbar  userType={Users.Admin}/>}
+                {/* {user&&<Sidebar userType={Users.Admin}/>} */}
+                  {children}
+                  
+                </div>
+             )}
           </main>
         </div>
       </body>

@@ -1,4 +1,5 @@
 "use client"
+import "react-quill/dist/quill.snow.css";
 import { FormEvent, useState } from "react";
 import { AddCourseTexts, adminTexts } from "@/HebrewStrings/Texts";
 import { CourseData, ContentData } from "@/app/types";
@@ -101,9 +102,10 @@ const AddCoursePage: React.FC = () => {
         addCourse(response.data);
         addAdminCourse(response.data);
         addNewCourseProcess(response.data);
-        setLoading(false);
-        router.push(`/home/courseManager/${response.data.id}`);
         await setCourseData(response.data);
+        router.push(`/home/courseManager/${response.data.id}`);
+        setLoading(false);
+        //await setCourseData(response.data);
       } else {
         setError(response.data?.message);
         setLoading(false);
