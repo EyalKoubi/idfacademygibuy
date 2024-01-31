@@ -23,7 +23,6 @@ export const findFirstUnwatched = (course: CourseData, router: any, coursesProgr
 
   const courseProgressById = coursesProgress?.find(cp => cp.courseId === course.id);
 
-  // Looping through each chapter and subject
   outerLoop:
   for (const chapter of course.chapters) {
     for (const subject of chapter.subjects) {
@@ -48,6 +47,8 @@ export const findFirstUnwatched = (course: CourseData, router: any, coursesProgr
 
   return firstUnwatchedChapterId !== '' && firstUnwatchedSubjectId !== '' && firstUnwatchedContentId !== '';
 }
+
+
  export function updateContentProgress(updatedContentProgress:ContentProgress[], subjectId:string, chapterId:string,contentId:string) {
     let found = false;
 

@@ -17,42 +17,27 @@ interface SidebarProps {
 }
 
 const Sidebar:React.FC<SidebarProps> = ({ userType }) => {
-  const { isMenuButtonPressed } = useAppState();
-  const [menu, setMenu] = useState<MenuRow[]>([]);
+  const { isMenuButtonPressed,isSmallScreen,isAdminMenu,setIsAdminMenu,onClickChangePremmisionMenu,menu,setMenu } = useAppState();
+
 
   const sidebarClass = isMenuButtonPressed ? "w-64" : "w-16";
 
   useEffect(() => {
-   
-    switch (userType) {
-      case Users.Admin:
-        setMenu(admin_menu);
-        break;
-      case Users.Creator:
-        setMenu(creator_menu);
-        break;
-      case Users.Editor:
-        setMenu(editor_menu);
-        break;
-      case Users.User:
-        setMenu(user_menu);
-        break;
-      default:
-    }
-  }, []);
+    setMenu(userType)
+  }, [userType]); 
 
   return (
-    <div className={`bg-gray-200 p-4 flex flex-col h-screen ${sidebarClass}`}>
-      <ul className="space-y-2">
+    <div className={` p-4 flex flex-col   min-h-screen ${sidebarClass}`}>
+      <ul className="space-y-6 ">
 
         {menu.map(({ id, href, rowInfo, icon }) => {
           return (
-            <RowInMenu key={id} href={href} rowInfo={rowInfo} icon={icon} />
+            <RowInMenu key={id} href={href} rowInfo={rowInfo} icon={icon} isSideBar={true} />
           );
         })}
       </ul>
       {isMenuButtonPressed && (
-        <div className="flex flex-row space-x-4 mb-4">
+        <div className="flex flex-row items-center space-x-4 mb-4">
           <div className="bg-red-300 px-4 py-2 rounded-md text-white">
             <button>back</button>
           </div>

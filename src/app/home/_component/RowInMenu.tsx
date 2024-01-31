@@ -14,17 +14,17 @@ interface RowInMenu {
   href: string;
   rowInfo: string;
   icon: React.ReactNode;
+  isSideBar:boolean;
 }
 
-const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon }) => {
+const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon,isSideBar }) => {
   const { isMenuButtonPressed } = useAppState();
   const {user,setUserCourses,setAdminCourses, setCourseProgress}=useUserStore();
   const {setUserRequestsCourse}=useUserRequestCourseStore();
   const {courses}=useCoursesStore();
   const router = useRouter();
- 
   const getCoursesByIds=(ids:string[])=>{
-    return courses.filter((course)=>ids.includes(course.id))
+    return courses.filter((course)=>ids.includes(course.id)) //if use filter without {} in the expresion
   }
   // const getCoursesByIds = (ids:string[]) => {
   //   console.log(courses);
@@ -96,12 +96,12 @@ const requestUserPremision=async()=>{
   };
 
   return (
-    <div>
+    <div className="flex items-center justify-end">
       <button  onClick={clickHandeller}>
         <div className="flex justify-between items-center space-x-1">  
-            <div className="min-w-32">
+           {((isSideBar&&isMenuButtonPressed)||!isSideBar) &&<div className="min-w-32">
               <i className="fas fa-home"></i> {rowInfo}
-            </div>
+            </div>}
            {icon}
         </div>
       </button>

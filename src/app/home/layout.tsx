@@ -12,6 +12,7 @@ import useUserRequestCourseStore from "../_contexts/requestsCoursesContext";
 import { Loading } from "react-daisyui";
 import Illustration from "@/app/assets/Education-illustration.svg"
 import Image from "next/image"; 
+import useAppState from "../_contexts/globalContext";
 const inter = Inter({ subsets: ["latin"] });
 
 enum Users {
@@ -31,7 +32,20 @@ export default function RootLayout({
   const {setUserRequestsCourse}=useUserRequestCourseStore()
 
   const [isLoading, setIsLoading] = useState(true);
+  const { setIsSmallScreen,isSmallScreen } = useAppState();
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsSmallScreen(window.innerWidth < 786);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+  
   const getData=async()=>{
     const response=await axios.get("/api/getData/")
     if(response.data.message){
@@ -48,31 +62,41 @@ export default function RootLayout({
   useEffect(() => {
     getData();
   }, []);
+  
 
   return (
-    <html>
-      <body className={inter.className}>
-        <div>
-          <main className="min-h-screen bg-gradient-to-b from-sky-100 to-transparent">
-              {isLoading ? (
-                // Loading indicator while data is being fetched
-                <div  className="flex flex-col justify-between items-center gap-10">
-                  <div className="m-8">
-               <Loading size="lg"/>
-               </div>
-               <Image src={Illustration} alt={""} />
-               </div>
-              ) : (
-                <div className="flex flex-col justify-between items-center gap-10">
-                {user&&<Navbar  userType={Users.Admin}/>}
-                {/* {user&&<Sidebar userType={Users.Admin}/>} */}
-                  {children}
-                  
+<html>
+  <body className={inter.className}>
+    <div className="relative">
+      <main className="min-h-screen bg-gradient-to-b from-sky-100 to-transparent">
+        {isLoading ? (
+          <div className="flex flex-col justify-between items-center min-w-full">
+            <div className="m-8">
+              <Loading size="lg" />
+            </div>
+            <Image src={Illustration} alt={""} />
+          </div>
+        ) : (
+          <div className="flex flex-col justify-between items-center gap-10 w-full">
+              <div className="absolute top-0 h-full max-w-64"></div>
+            {user && <Navbar userType={Users.Admin} />}
+            <div className="flex flex-row">
+              < >
+                {/* Main Content */}
+                {children}
+              </>
+              {user &&isSmallScreen&& (
+                <div className="absolute top-32 right-0 h-full max-w-64">
+                  {/* Sidebar */}
+                  <Sidebar userType={Users.Admin} />
                 </div>
-             )}
-          </main>
-        </div>
-      </body>
-    </html>
+              )}
+            </div>
+          </div>
+        )}
+      </main>
+    </div>
+  </body>
+</html>
   );
 }

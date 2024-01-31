@@ -51,7 +51,7 @@ const SearchCourseHomePage = () => {
   );
   return (
     <div className="flex flex-col">
-      <div className="bg-white flex flex-col w-5/5 items-center justify-center p-4 rounded-md gap-5 relative">
+      <div className="bg-white flex flex-col w-72 items-center justify-center p-4 rounded-md gap-5 relative">
         <div className="flex flex-col w-full text-sm rounded-md">
           <div className="relative">
             <input
@@ -65,29 +65,35 @@ const SearchCourseHomePage = () => {
           </div>
         </div>
       </div>
-      {suggestions.length > 0 && (
-        <div className="bg-white border text-right border-gray-300 w-60 rounded-lg shadow-lg mt-1 left-0"> {/* Adjust positioning here */}
-          <ul>
-            {suggestions.map((suggestionCourse) => (
-              <li key={suggestionCourse.id}>
-                <button
-                  onClick={() => {
-                    setSearchQuery(suggestionCourse.name);
-                    setSuggestions([]);
-                    handleSearch(suggestionCourse);
-                  }}
-                >
-                        <div className="flex items-center">
-                    
-                      <span className="ml-2">{suggestionCourse.name}</span>
-                      {SearchIcon}
-                    </div>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      { suggestions.length > 0 && (
+  <div className="relative">
+    <div className="bg-white border text-right border-gray-300 w-60 rounded-lg shadow-lg mt-1 left-0 absolute">
+      <ul>
+        {suggestions.map((suggestionCourse) => (
+          <li key={suggestionCourse.id} className="border hover:border-black">
+            <button
+              onClick={() => {
+                setSearchQuery(suggestionCourse.name);
+                setSuggestions([]);
+                handleSearch(suggestionCourse);
+              }}
+            >
+              <div className="flex items-center ">
+               < div className="mr-2">
+                <span >{suggestionCourse.name}</span>
+                </div>
+                <div>
+                {SearchIcon}
+                </div>
+              </div>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

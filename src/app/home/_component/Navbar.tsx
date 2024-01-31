@@ -25,88 +25,63 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ userType }) => {
-  const { isMenuButtonPressed } = useAppState();
-  const [menu, setMenu] = useState<MenuRow[]>([]);
-  const [isAdminButton,setIsAdminButton]=useState(false);
-  const [isAdminMenu,setIsAdminMenu]=useState(false)
+  const {initialUserType,setInitialUserType, isMenuButtonPressed,isSmallScreen,isAdminMenu,setIsAdminMenu,onClickChangePremmisionMenu,menu,setMenu } = useAppState();
+
   const router=useRouter()
-  const onClickChangePremmisionMenu=()=>{
-    setIsAdminMenu(!isAdminMenu)
-    const bool=!isAdminMenu
-    if(bool){
-      setMenu(admin_menu);
-    }
-    else{
-      setMenu(user_menu);
-    }
-  }
+
+
   useEffect(() => {
-    setIsAdminButton(false)
-    switch (userType) {
-      case Users.Admin:
-        setIsAdminButton(true)
-        setMenu(user_menu);
-        break;
-      case Users.Creator:
-        //setMenu(creator_menu);
-        break;
-      case Users.Editor:
-       // setMenu(editor_menu);
-        break;
-      case Users.User:{
-        setIsAdminButton(false);
-        setMenu(user_menu);
-        break;
-      }
-      default:
-        setMenu([]); // Provide a default case to handle unexpected values
-        break;
-    }
+  
+    setMenu(userType)
   }, [userType]); 
+
+    useEffect(() => {
+      setInitialUserType(userType)
+  }, []); 
 
  // const sidebarClass = isMenuButtonPressed ? "w-64" : "w-16";
 
-  return (
-    <nav className="flex justify-evenly items-center w-full py-5 ">
-    <div className="flex items-center mx-3 w-full ">
+ return (
+  <nav className="flex justify-between items-center w-full py-5 ">
+    <div className="flex items-center mx-3">
       <a href="/home" className="text-slate-900 text-4xl font-leagueGothic">
         <span>IDF</span>
         <span className="text-emerald-700">A</span>
       </a>
     </div>
+    {!isSmallScreen && (
+  <div className="flex justify-center mx-4 gap-10 items-center flex-grow">
+    {menu.slice().reverse().map(({ id, href, rowInfo, icon }) => {
+      return <RowInMenu href={href} rowInfo={rowInfo} icon={icon} isSideBar={false} />;
+    })}
+  </div>
+)}
 
-   
-    <div className="flex justify-center mx-4 gap-10 items-center w-full">
-  
-      {menu.slice() 
-    .reverse().map(({ id, href, rowInfo, icon}) => {
-        return (
-            <RowInMenu href={href} rowInfo={rowInfo}  icon={icon} />
-        );
-      })}
-    </div>
-    <div>
- 
-
-      </div>
-      <div className="min-w-fit">
-    <a onClick={()=>router.push("/home/userArea")}>
-      <Avatar className="ml-3 w-12 h-12 rounded-full overflow-hidden" src={AvatarImg.src}  />
-      <span className="text-sm">לאיזור אישי</span>
+    <div className="min-w-fit ml-auto">
+      <a onClick={() => router.push("/home/userArea")}>
+        <Avatar className="w-12 h-12 rounded-full overflow-hidden" src={AvatarImg.src} />
+        <span className="text-sm">לאיזור אישי</span>
       </a>
     </div>
-      <div className="flex items-center w-full justify-end">
-      {isAdminButton&& <Button onClick={onClickChangePremmisionMenu}>
-        {isAdminMenu ? NavBarText.backToUserMenu : NavBarText.AdminMenu}
-      </Button>}  
-          <button className="btn ml-2 bg-emerald-700 hover:bg-emerald-800 text-sm text-white px-5 rounded-md font-assistant" >
-          <RowInMenu href={"/home/myCourses"} rowInfo={ NavBarText.myCourses}  icon={ <ContinueStudyingIcon /> } />
-          </button>
-          <HamburgerMenu />
+
+    <div className="flex items-center ">
+      {initialUserType && (
+        <div className="mx-2">
+        <Button onClick={()=>onClickChangePremmisionMenu(isAdminMenu)}>
+          {isAdminMenu ? NavBarText.backToUserMenu : NavBarText.AdminMenu}
+        </Button>
         </div>
-     
-      </nav>
-  );
+      )}
+      <div className="flex-shrink-0">
+        <button className="btn bg-emerald-700 hover:bg-emerald-800 text-sm text-white px-5 rounded-md font-assistant">
+          <RowInMenu href={"/home/myCourses"} rowInfo={NavBarText.myCourses} icon={<ContinueStudyingIcon />} isSideBar={false} />
+        </button>
+      </div>
+      {isSmallScreen && <HamburgerMenu />}
+    </div>
+  </nav>
+);
+
 };
 
 export default Navbar;

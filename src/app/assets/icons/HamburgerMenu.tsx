@@ -7,6 +7,7 @@ const HamburgerMenu = () => {
     <button
       onClick={() => {
         setIsMenuButtonPressed(!isMenuButtonPressed);
+        console.log(isMenuButtonPressed)
       }}
     >
       <div>
