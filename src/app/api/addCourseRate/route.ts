@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { CourseSchema, handleError } from "@/utils/validation";
 import { CourseData } from "@/app/types";
 import { editCourse } from "@/app/_controllers/CourseController";
+import { updateUserCourseVote } from "@/app/_controllers/CourseUserController";
 
 interface CourseRequest extends NextRequest {
   name?: string;
@@ -11,11 +12,13 @@ interface CourseRequest extends NextRequest {
 
 export async function POST(req: CourseRequest, res: NextApiResponse) {
   const data = await req.formData();
-  if (!data.get("courseEdited"))
+  if (!data.get("course"))
     return NextResponse.json({ message: "There is no course input!" });
   const courseRenameProps:CourseData = JSON.parse(
-    data.get("courseEdited") as string
+    data.get("course") as string
   );
+  const userId=data.get("userId") as string
+  const Newrate =data.get("rate") as string as unknown as number
   if(courseRenameProps.img_id){
   const courseToDb={
     id: courseRenameProps.id,
@@ -28,6 +31,9 @@ export async function POST(req: CourseRequest, res: NextApiResponse) {
     rate:courseRenameProps.rate,
     num_rates:courseRenameProps.num_rates       
   }
-  return editCourse(courseToDb);
+  console.log(courseRenameProps.id,userId)
+  updateUserCourseVote(courseRenameProps.id,userId)
+   
+  return editCourse(courseToDb,Newrate);
   }
 }

@@ -6,39 +6,41 @@ import { CourseSchema, handleError } from "@/utils/validation";
 import { ContentData, CourseData } from "@/app/types";
 import { deleteChapter } from "@/app/_controllers/ChapterController"; 
 import { deleteContent, getContent } from "./ContentController";
-
-interface CourseCreationData {
+interface CourseDataWithoutChaptersProps{
+  id: string;
   name: string;
-  img_id: ContentData;
-  creationTimestamp: Date;
+  img_id: string;
+  creationTimestamp: Date | null;
   subscribe_num: number;
   description_sub_title: string;
   description: string;
   rate: number;
+  num_rates:number;
+}
+interface CourseCreationData  {
+  name: string;
+  img_id: ContentData;
+  creationTimestamp: Date | null;
+  subscribe_num: number;
+  description_sub_title: string;
+  description: string;
+  rate: number;
+  num_rates:number;
   userId: string;
 }
-interface CourseDataWithoutChaptersProps{
-    id: string;
-    name: string;
-    img_id: string | undefined;
-    creationTimestamp: Date | null;
-    subscribe_num: number;
-    description_sub_title: string;
-    description: string;
-    rate: number;
-}
+
 
 export async function createCourse(courseData: CourseCreationData) {
   try {
-    const { name, img_id, creationTimestamp,subscribe_num,description_sub_title,description,rate, userId } = courseData;
+    const { name, img_id, creationTimestamp,subscribe_num,description_sub_title,description,rate,num_rates, userId } = courseData;
     
-    const courseToDb = { name, img_id:img_id.id, creationTimestamp ,subscribe_num,description_sub_title,description,rate};
+    const courseToDb = { name, img_id:img_id.id, creationTimestamp ,subscribe_num,description_sub_title,description,rate,num_rates};
     CourseSchema.parse(courseToDb);
     
     const newCourse = await db
       .insertInto("Course")
       .values(courseToDb)
-      .returning(["id", "name", "img_id", "creationTimestamp","subscribe_num","description_sub_title","description","rate"])
+      .returning(["id", "name", "img_id", "creationTimestamp","subscribe_num","description_sub_title","description","rate","num_rates"])
       .executeTakeFirstOrThrow();
 
     await db
@@ -55,6 +57,7 @@ export async function createCourse(courseData: CourseCreationData) {
       description_sub_title,
       description,
       rate,
+      num_rates,
       chapters: []
     };
 
@@ -157,6 +160,7 @@ export async function getAllCourses():Promise<CourseData[]|undefined> {
       description_sub_title:course.description_sub_title,
       description:course.description,
       rate:course.rate,
+      num_rates:course.num_rates,
       chapters: chapters,
     });
     }
@@ -252,15 +256,19 @@ export async function getAllCourses():Promise<CourseData[]|undefined> {
 //     return undefined;
 //   }
 // }
-export async function editCourse(courseData: CourseDataWithoutChaptersProps) {
+export async function editCourse(courseData: CourseDataWithoutChaptersProps,rate?: number) {
     try {
       CourseSchema.parse(courseData);
-  
+      if(courseData.id){
+
+      let newRate=rate?(courseData.rate*courseData.num_rates+rate)/(courseData.num_rates+1):courseData.rate
+      let newNumRate=rate?courseData.num_rates+1:courseData.num_rates
+      console.log("the new rate ", newRate)
       const updatedCourse = await db
         .updateTable("Course")
-        .set({ name: courseData.name,description_sub_title:courseData.description_sub_title,description:courseData.description })
+        .set({ name: courseData.name,description_sub_title:courseData.description_sub_title,description:courseData.description,rate:newRate,num_rates:newNumRate })
         .where("id", "=", courseData.id)
-        .returning(["id", "name", "img_id", "creationTimestamp","subscribe_num","description_sub_title","description","rate"])
+        .returning(["id", "name", "img_id", "creationTimestamp","subscribe_num","description_sub_title","description","rate","num_rates"])
         .executeTakeFirstOrThrow();
   
       const contentImage = getContent(updatedCourse.img_id)
@@ -274,8 +282,13 @@ export async function editCourse(courseData: CourseDataWithoutChaptersProps) {
         description_sub_title: updatedCourse.description_sub_title,
         description: updatedCourse.description,
         rate: updatedCourse.rate,
-
+        num_rates:updatedCourse.num_rates,
+      
       });
+    }
+    else{
+      throw new Error("you try to update without gave me specific course")
+    }
     } catch (error) {
       console.error("Error in editCourse:", error);
       return handleError(error);

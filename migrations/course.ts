@@ -15,6 +15,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   .addColumn("description_sub_title", "text")
   .addColumn("description", "text")
   .addColumn("rate","float4")
+  .addColumn("num_rates","integer")
   .addUniqueConstraint("unique_course_name", ["name"])
   .execute();
   await db.schema
@@ -192,6 +193,9 @@ await db.schema
       .addColumn("lastSubjectId", "uuid")
       .addColumn("firstUnwatchedContentId","uuid")
       .addColumn("contentProgress", "jsonb") // JSONB for PostgreSQL, adjust according to your DBMS
+      .addColumn("already_vote", "boolean", (col) =>
+          col.defaultTo(false) // Assuming by default, a user has not voted.
+      )
       .addUniqueConstraint("unique_user_course_progress", ["userId", "courseId"])
       .execute();
 

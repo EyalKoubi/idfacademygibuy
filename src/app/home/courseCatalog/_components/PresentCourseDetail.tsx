@@ -7,23 +7,54 @@ import useUserStore from "@/app/_contexts/userContext";
 import useUserRequestCourseStore from "@/app/_contexts/requestsCoursesContext";
 import axios from "axios";
 import ErrorMessage from "../../_component/ErrorMessage";
+import CustomRating from "../../_component/rateing";
 interface  PresentCourseDetailsProps{
         course:CourseData;
 }
 const PresentCourseDetails: React.FC<PresentCourseDetailsProps> = ({course}) => {
-    const { courses } = useCoursesStore();
-    const {user,userCourses,adminCourses,addUserCourse,coursesProgress}=useUserStore();
+    const { courses,editCourse } = useCoursesStore();
+    const {user,userCourses,adminCourses,addUserCourse,coursesProgress,setCourseProgress}=useUserStore();
     const {userRequestsCourses,addUserRequestsCourse}=useUserRequestCourseStore();
     const [isRegister,setIsRegister]=useState(false)
     const [registererror,setRegistererror]=useState('')
     const [isRequested,setIsRequested]=useState(false)
-
-
+    const [rating, setRating] = useState(0);
+    const [currProggress,setCurrProgress]=useState(coursesProgress.find((courseProgress)=>courseProgress.courseId===course.id))
+    const handleRatingChange = (newRating: number) => {
+      setRating(newRating);
+      console.log(rating)
+    };
+    const submitRating = async () => {
+      try {
+        let formData = new FormData();
+        formData.append("course", JSON.stringify(course));
+        formData.append("rate", rating.toString());
+        formData.append("userId", user.id);
+        const response = await axios.post("/api/addCourseRate",formData, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        console.log(response.data)
+        if (response.data?.id) {
+          editCourse(response.data)
+          let newProggress=currProggress
+          if(newProggress){
+          newProggress.already_vote=true
+          setCourseProgress(newProggress)
+          setCurrProgress(newProggress)
+          }
+        }
+        else{
+          setRegistererror("לא התבצע עדכון הדירוג נסה שנית ")
+        }
+      } catch (error) {
+        console.error("Error submitting rating:", error);
+      }
+    };
+  
     //const course= courses.find((course)=>course.id===courseid)
     const chaptersToPresent=course?course.chapters:[];
     useEffect(()=>{
       console.log(course)
-      console.log(chaptersToPresent)
       setIsRegister((userCourses.some(userCourse => userCourse.id === course?.id)))
       setIsRequested((userRequestsCourses.some(userrequestCourse => (userrequestCourse.course?.id ===course?.id)&&(userrequestCourse.user.id === user.id))))
     },[course])
@@ -70,6 +101,14 @@ const registerCourse=async ()=> {
           <span>{presentCourseDetailTexts.rateOfCourse}</span>
           {course.rate}
         </div>
+        {(isRegister&& !currProggress?.already_vote&&<div className="bg-white ">
+       <button className="p-2 ml-1 bg-green-500 text-white rounded hover:bg-yellow-600" onClick={submitRating}>
+            Submit Rating
+          </button>
+          <CustomRating value={rating} rating={rating} setRating={setRating} />
+         
+          <span>{presentCourseDetailTexts.rateThisCourse}</span>
+        </div>)}
                 </>
       )}
       <br/>

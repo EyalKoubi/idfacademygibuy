@@ -48,7 +48,8 @@ export type CourseData = {
   subscribe_num: number;         // The number of users who have subscribed to this course.
   description_sub_title: string;            // Name of the primary course instructor.
   description: string;     // Names of sub-instructors, if any.
-  rate: number;                  // The average rating of the instructor(s).
+  rate: number;
+  num_rates:number;                  // The average rating of the instructor(s).
   chapters: ChapterData[];  
 };
 
@@ -81,6 +82,7 @@ export type UserCourseProgress = {
   lastSubjectId: string;
   firstUnwatchedContentId:string;
   contentProgress: ContentProgress[];
+  already_vote:boolean;
 };
 export type ContentProgress = {
   chapterId:string;

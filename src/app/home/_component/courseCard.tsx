@@ -55,15 +55,7 @@ return (
   <div className={`max-w-sm rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-slate-200 m-4 text-right ${isPresentMode ? 'h-4/5' : ''}`}>
     <div className="p-4">
       <div className="font-bold text-xl mb-2">{course.name}</div>
-      <div className="text-gray-700 text-base">
-        <ul>
-          {course.chapters?.map((chapter, index) => (
-            <li key={index} className="mb-1">
-              {chapter.name}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <div>{course.description_sub_title}</div>
       {course.img_id && <MediaViewer content={course.img_id} isPresentMode={false} />}
       {<ErrorMessage message={registererror} warning={true}/>}
       {course.creationTimestamp && (

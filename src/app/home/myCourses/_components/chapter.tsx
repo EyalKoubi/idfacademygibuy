@@ -21,6 +21,9 @@ const Chapter: React.FC<ChapterProps> = ({ chapter, courseid,isRegister,setRegis
     }
     else{
       setRegistererror("אתה עדייו לא רשום קורס")
+      setTimeout(() => {
+        setRegistererror("")
+      }, 3);
     }
   };
 

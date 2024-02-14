@@ -94,6 +94,7 @@ export interface CourseTable {
   description_sub_title: string;
   description: string;
   rate: number;
+  num_rates:number;
 }
 
 export interface UserRequestsCourseTable {
@@ -107,7 +108,8 @@ export interface UserCourseProgressTable {
   lastChapterId: string|null;      
   lastSubjectId: string|null;
   firstUnwatchedContentId:string|null ;    
-  contentProgress: string;  
+  contentProgress: string; 
+  already_vote:boolean;
 }
 export interface Database {
   Account: Account; 

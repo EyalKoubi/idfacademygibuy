@@ -15,6 +15,7 @@ interface UpdateProcessRequest extends NextRequest {
     lastSubjectId?:string;
     firstUnwatchedContentId?:string;
     contentProgress?:string;
+    already_vote?:boolean
   }
   
   export async function POST(req: UpdateProcessRequest, res: NextApiResponse) {
@@ -26,7 +27,7 @@ interface UpdateProcessRequest extends NextRequest {
     const lastSubjectId = data.get("lastSubjectId") as string;
     const firstUnwatchedContentId = data.get("firstUnwatchedContentId") as string;
     const contentProgress = data.get("contentProgress") as string;
-  
+    const already_vote=data.get("already_vote") as string as unknown as boolean
     return await updateUserCourseProgress(
       {
         userId,
@@ -35,6 +36,7 @@ interface UpdateProcessRequest extends NextRequest {
         lastSubjectId,
         firstUnwatchedContentId,
         contentProgress,
+        already_vote
       }
     );
   }

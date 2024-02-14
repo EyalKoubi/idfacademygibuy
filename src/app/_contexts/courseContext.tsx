@@ -65,6 +65,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
     description_sub_title:"",
     description:"",
     rate:0,
+    num_rates:0,
     chapters: [],
   },
   addCourse: (course) =>
@@ -135,6 +136,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             description_sub_title:curCourse.description_sub_title,
             description:curCourse.description,
             rate:curCourse.rate,
+            num_rates:curCourse.num_rates,
             chapters: newChapters,
           };
         }
@@ -167,6 +169,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             description_sub_title:curCourse.description_sub_title,
             description:curCourse.description,
             rate:curCourse.rate,
+            num_rates:curCourse.num_rates,
             chapters: updatedChapter,
           };
         }
@@ -202,6 +205,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             description_sub_title:curCourse.description_sub_title,
             description:curCourse.description,
             rate:curCourse.rate,
+            num_rates:curCourse.num_rates,
             chapters: updatedChapters,
           };
         }
@@ -252,6 +256,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             description_sub_title:curCourse.description_sub_title,
             description:curCourse.description,
             rate:curCourse.rate,
+            num_rates:curCourse.num_rates,
             chapters: newChapters,
           };
         }
@@ -273,6 +278,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             description_sub_title:curCourse.description_sub_title,
             description:curCourse.description,
             rate:curCourse.rate,
+             num_rates:curCourse.num_rates,
             chapters: curCourse.chapters,
           };
         return curCourse;
@@ -304,6 +310,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             description_sub_title:curCourse.description_sub_title,
             description:curCourse.description,
             rate:curCourse.rate,
+            num_rates:curCourse.num_rates,
             chapters: updatedChapter,
           };
         }
@@ -345,6 +352,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             description_sub_title:curCourse.description_sub_title,
             description:curCourse.description,
             rate:curCourse.rate,
+            num_rates:curCourse.num_rates,
             chapters: updatedChapters,
           };
         }
@@ -396,6 +404,7 @@ const useCoursesStore = create<CoursesState & CoursesActions>((set) => ({
             description_sub_title:curCourse.description_sub_title,
             description:curCourse.description,
             rate:curCourse.rate,
+            num_rates:curCourse.num_rates,
             chapters: newChapters,
           };
         }

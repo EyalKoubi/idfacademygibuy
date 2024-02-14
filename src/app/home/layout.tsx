@@ -80,7 +80,7 @@ export default function RootLayout({
           <div className="flex flex-col justify-between items-center gap-10 w-full">
               <div className="absolute top-0 h-full max-w-64"></div>
             {user && <Navbar userType={Users.Admin} />}
-            <div className="flex flex-row">
+            <div className="flex flex-col">
               < >
                 {/* Main Content */}
                 {children}

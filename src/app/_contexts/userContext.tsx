@@ -12,7 +12,8 @@ type CoursesActions = {
   setAdminCourses: (courses: CourseData[]) => void;
   deleteCourseFromUser: (course:CourseData)=>void;
   addNewCourseProcess: (course: CourseData) => void;
-  setCourseProgress: (coursesProgress: UserCourseProgress[])=>void;
+  setCoursesProgress: (coursesProgress: UserCourseProgress[])=>void;
+  setCourseProgress: (coursesProgress: UserCourseProgress)=>void;
   addAdminCourse:(course:CourseData)=>void;
   markContentAsWatched: (courseId: string, chapterId: string, subjectId: string, contentId: string) => void;
   ContentsSubjectStatus: (state:UserState & CoursesActions, courseId: string, chapterId: string, subjectId: string)=> ContentItemProgress[]|undefined;
@@ -36,9 +37,20 @@ const useUserStore = create<UserState & CoursesActions>((set) => ({
     state.adminCourses = courses;
     return { ...state };
   }),
-  setCourseProgress: (coursesProgress: UserCourseProgress[]) => set((state) => {
+  setCoursesProgress: (coursesProgress: UserCourseProgress[]) => set((state) => {
     state.coursesProgress = coursesProgress;
     return { ...state };
+  }),
+  setCourseProgress: (courseProgress: UserCourseProgress) => set((state) => {
+    const updatedCoursesProgress = state.coursesProgress.map((cp) => {
+      if (cp.courseId === courseProgress.courseId) {
+        // Update this courseProgress with the new values
+        return { ...cp, ...courseProgress };
+      }
+      return cp;
+    });
+
+    return { ...state, coursesProgress: updatedCoursesProgress };
   }),
   addUserCourse: (course: CourseData) => set((state) => ({
     ...state,
@@ -79,6 +91,7 @@ const useUserStore = create<UserState & CoursesActions>((set) => ({
       lastChapterId: '',
       lastSubjectId:'' ,
       firstUnwatchedContentId:'',
+      already_vote:false,
       contentProgress: []}],
   })),
 
@@ -114,6 +127,7 @@ const useUserStore = create<UserState & CoursesActions>((set) => ({
         lastChapterId: course.chapters[0].id,
         lastSubjectId: course.chapters[0].subjects[0].id,
         firstUnwatchedContentId:course.chapters[0].subjects[0].contents[0].id,
+        already_vote:false,
         contentProgress: [{
           chapterId,
           subjectId,

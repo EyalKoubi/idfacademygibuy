@@ -76,6 +76,7 @@ export const searchCourseTexts={
 export const presentCourseDetailTexts={
   descripitonOfCourse:"תיאור הקורס:",
   rateOfCourse:"דירוג הקורס:",
+  rateThisCourse:"דרג את הקורס:",
   subscribeNum:"מספר מינויים:",
   chaptersOfCourse:"פרקי הקורס"
 }

@@ -17,6 +17,7 @@ interface UpdateProcessProps {
   lastSubjectId: string;
   firstUnwatchedContentId: string;
   contentProgress: string;
+  already_vote:boolean
 }
 
 export async function processCourseUserRequest(requestData: CourseUserRequestData) {
@@ -54,7 +55,8 @@ export async function processCourseUserRequest(requestData: CourseUserRequestDat
             lastChapterId: firstChapter?.id || null,
             lastSubjectId: firstSubject?.id || null,
             firstUnwatchedContentId: firstContent?.id ||null,
-            contentProgress: JSON.stringify([])
+            contentProgress: JSON.stringify([]),
+            already_vote:false,
         })
         .executeTakeFirstOrThrow();
 
@@ -115,7 +117,8 @@ export async function getUserCourseRequests(userId: string, adminCourseIds: stri
       lastChapterId: progress.lastChapterId,
       lastSubjectId: progress.lastSubjectId,
       firstUnwatchedContentId: progress.firstUnwatchedContentId,
-      contentProgress: contentProgress 
+      contentProgress: contentProgress,
+      already_vote:  progress.already_vote
     };
   });
   
@@ -148,9 +151,18 @@ export async function getUserCoursesIds(userId: string, roleIndex: number): Prom
       return handleError(error);
     }
   }
-
+  export async function updateUserCourseVote(courseId:string,userId:string){
+    const already_vote=await db
+        .updateTable("UserCourseProgress")
+        .set({already_vote:true })
+        .where("userId", "=",userId)
+        .where("courseId", "=", courseId)
+        .returning(["already_vote"])
+        .executeTakeFirstOrThrow();
+    console.log(already_vote)
+  }
   
-  export async function updateUserCourseProgress(updateProcessProps: UpdateProcessProps,) {
+  export async function updateUserCourseProgress(updateProcessProps: UpdateProcessProps) {
     const {
       userId,
       courseId,
@@ -158,6 +170,7 @@ export async function getUserCoursesIds(userId: string, roleIndex: number): Prom
       lastSubjectId,
       firstUnwatchedContentId,
       contentProgress,
+      already_vote
     } = updateProcessProps;
   
     try {
@@ -168,6 +181,7 @@ export async function getUserCoursesIds(userId: string, roleIndex: number): Prom
           lastSubjectId,
           firstUnwatchedContentId,
           contentProgress,
+          already_vote
         })
         .where("userId", "=", userId)
         .where("courseId", "=", courseId)

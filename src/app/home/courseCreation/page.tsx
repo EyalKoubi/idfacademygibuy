@@ -29,7 +29,8 @@ const AddCoursePage: React.FC = () => {
     subscribe_num: 0, 
     description_sub_title: "", 
     description: "תיאור ברירת מחדל ",
-    rate: 0, 
+    rate: 0,
+    num_rates:0 
   });
   const [fileData, setFileData] = useState<any | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -85,6 +86,7 @@ const AddCoursePage: React.FC = () => {
         description_sub_title: courseData.description_sub_title,
         description: courseData.description,
         rate: courseData.rate,
+        num_rates:courseData.num_rates
       };
   
       let formData = new FormData();
