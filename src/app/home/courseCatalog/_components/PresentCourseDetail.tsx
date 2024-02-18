@@ -7,7 +7,7 @@ import useUserStore from "@/app/_contexts/userContext";
 import useUserRequestCourseStore from "@/app/_contexts/requestsCoursesContext";
 import axios from "axios";
 import ErrorMessage from "../../_component/ErrorMessage";
-import CustomRating from "../../_component/rateing";
+import CustomRating from "../../_component/Rating";
 interface  PresentCourseDetailsProps{
         course:CourseData;
 }
@@ -20,10 +20,17 @@ const PresentCourseDetails: React.FC<PresentCourseDetailsProps> = ({course}) => 
     const [isRequested,setIsRequested]=useState(false)
     const [rating, setRating] = useState(0);
     const [currProggress,setCurrProgress]=useState(coursesProgress.find((courseProgress)=>courseProgress.courseId===course.id))
+    useEffect(()=>{
+      console.log(coursesProgress)
+      setCurrProgress(coursesProgress.find((courseProgress)=>courseProgress.courseId===course.id))
+      console.log("already vote ",currProggress?.already_vote)
+    },[course])
+    
     const handleRatingChange = (newRating: number) => {
       setRating(newRating);
       console.log(rating)
     };
+    // console.log("already vote ",currProggress?.already_vote)
     const submitRating = async () => {
       try {
         let formData = new FormData();

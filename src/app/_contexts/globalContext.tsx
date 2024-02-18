@@ -1,73 +1,81 @@
-import create from "zustand";
-import { Theme, lightTheme } from "../theme";
-import { Users } from "@/app/types";
-import {
-  admin_menu,
-  user_menu,
-  creator_menu,
-  editor_menu,
-  MenuRow,
-} from "@/app/home/menus";
+import create from 'zustand';
+import { useEffect, useState } from 'react';
+import { Theme, lightTheme } from '../theme'; // Adjust import paths as necessary
+import { Users } from '@/app/types';
+import { MenuRow, admin_menu, user_menu } from '@/app/home/menus'; // Adjust import paths as necessary
 
+// Define your AppState and AppActions types as before
 type AppState = {
   isMenuButtonPressed: boolean;
-  theme: Theme;
+  // theme: Theme;
   isSmallScreen: boolean;
   isAdminMenu: boolean;
-  menu: MenuRow[];
-  initialUserType: number; // Track the initial user type
+  menu: MenuRow[]; // Assuming MenuRow is correctly defined elsewhere
+  initialUserType: Users;
 };
 
 type AppActions = {
-  setInitialUserType:(value:number) => void,
+  setInitialUserType: (value: number) => void;
   setIsMenuButtonPressed: (value: boolean) => void;
-  setTheme: (value: Theme) => void;
+  // setTheme: (value: Theme) => void;
   setIsSmallScreen: (value: boolean) => void;
   setIsAdminMenu: (value: boolean) => void;
   setMenu: (userType: number) => void;
-  onClickChangePremmisionMenu: (value:boolean) => void;
+  onClickChangePremmisionMenu: (value: boolean) => void;
 };
 
-const useAppState = create<AppState & AppActions>((set) => ({
+const useAppState = create<AppState & AppActions>((set, get) => ({
+  // Initial state
   isMenuButtonPressed: false,
-  theme: lightTheme,
-  isSmallScreen: window.innerWidth < 786,
+  // theme: lightTheme,
+  isSmallScreen: false, // Initialized as false, will be set correctly in useEffect
   isAdminMenu: false,
   menu: [],
-  initialUserType: Users.Admin, // Assume the initial user type is admin
-  setInitialUserType:(value) => set({ initialUserType: value }),
+  initialUserType: Users.User,
+
+  // Actions
+  setInitialUserType: (value) => set({ initialUserType: value }),
   setIsMenuButtonPressed: (value) => set({ isMenuButtonPressed: value }),
-  setTheme: (value) => set({ theme: value }),
+  // setTheme: (value) => set({ theme: value }),
   setIsSmallScreen: (value) => set({ isSmallScreen: value }),
   setIsAdminMenu: (value) => set({ isAdminMenu: value }),
-
   setMenu: (userType) => {
+    let menu:MenuRow[];
     switch (userType) {
       case Users.Admin:
-        set({ menu: user_menu, isAdminMenu: true });
-        break;
-      case Users.Creator:
-        // set({ menu: creator_menu });
-        break;
-      case Users.Editor:
-        // set({ menu: editor_menu });
+        menu = admin_menu;
         break;
       case Users.User:
-        set({ menu: user_menu, isAdminMenu: false });
+        menu = user_menu;
         break;
+      // Handle other cases as needed
       default:
-        set({ menu: [], isAdminMenu: false });
-        break;
+        menu = [];
     }
+    set({ menu, isAdminMenu: userType === Users.Admin });
   },
-
   onClickChangePremmisionMenu: (value) => {
-      const boolIsAdminMenu = !value;
-      const userType = boolIsAdminMenu ? Users.Admin : Users.User;
-  
-      const menu = userType === Users.Admin ? admin_menu : user_menu;
-      set({menu,isAdminMenu:boolIsAdminMenu})
+    const boolIsAdminMenu = !value;
+    const userType = boolIsAdminMenu ? Users.Admin : Users.User;
+    const menu = userType === Users.Admin ? admin_menu : user_menu;
+    set({ menu, isAdminMenu: boolIsAdminMenu });
   },
 }));
 
+// A component or hook to set isSmallScreen based on window size
+export function useWindowSizeListener() {
+  const setIsSmallScreen = useAppState((state) => state.setIsSmallScreen);
+
+  useEffect(() => {
+    function handleResize() {
+      setIsSmallScreen(window.innerWidth < 786);
+    }
+
+    handleResize();
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [setIsSmallScreen]); // Empty array means this effect runs only once on mount
+}
 export default useAppState;
+// Remember to call useWindowSizeListener() in your top-level component or in specific components where you need accurate isSmallScreen state.

@@ -58,6 +58,7 @@ export async function processCourseUserRequest(requestData: CourseUserRequestDat
             contentProgress: JSON.stringify([]),
             already_vote:false,
         })
+        .returning(["courseId","lastChapterId","lastSubjectId","firstUnwatchedContentId","contentProgress","already_vote"])
         .executeTakeFirstOrThrow();
 
       return NextResponse.json(insertIntoUserCourses);

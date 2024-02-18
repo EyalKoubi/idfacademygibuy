@@ -28,15 +28,9 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
   const {initialUserType,setInitialUserType, isMenuButtonPressed,isSmallScreen,isAdminMenu,setIsAdminMenu,onClickChangePremmisionMenu,menu,setMenu } = useAppState();
 
   const router=useRouter()
-
-
   useEffect(() => {
   
-    setMenu(userType)
-  }, [userType]); 
-
-    useEffect(() => {
-      setInitialUserType(userType)
+    setMenu(initialUserType)
   }, []); 
 
  // const sidebarClass = isMenuButtonPressed ? "w-64" : "w-16";

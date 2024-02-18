@@ -3,7 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import Provider from "@/app/_trpc/Provider";
 import { SessionProvider } from "next-auth/react";
-import useAppState from "./_contexts/globalContext";
+// import useAppState from "./_contexts/globalContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,7 +12,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { theme } = useAppState();
+  // const { theme } = useAppState();
 
   return (
     <html>

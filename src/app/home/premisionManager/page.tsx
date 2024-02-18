@@ -11,21 +11,22 @@ const Page = () => {
     const [pendingRegistrations, setPendingRegistrations] = useState<User[]>([]);
     const [selectedCourse, setSelectedCourse] = useState<{[userId: string]: string}>({});
     const {userRequestsCourses,removeRequestUserCourse}=useUserRequestCourseStore();
-    const {user,userCourses,addUserCourse}=useUserStore();
+    const {user,userCourses,addUserCourse,addNewCourseProcess}=useUserStore();
 
-    const answerRequestCourse = (userCurrent:any,course:CourseData,answerType:string) => {
+    const answerRequestCourse =async (userCurrent:any,course:CourseData,answerType:string) => {
         const formData=new FormData();
         formData.append("userId",userCurrent.id)
         formData.append("course",JSON.stringify(course))
         formData.append("answerType",answerType)
-        axios.post(`/api/answerRequestCourse`,formData)
-            .then(() => {
+        const response =await axios.post(`/api/answerRequestCourse`,formData)
+        console.log(response.data)
                 removeRequestUserCourse(userCurrent,course)
+                addNewCourseProcess(course)
                 if(userCurrent.id===user.id&&answerType==="Accept")//if we approve request to my self
                     addUserCourse(course)
                     console.log(userCourses)
-            })
-            .catch(error => console.error(error));
+            // })
+          
     };
 
    
