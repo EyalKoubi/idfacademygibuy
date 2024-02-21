@@ -66,12 +66,16 @@ export async function getDefaultImageCourseContent(file:File){
 }
 export async function processContent(contentData: ContentDataProps) {
     const { file,title, comments, subjectId } = contentData;
-  
+    console.log("the file is :",file)
     ContentMediaSchema.parse({title, file_size: file.size, comments });
+    //calculate estimated time 
+    const processingSpeedMBPerSecond = 1;
+    const fileSizeInMB = file.size / 1024 / 1024;
+    const estimatedProcessingTimeInSeconds =fileSizeInMB>0?fileSizeInMB / processingSpeedMBPerSecond:2;
     const newContent = await db
       .insertInto("Content")
-      .values({ title,file_name: file.name, comments })
-      .returning(["id","title", "file_name", "comments"])
+      .values({ title,file_name: file.name, comments,estimated_time_minutes:estimatedProcessingTimeInSeconds })
+      .returning(["id","title", "file_name", "comments","estimated_time_minutes"])
       .executeTakeFirstOrThrow();
   
     if (!file) {

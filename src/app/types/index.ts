@@ -13,9 +13,10 @@ export enum Users {
 
 export type ContentData = {
   id: string;
-  title:string;
+  title: string;
   file_name: string;
   comments: string;
+  estimated_time_minutes?: number; 
 };
 
 export type SubjectData = {

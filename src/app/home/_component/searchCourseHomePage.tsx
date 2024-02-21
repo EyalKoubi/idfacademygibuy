@@ -50,7 +50,7 @@ const SearchCourseHomePage = () => {
     </svg>
   );
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col align-middle">
       <div className="bg-white flex flex-col w-72 items-center justify-center p-4 rounded-md gap-5 relative">
         <div className="flex flex-col w-full text-sm rounded-md">
           <div className="relative">

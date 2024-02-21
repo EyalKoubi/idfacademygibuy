@@ -116,7 +116,7 @@ export const editTexts = {
   contentName: "שם תוכן",
 
   chapterBrief: "תקציר פרק",
-
+  rename:"שנה שם",
   comments: "הערות",
 };
 

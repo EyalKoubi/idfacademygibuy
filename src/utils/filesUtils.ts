@@ -1,3 +1,4 @@
+import { ChapterData, CourseData } from "@/app/types";
 
 export const getMimeType = (extension: string | undefined) => {
     if (!extension) return '';
@@ -15,7 +16,22 @@ export const getMimeType = (extension: string | undefined) => {
     return 'application/octet-stream';
 };
 
-
+export async function EstimatedCourse(course:CourseData) {
+  let estimated_hour = 0;
+  // Loop over chapters using 'for...of' to get chapter objects directly
+  for (let chapter of course.chapters) {
+      // Assuming chapter.subjects is also an array, loop over it
+      for (let subject of chapter.subjects) {
+          // Assuming subject.contents is an array, loop over it
+          for (let content of subject.contents) {
+              // Assuming content has an 'est' property representing estimated time
+              estimated_hour += content.estimated_time_minutes?content.estimated_time_minutes:0;
+          }
+      }
+  }
+  // Here you can return or use estimated_hour as needed
+  return `${(estimated_hour/60)}:${(estimated_hour%60)}`;
+}
 export const generateVideoImageThumbnail = async (videoUrl: string): Promise<string> => {
   return new Promise((resolve, reject) => {
     const video = document.createElement('video');

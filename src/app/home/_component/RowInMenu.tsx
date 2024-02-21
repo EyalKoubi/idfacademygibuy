@@ -24,7 +24,7 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon,isSideBar }) => {
   const {courses}=useCoursesStore();
   const router = useRouter();
   const getCoursesByIds=(ids:string[])=>{
-    return courses.filter((course)=>ids.includes(course.id)) //if use filter without {} in the expresion
+    return courses.filter((course)=>ids?.includes(course.id)) //if use filter without {} in the expresion
   }
   // const getCoursesByIds = (ids:string[]) => {
   //   console.log(courses);
@@ -32,7 +32,8 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon,isSideBar }) => {
   // };
   const requestHandlerUserCourses=async(formData:FormData,rowInfo:string)=>{
     console.log("reach to user requests")
-    const userType:string=rowInfo===NavBarText.myCourses? "4":"1";
+    console.log("the row info is ",rowInfo)
+    const userType:string=(rowInfo===NavBarText.myCourses)?"4":"1";
     console.log(userType)
     formData.append("userType", userType);
     // const requestString="/api/getUserCourseRequests/"+user.id+"|"+userType
@@ -41,6 +42,7 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon,isSideBar }) => {
       console.log("error to fetch data")
     }
     else{
+      console.log(userType)
       console.log(response.data)
       if(userType==="4"){
         console.log(response.data)
@@ -49,7 +51,8 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon,isSideBar }) => {
         setUserCourses(getCoursesByIds(response.data.coursesIds))
         setCourseProgress(response.data.coursesProgress)
       }
-      if(userType==="1")  
+      if(userType==="1") 
+        console.log(userType)
         setAdminCourses(getCoursesByIds(response.data))
     router.push(href);
   }
@@ -84,7 +87,10 @@ const requestUserPremision=async()=>{
           router.push(href);
         });
         break;
-      case NavBarText.myCourses ||NavBarText.myCourses:
+      case NavBarText.myCourses :
+        requestHandlerUserCourses(formData,rowInfo)
+        break;
+      case NavBarText.courseManager:
         requestHandlerUserCourses(formData,rowInfo)
         break;
       case NavBarText.premsionManager:

@@ -33,8 +33,6 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
     setMenu(initialUserType)
   }, []); 
 
- // const sidebarClass = isMenuButtonPressed ? "w-64" : "w-16";
-
  return (
   <nav className="flex justify-between items-center w-full py-5 ">
     <div className="flex items-center mx-3">

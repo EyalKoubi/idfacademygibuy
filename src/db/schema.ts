@@ -48,6 +48,7 @@ export interface ContentTable {
   title:string;
   file_name: string;
   comments: string;
+  estimated_time_minutes:number|undefined;
 }
 
 export interface ContentSubjectTable {

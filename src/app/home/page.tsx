@@ -45,7 +45,9 @@ const HomePage = () => {
           חפשו בין ה{courses.length} קורסים הזמינים ללמידה
         </h2>
       </div>
-     <SearchCourseHomePage/>
+      <div className="my-3 flex justify-center">
+        <SearchCourseHomePage/>
+     </div>
       <Image src={Illustration} alt={""} />
       <PopularCourses/>
    </>
