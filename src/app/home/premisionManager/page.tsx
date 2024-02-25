@@ -25,7 +25,6 @@ const Page = () => {
                 if(userCurrent.id===user.id&&answerType==="Accept")//if we approve request to my self
                     addUserCourse(course)
                     console.log(userCourses)
-            // })
           
     };
 

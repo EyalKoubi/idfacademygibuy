@@ -7,7 +7,6 @@ import * as Minio from "minio";
 import { uploadFileToS3Service, bucket,s3Client } from "@/app/_minio/minio";
 import { ContentData, ContentItemProgress } from "../types";
 import imageUrl from '../../../public/assets/default-course-image.png';
-
 import defaultImageCourse from "@/../public/assets/default-course-image.png";
 import fs from "fs/promises";
 interface ContentDataProps{
@@ -23,6 +22,8 @@ interface EditContentProps {
   }
   
 
+  // This function assumes that the file argument is a path to the video file
+  
 async function ensureBucketExists( bucket: string) {
   try {
     const exists = await s3Client.bucketExists(bucket);
@@ -52,7 +53,7 @@ export async function getContentByName(contentName:string):Promise<ContentData|u
   return contentFromDb;}
   catch{return undefined;}
 }
-export async function getDefaultImageCourseContent(file:File){
+export async function getDefaultImageCourseContent(file:File,title:string){
   const defaultfromDb= await getContentByName("default-image-course.png")
   console.log(defaultfromDb)
   if(defaultfromDb){
@@ -61,7 +62,7 @@ export async function getDefaultImageCourseContent(file:File){
     
   }
   else{
-    return await addDefaultCourseImageContent(file);
+    return await addDefaultCourseImageContent(file,title);
   }
 }
 export async function processContent(contentData: ContentDataProps) {
@@ -69,15 +70,28 @@ export async function processContent(contentData: ContentDataProps) {
     console.log("the file is :",file)
     ContentMediaSchema.parse({title, file_size: file.size, comments });
     //calculate estimated time 
-    const processingSpeedMBPerSecond = 1;
-    const fileSizeInMB = file.size / 1024 / 1024;
-    const estimatedProcessingTimeInSeconds =fileSizeInMB>0?fileSizeInMB / processingSpeedMBPerSecond:2;
+    const fileSizeInMB = file.size / (1024 * 1024);
+
+    const baseProcessingSpeedMBPerSecond = 1;
+    
+    let adjustedProcessingSpeed = baseProcessingSpeedMBPerSecond;
+    if (fileSizeInMB > 500) {
+        adjustedProcessingSpeed *= 0.75; 
+    } else if (fileSizeInMB < 100) {
+        adjustedProcessingSpeed *= 1.25; 
+    }
+    const estimatedProcessingTimeInSeconds = fileSizeInMB > 0 ? fileSizeInMB / adjustedProcessingSpeed : 2;
+    
     const newContent = await db
       .insertInto("Content")
       .values({ title,file_name: file.name, comments,estimated_time_minutes:estimatedProcessingTimeInSeconds })
       .returning(["id","title", "file_name", "comments","estimated_time_minutes"])
       .executeTakeFirstOrThrow();
-  
+    await db
+      .insertInto("ContentSubject")
+      .values({ contentId: newContent.id, subjectId })
+      .execute();
+
     if (!file) {
       throw new Error("File is missing");
     }
@@ -117,7 +131,7 @@ export async function addContentWithoutResponse(contentData: ContentDataProps) {
 
 
 
-export async function addDefaultCourseImageContent(file:File) {
+export async function addDefaultCourseImageContent(file:File,title:string) {
   try {
 
    // Create a File object with all properties (optional)
@@ -125,7 +139,7 @@ export async function addDefaultCourseImageContent(file:File) {
    // Upload the file to Minio (optional)
     const contentData = {
       file: file,
-      title:"",
+      title,
       comments: "תמונת קורס ברירת מחדל",
       subjectId: "",
     };

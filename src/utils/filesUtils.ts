@@ -15,24 +15,32 @@ export const getMimeType = (extension: string | undefined) => {
 
     return 'application/octet-stream';
 };
-
-export async function EstimatedCourse(course:CourseData) {
-  let estimated_hour = 0;
-  // Loop over chapters using 'for...of' to get chapter objects directly
+//estimated time of course to present in course details
+export function EstimatedCourse(course: CourseData) {
+  let estimated_seconds = 0;
   for (let chapter of course.chapters) {
-      // Assuming chapter.subjects is also an array, loop over it
-      for (let subject of chapter.subjects) {
-          // Assuming subject.contents is an array, loop over it
-          for (let content of subject.contents) {
-              // Assuming content has an 'est' property representing estimated time
-              estimated_hour += content.estimated_time_minutes?content.estimated_time_minutes:0;
-          }
+    for (let subject of chapter.subjects) {
+      for (let content of subject.contents) {
+        estimated_seconds += content.estimated_time_minutes ? content.estimated_time_minutes : 0; // Assuming the correct naming
       }
+    }
   }
-  // Here you can return or use estimated_hour as needed
-  return `${(estimated_hour/60)}:${(estimated_hour%60)}`;
+  // Calculate hours and minutes from seconds
+  const hours = Math.floor(estimated_seconds / 3600);
+  const minutes = Math.floor((estimated_seconds % 3600) / 60);
+  const seconds = Math.floor(estimated_seconds % 60); // Remaining seconds
+
+  // Format hours, minutes, and seconds to ensure two digits
+  const formattedHours = hours.toString().padStart(2, '0');
+  const formattedMinutes = minutes.toString().padStart(2, '0');
+  const formattedSeconds = seconds.toString().padStart(2, '0');
+
+  console.log(`${formattedHours}:${formattedMinutes}:${formattedSeconds}`);
+  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
 }
+
 export const generateVideoImageThumbnail = async (videoUrl: string): Promise<string> => {
+  // need to fix 
   return new Promise((resolve, reject) => {
     const video = document.createElement('video');
     video.src = videoUrl;

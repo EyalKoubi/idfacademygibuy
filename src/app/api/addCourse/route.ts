@@ -24,6 +24,7 @@ export async function POST(req:CourseRequest, res: NextApiResponse) {
     let file=undefined;
     const comments = data.get("comments") as string;
     const title = data.get("fileTitle") as string;
+    console.log("the title is ",title)
     let course_image:ContentData|undefined;
      file = data.get("file") as unknown as File;
      console.log(file)
@@ -31,7 +32,7 @@ export async function POST(req:CourseRequest, res: NextApiResponse) {
       course_image=await addContentWithoutResponse({ file,title, comments, subjectId:"" });
      }
     else{
-      course_image =await getDefaultImageCourseContent(file);
+      course_image =await getDefaultImageCourseContent(file,title);
     }
     if(course_image)
     return createCourse({

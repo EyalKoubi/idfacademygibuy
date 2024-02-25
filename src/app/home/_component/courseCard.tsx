@@ -13,6 +13,7 @@ import useUserRequestCourseStore from "@/app/_contexts/requestsCoursesContext";
 import { calculateProgress, findFirstUnwatched } from "@/utils/progressUtils";
 import { Progress, RadialProgress } from "react-daisyui";
 import ProgressBar from "../myCourses/_components/ProgressBar";
+import { EstimatedCourse } from "@/utils/filesUtils";
 interface CourseCardProps {
   course: CourseData;
   isPresentMode:boolean;
@@ -34,7 +35,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
     const curcourseprogress=coursesProgress.find(cp=>cp.courseId===course.id)
     if(curcourseprogress)
       setCurrCourseProgress(curcourseprogress)
-  
+    console.log("the course:"," with estimeted of :",EstimatedCourse(course))
   },[course])
 
   const formatDate = (timestamp: Date ) => {

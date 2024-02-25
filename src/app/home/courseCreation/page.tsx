@@ -66,6 +66,7 @@ const AddCoursePage: React.FC = () => {
       setFileData(null);
     }
   };
+  
   const handleEditorChange = (value:string) => {
     console.log(value)
     setEditorValue(value);
@@ -103,7 +104,7 @@ const AddCoursePage: React.FC = () => {
       if (response.data?.id) {
         addCourse(response.data);
         addAdminCourse(response.data);
-        addNewCourseProcess(response.data);
+
         await setCourseData(response.data);
         router.push(`/home/courseManager/${response.data.id}`);
         setLoading(false);
