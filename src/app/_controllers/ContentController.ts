@@ -148,7 +148,7 @@ export async function addDefaultCourseImageContent(file:File,title:string) {
       title,
       comments: "תמונת קורס ברירת מחדל",
       subjectId: "",
-      estimated_time_minutes:0
+      estimated_time_seconds:120
     };
 
     const newContent = await addContentWithoutResponse(contentData);
@@ -161,19 +161,15 @@ export async function addDefaultCourseImageContent(file:File,title:string) {
 }
 export async function addTextContent(title:string,editorValue: string, subjectId: string) {
   try {
+    console.log(title,editorValue,subjectId)
     ContentTextSchema.parse({title,comments:editorValue}) 
 
 
-    const contentData: ContentDataProps = {
-      file: null as unknown as File, 
-      title,
-      comments: editorValue,
-      subjectId,
-      estimated_time_minutes:120
-    };
+   
+   
     const newContent = await db
     .insertInto("Content")
-    .values({title, file_name: "", comments:editorValue })
+    .values({title, file_name: "", comments:editorValue,estimated_time_seconds:120 })
     .returning(["id","title", "file_name", "comments"])
     .executeTakeFirstOrThrow();
 

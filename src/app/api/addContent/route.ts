@@ -13,6 +13,7 @@ export async function POST(req:MulterRequest, res: NextApiResponse) {
   const title= data.get("title") as string;
   const comments = data.get("comments") as string;
   const subjectId = data.get("subjectId") as string;
+  console.log(title,comments,subjectId)
   const estimated_time_seconds=data.get("estimatedVideoTime") as unknown as number
   if(data.get("file")){
     const file = data.get("file") as unknown as File;

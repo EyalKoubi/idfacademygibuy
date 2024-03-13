@@ -70,15 +70,17 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
     setLoading(true);
     event?.preventDefault();
     const formData: FormData = new FormData();
+    const default_estimated_time_seconds=120 // default to read text content 2 minutes=120 seconds
     
+    // formData.append("mimeType", mimeType); // Including MIME type in the request
+    formData.append("title", contentData.title);
+    formData.append("comments", contentData.comments);
+    formData.append("subjectId", subject.id);
     if (file) {
+        formData.append("file", file, file.name);
         const fileExtension: string = file.name.split('.').pop() || '';
         const mimeType: string = getMimeType(fileExtension);
-        formData.append("file", file, file.name);
-        // formData.append("mimeType", mimeType); // Including MIME type in the request
-        formData.append("title", contentData.title);
-        formData.append("comments", contentData.comments);
-        formData.append("subjectId", subject.id);
+      
         // Check if the file is a video and attempt to get its duration
         if (mimeType.startsWith('video/')) {
             // Create a temporary video element to load the file and read its duration
@@ -104,12 +106,13 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
             videoElement.src = window.URL.createObjectURL(file);
         } else {
             // If it's not a video, just proceed with the upload
-            const default_estimated_time_seconds=120
+           
             formData.append("estimatedVideoTime", default_estimated_time_seconds.toString());
             uploadFile(formData);
         }
     } else {
         // Proceed with the upload if there's no file selected (optional handling)
+        formData.append("estimatedVideoTime", default_estimated_time_seconds.toString());
         uploadFile(formData);
     }
 };
