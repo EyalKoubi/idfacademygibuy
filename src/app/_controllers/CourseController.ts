@@ -134,7 +134,7 @@ export async function getAllCourses():Promise<CourseData[]|undefined> {
           .selectFrom("ContentSubject")
           .innerJoin("Content", "Content.id", "ContentSubject.contentId")
           .where("ContentSubject.subjectId", "=", subjectWithOutContents.id)
-          .select(["Content.id","Content.title", "Content.file_name", "Content.comments","Content.estimated_time_minutes"])
+          .select(["Content.id","Content.title", "Content.file_name", "Content.comments","Content.estimated_time_seconds"])
           .execute();
 
         subjects.push({

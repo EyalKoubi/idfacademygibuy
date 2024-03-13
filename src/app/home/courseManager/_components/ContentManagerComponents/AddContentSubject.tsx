@@ -34,7 +34,7 @@ const AddContentForm: React.FC<AddContentFormProps> = ({
     setIsTextContent(!isTextContent);
     setEditorState(EditorState.createEmpty());
     setEditorValue("");
-    setContentData({ ...contentData,title:"", comments: "" });
+    setContentData({ ...contentData,title:"", comments: "",estimated_time_seconds:2 });
     setFile(null);
   };
 

@@ -62,7 +62,7 @@ return (
       {course.creationTimestamp && (
         <p className="text-sm text-gray-500">{CourseCardTexts.createOn} {formatDate(course.creationTimestamp)}</p>
       )}
-
+      <div>{`${CourseCardTexts.estimatedTimeText} ${EstimatedCourse(course)}`}</div>
           <button  className="p-2 ml-1 bg-yellow-500 text-white rounded hover:bg-yellow-600" onClick={() => { router.push(`/home/myCourses/${course.id}/chapters`) }}>{editTexts.showCourse}</button>
           {(isRegister && isPresentMode) && ( 
             <div>
@@ -70,6 +70,7 @@ return (
           <div className="flex flex-col items-end gap-y-2">
               <ProgressBar value={calculateProgress(course, currCourseProgress?.contentProgress)} />
           </div>
+          
           </div>
 
       )}

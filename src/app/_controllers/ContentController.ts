@@ -14,6 +14,7 @@ interface ContentDataProps{
   title:string;
   comments: string;
   subjectId: string;
+  estimated_time_seconds:number;
 }
 interface EditContentProps {
     contentId: string;
@@ -66,32 +67,37 @@ export async function getDefaultImageCourseContent(file:File,title:string){
   }
 }
 export async function processContent(contentData: ContentDataProps) {
-    const { file,title, comments, subjectId } = contentData;
+    const { file,title, comments, subjectId,estimated_time_seconds } = contentData;
+    console.log("before-------------------------------")
     console.log("the file is :",file)
+    console.log("the subkect id is : ",subjectId)
     ContentMediaSchema.parse({title, file_size: file.size, comments });
+    console.log("asdasdasdasdkasdkskjfskjdfkjsdkjf")
     //calculate estimated time 
-    const fileSizeInMB = file.size / (1024 * 1024);
+    // const fileSizeInMB = file.size / (1024 * 1024);
 
-    const baseProcessingSpeedMBPerSecond = 1;
+    // const baseProcessingSpeedMBPerSecond = 1;
     
-    let adjustedProcessingSpeed = baseProcessingSpeedMBPerSecond;
-    if (fileSizeInMB > 500) {
-        adjustedProcessingSpeed *= 0.75; 
-    } else if (fileSizeInMB < 100) {
-        adjustedProcessingSpeed *= 1.25; 
-    }
-    const estimatedProcessingTimeInSeconds = fileSizeInMB > 0 ? fileSizeInMB / adjustedProcessingSpeed : 2;
+    // let adjustedProcessingSpeed = baseProcessingSpeedMBPerSecond;
+    // if (fileSizeInMB > 500) {
+    //     adjustedProcessingSpeed *= 0.75; 
+    // } else if (fileSizeInMB < 100) {
+    //     adjustedProcessingSpeed *= 1.25; 
+    // }
+    // const estimatedProcessingTimeInSeconds = fileSizeInMB > 0 ? fileSizeInMB / adjustedProcessingSpeed : 2;
     
     const newContent = await db
       .insertInto("Content")
-      .values({ title,file_name: file.name, comments,estimated_time_minutes:estimatedProcessingTimeInSeconds })
-      .returning(["id","title", "file_name", "comments","estimated_time_minutes"])
+      .values({ title,file_name: file.name, comments,estimated_time_seconds })
+      .returning(["id","title", "file_name", "comments","estimated_time_seconds"])
       .executeTakeFirstOrThrow();
+    console.log("the new content",newContent)
+    if(subjectId!==""){
     await db
       .insertInto("ContentSubject")
       .values({ contentId: newContent.id, subjectId })
       .execute();
-
+    }
     if (!file) {
       throw new Error("File is missing");
     }
@@ -142,6 +148,7 @@ export async function addDefaultCourseImageContent(file:File,title:string) {
       title,
       comments: "תמונת קורס ברירת מחדל",
       subjectId: "",
+      estimated_time_minutes:0
     };
 
     const newContent = await addContentWithoutResponse(contentData);
@@ -162,6 +169,7 @@ export async function addTextContent(title:string,editorValue: string, subjectId
       title,
       comments: editorValue,
       subjectId,
+      estimated_time_minutes:120
     };
     const newContent = await db
     .insertInto("Content")

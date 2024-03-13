@@ -130,7 +130,8 @@ export const GeneralTexts = {
 export const CourseCardTexts={
   progress:"הושלם:",
   requestContinueToApprove:"הבקשה ממתינה לאישור מנהל",
-  createOn:"נוצר ב:"
+  createOn:"נוצר ב:",
+  estimatedTimeText:"זמן משוער:"
 }
 
 export const messagesText = {

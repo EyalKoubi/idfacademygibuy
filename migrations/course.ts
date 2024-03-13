@@ -44,8 +44,8 @@ export async function up(db: Kysely<any>): Promise<void> {
   .addColumn("title", "text")
   .addColumn("file_name", "text")
   .addColumn("comments", "text")
-  .addColumn("estimated_time_minutes","float4")
-  .addUniqueConstraint("unique_content_all_columns", ["id","file_name", "comments"])
+  .addColumn("estimated_time_seconds","integer")
+  .addUniqueConstraint("unique_content_all_columns", ["title","file_name", "comments","estimated_time_seconds"])
   .execute();
 
 

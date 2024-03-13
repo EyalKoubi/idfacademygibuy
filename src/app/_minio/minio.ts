@@ -56,8 +56,6 @@ export async function getPresignedUrlFromS3Service(bucket: string, fileName: str
   }
 }
 
-
-import { createReadStream } from 'fs';
 import { PassThrough } from 'stream';
 
 

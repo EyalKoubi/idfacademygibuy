@@ -7,6 +7,7 @@ import useCoursesStore from "@/app/_contexts/courseContext";
 import Content from "../ContentManagerComponents/Content";
 import RenameSubjectForm from "./RenameSubject";
 import AddContentForm from "../ContentManagerComponents/AddContentSubject";
+import { getMimeType } from "@/utils/filesUtils";
 
 interface SubjectProps {
   subject: SubjectData;
@@ -26,11 +27,14 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
     title:"",
     file_name: "",
     comments: "",
+    estimated_time_seconds:0
   });
   const [file, setFile] = useState<any | null>(null);
   const [loading,setLoading]=useState<boolean>(false);
   const [addContentError, setAddContentError] = useState('');
   const [renameSubjectError, setRenameSubjectError] = useState('');
+
+
   const handleDeleteSubject = async () => {
     const formData = new FormData();
     formData.append("subjectId", subject.id);
@@ -62,35 +66,73 @@ const Subject:React.FC<SubjectProps>= ({ subject, chapterId, courseId }) => {
     setIsRenameSubject(false);
   }
   };
-
   const submitFile = async (event: FormEvent) => {
-    setLoading(true)
+    setLoading(true);
     event?.preventDefault();
-    const formData: any = new FormData();
-    if (file){
-      formData.append("file", file, file.name);
-    }
-    formData.append("title", contentData.title);
-    formData.append("comments", contentData.comments);
-    formData.append("subjectId", subject.id);
-    try {
-      const response = await axios.post("/api/addContent", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-      if (response.data?.message) {
-          setAddContentError(response.data?.message)
-      }
-      else{
-      const newCont = response.data;
-      setIsAddingContent(false);
-      addContent(courseId, chapterId, subject.id, newCont);
-      }
-    } catch (error) {
+    const formData: FormData = new FormData();
+    
+    if (file) {
+        const fileExtension: string = file.name.split('.').pop() || '';
+        const mimeType: string = getMimeType(fileExtension);
+        formData.append("file", file, file.name);
+        // formData.append("mimeType", mimeType); // Including MIME type in the request
+        formData.append("title", contentData.title);
+        formData.append("comments", contentData.comments);
+        formData.append("subjectId", subject.id);
+        // Check if the file is a video and attempt to get its duration
+        if (mimeType.startsWith('video/')) {
+            // Create a temporary video element to load the file and read its duration
+            const videoElement: HTMLVideoElement = document.createElement('video');
+            videoElement.preload = 'metadata';
 
-      console.log("🚀 ~ file: Subject.tsx:38 ~ submitFile ~ error:", error);
+            videoElement.onloadedmetadata = () => {
+                window.URL.revokeObjectURL(videoElement.src);
+                let duration: number =Math.ceil( videoElement.duration);
+                console.log(duration)
+                formData.append("estimatedVideoTime", duration.toString());
+
+                // Proceed with the file upload after duration is obtained
+                uploadFile(formData);
+            };
+
+            videoElement.onerror = () => {
+                console.error("Error loading video file for duration estimation.");
+                // Proceed with the file upload without duration if there's an error
+                uploadFile(formData);
+            };
+
+            videoElement.src = window.URL.createObjectURL(file);
+        } else {
+            // If it's not a video, just proceed with the upload
+            const default_estimated_time_seconds=120
+            formData.append("estimatedVideoTime", default_estimated_time_seconds.toString());
+            uploadFile(formData);
+        }
+    } else {
+        // Proceed with the upload if there's no file selected (optional handling)
+        uploadFile(formData);
     }
-    setLoading(false)
-  };
+};
+
+const uploadFile = async (formData: FormData) => {
+    try {
+        const response = await axios.post("/api/addContent", formData, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+        if (response.data?.message) {
+            setAddContentError(response.data?.message);
+        } else {
+            const newContent = response.data;
+            setIsAddingContent(false);
+            addContent(courseId, chapterId, subject.id, newContent);
+        }
+    } catch (error) {
+        console.error("Error uploading file:", error);
+    } finally {
+        setLoading(false);
+    }
+};
+
   return (
 <div key={subject.name} className="p-4 bg-gray-300 rounded shadow mb-3">
   <span className="text-lg font-medium">{subject.name}</span>

@@ -1,5 +1,5 @@
+import { bucket, getPresignedUrlFromS3Service } from "@/app/_minio/minio";
 import { ChapterData, CourseData } from "@/app/types";
-
 export const getMimeType = (extension: string | undefined) => {
     if (!extension) return '';
 
@@ -21,7 +21,7 @@ export function EstimatedCourse(course: CourseData) {
   for (let chapter of course.chapters) {
     for (let subject of chapter.subjects) {
       for (let content of subject.contents) {
-        estimated_seconds += content.estimated_time_minutes ? content.estimated_time_minutes : 0; // Assuming the correct naming
+        estimated_seconds += content.estimated_time_seconds? content.estimated_time_seconds : 0; // Assuming the correct naming
       }
     }
   }
@@ -85,4 +85,3 @@ export const generateVideoImageThumbnail = async (videoUrl: string): Promise<str
   });
 };
 
-  

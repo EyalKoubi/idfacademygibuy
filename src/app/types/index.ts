@@ -16,7 +16,7 @@ export type ContentData = {
   title: string;
   file_name: string;
   comments: string;
-  estimated_time_minutes?: number; 
+  estimated_time_seconds?: number; 
 };
 
 export type SubjectData = {
