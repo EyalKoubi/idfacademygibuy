@@ -19,7 +19,7 @@ interface RowInMenu {
 
 const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon,isSideBar }) => {
   const { isMenuButtonPressed } = useAppState();
-  const {user,setUserCourses,setAdminCourses, setCourseProgress}=useUserStore();
+  const {user,userCourses,setUserCourses,setAdminCourses, setCourseProgress}=useUserStore();
   const {setUserRequestsCourse}=useUserRequestCourseStore();
   const {courses}=useCoursesStore();
   const router = useRouter();
@@ -45,16 +45,19 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon,isSideBar }) => {
       console.log(userType)
       console.log(response.data)
       const ids=response.data.coursesIds
+
       const courses=await getCoursesByIds(ids)
+      
       if(userType==="4"){
         console.log("the data of courses user:",response.data)
         setUserCourses(courses)
         setCourseProgress(response.data.coursesProgress)
       }
-      if(userType==="1") 
+      if(userType==="1") {
         console.log(userType)
         setAdminCourses(courses)
-    
+      }
+    console.log("the user courses are:",userCourses)
     router.push(href);
   }
 }

@@ -97,6 +97,7 @@ const AddCoursePage: React.FC = () => {
       formData.append("comments", courseData.name);
       formData.append("fileTitle", courseData.name);
       formData.append("file", fileData, fileData.name);
+    
       console.log(fileData)
       const response = await axios.post("/api/addCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },

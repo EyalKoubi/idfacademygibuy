@@ -1,6 +1,6 @@
 import { CourseData } from "../types";
 import { getAllCourses } from "./CourseController";
-import { getUserCourseProgress, getUserCourseRequests } from "./CourseUserController";
+import { getUserCourseProgress, getUserCourseRequests, getUserCoursesIds } from "./CourseUserController";
 import {  getUser } from "./UserController";
 
 export async function fetchData() {
@@ -9,7 +9,7 @@ export async function fetchData() {
       const courses=coursesFromDb?coursesFromDb:[];
       const userFromDb=await getUser("");//need to put id or something
       if(courses){
-      // const userCourses = await filterUserCourses(userFromDb.id, courses, 4); // 4 is user role index
+       const userCoursesIds = await getUserCoursesIds(userFromDb.id,4); // 4 is user role index
       // const adminCourses = await filterUserCourses(userFromDb.id, courses, 1); // 1 is admin role index
     //  const adminCourseIds = adminCourses.map(course => course.id);
       //const userRequests = await getUserCourseRequests(userFromDb.id,courses,adminCourseIds);
@@ -22,7 +22,7 @@ export async function fetchData() {
           role: roleValue
         },
         courses,
-        // userCourses,
+        userCoursesIds,
         // adminCourses,
         // userRequestsCourse:userRequests,
         //userCourseProgress: userProgress, // Include user course progress

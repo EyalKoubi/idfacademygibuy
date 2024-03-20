@@ -14,6 +14,7 @@ import { calculateProgress, findFirstUnwatched } from "@/utils/progressUtils";
 import { Progress, RadialProgress } from "react-daisyui";
 import ProgressBar from "../myCourses/_components/ProgressBar";
 import { EstimatedCourse } from "@/utils/filesUtils";
+import { requestHandlerUserCourses } from "@/utils/menuActionsUtil";
 interface CourseCardProps {
   course: CourseData;
   isPresentMode:boolean;
@@ -51,7 +52,12 @@ const CourseCard: React.FC<CourseCardProps> = ({ course,isPresentMode}) => {
     }
   };
   useEffect(()=>{console.log("userCourseRequest",userRequestsCourses)},[userRequestsCourses])
-  
+  const OnClickShowCourse=()=>{
+    let formData = new FormData();
+    formData.append("userId", user.id);
+    requestHandlerUserCourses(formData)
+    router.push(`/home/myCourses/${course.id}/chapters`)
+  }
 return (
   <div className={`max-w-sm rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-slate-200 m-4 text-right ${isPresentMode ? 'h-4/5' : ''}`}>
     <div className="p-4">

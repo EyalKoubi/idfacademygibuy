@@ -62,6 +62,7 @@ const PresentCourseDetails: React.FC<PresentCourseDetailsProps> = ({course}) => 
     const chaptersToPresent=course?course.chapters:[];
     useEffect(()=>{
       console.log(course)
+      console.log(userCourses)
       setIsRegister((userCourses.some(userCourse => userCourse.id === course?.id)))
       setIsRequested((userRequestsCourses.some(userrequestCourse => (userrequestCourse.course?.id ===course?.id)&&(userrequestCourse.user.id === user.id))))
     },[course])
@@ -86,7 +87,7 @@ const registerCourse=async ()=> {
 
     return (
       <div className="max-w-md text-right rounded-lg overflow-hidden shadow-lg border border-gray-300 bg-slate-200 m-4">
-      <div className="p-4 text-right"></div>
+      {/* <div className="p-4 text-right"></div> */}
       {course && (
         <>
          <div>

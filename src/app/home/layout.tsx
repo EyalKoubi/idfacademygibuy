@@ -13,6 +13,7 @@ import { Loading } from "react-daisyui";
 import Illustration from "@/app/assets/Education-illustration.svg"
 import Image from "next/image"; 
 import useAppState from "../_contexts/globalContext";
+
 const inter = Inter({ subsets: ["latin"] });
 
 enum Users {
@@ -45,7 +46,10 @@ export default function RootLayout({
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  
+  const getCoursesByIds = (ids: string[]) => {
+    return ids ? courses.filter((course) => ids.includes(course.id)) : [];
+}
+
   const getData=async()=>{
     const response=await axios.get("/api/getData/")
     if(response.data.message){
@@ -54,6 +58,8 @@ export default function RootLayout({
     else{
       setUser(response.data.user)
       setCourses(response.data.courses)
+      const userCourses=getCoursesByIds(response.data.userCoursesIds)
+      setUserCourses(userCourses)
       setIsLoading(false)
 
       console.log("data from db :",response.data)
