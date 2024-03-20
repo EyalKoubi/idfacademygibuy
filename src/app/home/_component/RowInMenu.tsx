@@ -46,16 +46,18 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon,isSideBar }) => {
       console.log(response.data)
       const ids=response.data.coursesIds
 
-      const courses=await getCoursesByIds(ids)
+      const coursesFromDb=await getCoursesByIds(ids)
       
       if(userType==="4"){
         console.log("the data of courses user:",response.data)
-        setUserCourses(courses)
+        setUserCourses(coursesFromDb)
         setCourseProgress(response.data.coursesProgress)
+        console.log("the user courses are:",userCourses)
       }
       if(userType==="1") {
-        console.log(userType)
-        setAdminCourses(courses)
+        console.log("the data of courses admin:",response.data)
+        console.log(coursesFromDb)
+        setAdminCourses(coursesFromDb)
       }
     console.log("the user courses are:",userCourses)
     router.push(href);

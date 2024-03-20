@@ -30,8 +30,11 @@ export async function GET(req: NextRequest, context: getUserCourseProps) {
       return NextResponse.json(data);
     }
     else{
-    console.log(coursesIds);
-    return NextResponse.json(coursesIds);
+      const data={
+        coursesIds,
+      }
+    console.log(data);
+    return NextResponse.json(data);
     }
   } catch (error) {
   console.error("Error in GET request:", error);

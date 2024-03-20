@@ -13,6 +13,7 @@ import { Loading } from "react-daisyui";
 import Illustration from "@/app/assets/Education-illustration.svg"
 import Image from "next/image"; 
 import useAppState from "../_contexts/globalContext";
+import { CourseData } from "../types";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -46,8 +47,9 @@ export default function RootLayout({
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  const getCoursesByIds = (ids: string[]) => {
-    return ids ? courses.filter((course) => ids.includes(course.id)) : [];
+  const getCoursesByIds = (corusesFromDb:CourseData[],ids: string[]) => {
+    console.log(corusesFromDb)
+    return ids ? corusesFromDb.filter((course) => ids.includes(course.id)) : [];
 }
 
   const getData=async()=>{
@@ -58,8 +60,11 @@ export default function RootLayout({
     else{
       setUser(response.data.user)
       setCourses(response.data.courses)
-      const userCourses=getCoursesByIds(response.data.userCoursesIds)
-      setUserCourses(userCourses)
+      const userCoursesFromDb=getCoursesByIds(response.data.courses,response.data.userCoursesIds)
+      console.log(userCoursesFromDb)
+      setUserCourses(userCoursesFromDb)
+      console.log(1)
+      console.log("userCourses:",userCourses)
       setIsLoading(false)
 
       console.log("data from db :",response.data)
