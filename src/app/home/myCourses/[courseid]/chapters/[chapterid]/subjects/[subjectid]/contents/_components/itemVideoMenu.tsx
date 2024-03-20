@@ -8,7 +8,7 @@ interface VideoListItemProps {
 }
 
 const ItemVideoMenu: React.FC<VideoListItemProps> = ({ content, contentStatus, onVideoSelect }) => {
-  console.log(content.mediaSrc)
+  // console.log(content.mediaSrc)
   const hasValidMediaSrc = content.mediaSrc;
 
   // Define the default image source

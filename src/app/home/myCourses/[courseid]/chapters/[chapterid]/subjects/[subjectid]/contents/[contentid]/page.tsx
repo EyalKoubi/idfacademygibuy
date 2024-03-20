@@ -102,7 +102,7 @@
     };
     return (
       <div className="flex flex-col h-screen mr-11">
-        <h1>{subjectTitleName}</h1>
+        <h1 className='text-center'>{subjectTitleName}</h1>
         <div className="flex justify-between items-start m-4 bg-gray-200 p-4 rounded">
           <div className="flex-1 flex justify-center items-center">
             {currContent ? (

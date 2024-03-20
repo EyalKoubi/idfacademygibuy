@@ -33,7 +33,7 @@ const VideoLinkList: React.FC<VideoLinkListProps> = ({
           presignedUrl = await generateVideoImageThumbnail(presignedUrl);
         }
         console.log(!contentData.some((updatedContent) => updatedContent.id === content.id))
-        // Check if the content with the same ID already exists in contentData
+        
           const updatedContent = {
             ...content,
             mediaSrc: presignedUrl,
@@ -43,7 +43,7 @@ const VideoLinkList: React.FC<VideoLinkListProps> = ({
           // Update the contentData state
           setContentData((prevContentData) => {
             if (!prevContentData.some((content) => content.id === updatedContent.id)) {
-              return [...prevContentData, updatedContent];
+              return [ updatedContent,...prevContentData];
             }
             return prevContentData;
           });
@@ -51,9 +51,10 @@ const VideoLinkList: React.FC<VideoLinkListProps> = ({
         console.error('Error fetching media:', error);
       }
     };
-
-    if (contents && contents.length > 0) {
+    console.log(contents)
+    if (contents) {
       contents.forEach((content) => {
+        console.log(content)
         fetchMediaInfo(content);
       });
     }

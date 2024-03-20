@@ -23,13 +23,11 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon,isSideBar }) => {
   const {setUserRequestsCourse}=useUserRequestCourseStore();
   const {courses}=useCoursesStore();
   const router = useRouter();
-  const getCoursesByIds=(ids:string[])=>{
-    return courses.filter((course)=>ids?.includes(course.id)) //if use filter without {} in the expresion
-  }
-  // const getCoursesByIds = (ids:string[]) => {
-  //   console.log(courses);
-  //   return courses.filter((course) => ids.includes(course.id));
-  // };
+  const getCoursesByIds = (ids: string[]) => {
+    console.log(ids);
+    console.log(courses)
+    return ids ? courses.filter((course) => ids.includes(course.id)) : [];
+}
   const requestHandlerUserCourses=async(formData:FormData,rowInfo:string)=>{
     console.log("reach to user requests")
     console.log("the row info is ",rowInfo)
@@ -37,23 +35,26 @@ const RowInMenu:React.FC<RowInMenu> = ({ rowInfo, href, icon,isSideBar }) => {
     console.log(userType)
     formData.append("userType", userType);
     // const requestString="/api/getUserCourseRequests/"+user.id+"|"+userType
+    console.log("the herf is ",href)
     const response=await axios.get("/api/getUserCourses/"+user.id+"|"+userType);
     if(response.data.message){
       console.log("error to fetch data")
+      
     }
     else{
       console.log(userType)
       console.log(response.data)
+      const ids=response.data.coursesIds
+      const courses=await getCoursesByIds(ids)
       if(userType==="4"){
-        console.log(response.data)
-        const courses=await getCoursesByIds(response.data.coursesIds)
-        console.log(courses)
-        setUserCourses(getCoursesByIds(response.data.coursesIds))
+        console.log("the data of courses user:",response.data)
+        setUserCourses(courses)
         setCourseProgress(response.data.coursesProgress)
       }
       if(userType==="1") 
         console.log(userType)
-        setAdminCourses(getCoursesByIds(response.data))
+        setAdminCourses(courses)
+    
     router.push(href);
   }
 }
