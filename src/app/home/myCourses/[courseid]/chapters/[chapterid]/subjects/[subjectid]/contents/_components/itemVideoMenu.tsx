@@ -15,8 +15,8 @@ const ItemVideoMenu: React.FC<VideoListItemProps> = ({ content, contentStatus, o
   const defaultImageSrc = '@/app/src/assets/default-image-playlist.jpg'; 
   return (
     <div
-      className={`flex justify-between items-center min-w-full p-2 rounded-md my-2 cursor-pointer hover:bg-gray-300 transition duration-200 ${
-        hasValidMediaSrc ? '' : 'bg-gray-200' 
+      className={`flex justify-between items-center min-w-full p-2 rounded-md my-2 cursor-pointer hover:bg-white transition duration-200 ${
+        hasValidMediaSrc ? '' : 'bg-white' 
       }`}
       onClick={() => onVideoSelect(content, contentStatus)}
     >

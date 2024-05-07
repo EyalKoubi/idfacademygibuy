@@ -71,7 +71,7 @@ export async function processCourseUserRequest(requestData: CourseUserRequestDat
   }
 }
 
-export async function getUserCourseRequests(userId: string, adminCourseIds: string[]) {
+export async function getUserCoursesRequestsForAdmin(userId: string, adminCourseIds: string[]) {
     const userRequestsCoursesDb = adminCourseIds.length > 0 ? await db
     .selectFrom("UserRequestsCourse")
     .leftJoin("User", "User.id", "UserRequestsCourse.userId")
@@ -101,6 +101,22 @@ export async function getUserCourseRequests(userId: string, adminCourseIds: stri
     }));
     return userRequestsCourse;
   }
+
+  export async function getAllUserCourseRequests(userId: string) {
+    let userRequestsCoursesIdsDb = await db
+    .selectFrom("UserRequestsCourse")
+    
+    .where("UserRequestsCourse.userId", "=", userId) 
+    .select([ 
+      "UserRequestsCourse.courseId", 
+    ])
+    .execute()
+    if (userRequestsCoursesIdsDb==undefined)
+        userRequestsCoursesIdsDb=[]
+    
+    return userRequestsCoursesIdsDb.map(object => object.courseId);;
+  }
+  
 
   export async function getUserCourseProgress(userId: string) {
     const userCourseProgressData = await db

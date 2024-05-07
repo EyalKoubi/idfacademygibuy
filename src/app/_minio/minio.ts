@@ -1,6 +1,8 @@
 import * as Minio from "minio";
 import { Stream } from "stream";
 
+import { PassThrough } from 'stream';
+
 export const s3Config: Minio.ClientOptions = {
   endPoint: process.env.S3_ENDPOINT || '127.0.0.1', // Default value if not set
   port: parseInt(process.env.S3_PORT || '9000', 10), // Provide a default port and parse it as an integer
@@ -56,7 +58,6 @@ export async function getPresignedUrlFromS3Service(bucket: string, fileName: str
   }
 }
 
-import { PassThrough } from 'stream';
 
 
 

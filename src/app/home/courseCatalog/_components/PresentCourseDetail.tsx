@@ -8,13 +8,14 @@ import useUserRequestCourseStore from "@/app/_contexts/requestsCoursesContext";
 import axios from "axios";
 import ErrorMessage from "../../_component/ErrorMessage";
 import CustomRating from "../../_component/Rating";
+import { EstimatedCourse } from "@/utils/filesUtils";
 interface  PresentCourseDetailsProps{
         course:CourseData;
 }
 const PresentCourseDetails: React.FC<PresentCourseDetailsProps> = ({course}) => {
     const { courses,editCourse } = useCoursesStore();
     const {user,userCourses,adminCourses,addUserCourse,coursesProgress,setCourseProgress}=useUserStore();
-    const {userRequestsCourses,addUserRequestsCourse}=useUserRequestCourseStore();
+    const {userRequestsCourses,addUserRequestsCourse,allMyRequestToCourses}=useUserRequestCourseStore();
     const [isRegister,setIsRegister]=useState(false)
     const [registererror,setRegistererror]=useState('')
     const [isRequested,setIsRequested]=useState(false)
@@ -64,7 +65,7 @@ const PresentCourseDetails: React.FC<PresentCourseDetailsProps> = ({course}) => 
       console.log(course)
       console.log(userCourses)
       setIsRegister((userCourses.some(userCourse => userCourse.id === course?.id)))
-      setIsRequested((userRequestsCourses.some(userrequestCourse => (userrequestCourse.course?.id ===course?.id)&&(userrequestCourse.user.id === user.id))))
+      setIsRequested(allMyRequestToCourses.includes(course.id))
     },[course])
 const registerCourse=async ()=> {
     
@@ -119,6 +120,7 @@ const registerCourse=async ()=> {
         </div>)}
                 </>
       )}
+      <div>{`${CourseCardTexts.estimatedTimeText} ${EstimatedCourse(course)}`}</div>
       <br/>
       <span>{presentCourseDetailTexts.chaptersOfCourse}</span>
       <div className="flex flex-col">

@@ -97,6 +97,7 @@ export type ContentItemProgress = {
 };
 
 export type UserRequestCourseState={
+  allMyRequestToCourses:string[];
   userRequestsCourses:UserRequestsCourse[];
 }
 

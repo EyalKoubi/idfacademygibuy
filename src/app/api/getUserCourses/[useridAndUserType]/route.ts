@@ -32,7 +32,7 @@ export async function GET(req: NextRequest, context: getUserCourseProps) {
     else{
       const data={
         coursesIds,
-      }
+    }
     console.log(data);
     return NextResponse.json(data);
     }

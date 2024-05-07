@@ -63,7 +63,7 @@ const VideoLinkList: React.FC<VideoLinkListProps> = ({
   useEffect(()=>{console.log(contentData)},[contentData])
 
   return (
-    <div className='min-w-full'>
+    <div className='bg-white min-w-full min-h-full'>
       <section>
         <p className="bg-gray-300 p-2 rounded">{subjectTitleName}</p>
       </section>

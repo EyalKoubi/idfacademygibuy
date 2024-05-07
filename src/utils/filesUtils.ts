@@ -27,16 +27,19 @@ export function EstimatedCourse(course: CourseData) {
   }
   // Calculate hours and minutes from seconds
   const hours = Math.floor(estimated_seconds / 3600);
-  const minutes = Math.floor((estimated_seconds % 3600) / 60);
+  let minutes = Math.floor((estimated_seconds % 3600) / 60);
   const seconds = Math.floor(estimated_seconds % 60); // Remaining seconds
 
   // Format hours, minutes, and seconds to ensure two digits
   const formattedHours = hours.toString().padStart(2, '0');
-  const formattedMinutes = minutes.toString().padStart(2, '0');
+  
   const formattedSeconds = seconds.toString().padStart(2, '0');
 
+  if(seconds>0&& seconds<60)
+    minutes=minutes+1
+  const formattedMinutes = minutes.toString().padStart(2, '0');
   console.log(`${formattedHours}:${formattedMinutes}:${formattedSeconds}`);
-  return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+  return `${formattedHours}:${formattedMinutes}`;
 }
 
 export const generateVideoImageThumbnail = async (videoUrl: string): Promise<string> => {

@@ -141,14 +141,12 @@ export async function addDefaultCourseImageContent(file:File,title:string) {
   try {
 
    // Create a File object with all properties (optional)
-
-   // Upload the file to Minio (optional)
     const contentData = {
       file: file,
       title,
       comments: "תמונת קורס ברירת מחדל",
       subjectId: "",
-      estimated_time_seconds:120
+      estimated_time_seconds:0
     };
 
     const newContent = await addContentWithoutResponse(contentData);

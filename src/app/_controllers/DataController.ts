@@ -1,6 +1,6 @@
 import { CourseData } from "../types";
 import { getAllCourses } from "./CourseController";
-import { getUserCourseProgress, getUserCourseRequests, getUserCoursesIds } from "./CourseUserController";
+import { getUserCourseProgress, getAllUserCourseRequests, getUserCoursesIds } from "./CourseUserController";
 import {  getUser } from "./UserController";
 
 export async function fetchData() {
@@ -12,9 +12,9 @@ export async function fetchData() {
        const userCoursesIds = await getUserCoursesIds(userFromDb.id,4); // 4 is user role index
       // const adminCourses = await filterUserCourses(userFromDb.id, courses, 1); // 1 is admin role index
     //  const adminCourseIds = adminCourses.map(course => course.id);
-      //const userRequests = await getUserCourseRequests(userFromDb.id,courses,adminCourseIds);
+        const userRequests = await getAllUserCourseRequests(userFromDb.id);
      // const userProgress = await getUserCourseProgress(userFromDb.id);
-
+        console.log("all user request courses ids",userRequests)
       const roleValue=1;// need to fix when will be roles (define role 1-admin)
       const data = {
         user: {
@@ -24,7 +24,7 @@ export async function fetchData() {
         courses,
         userCoursesIds,
         // adminCourses,
-        // userRequestsCourse:userRequests,
+         userAllRequestsCourse:userRequests,
         //userCourseProgress: userProgress, // Include user course progress
       };
   

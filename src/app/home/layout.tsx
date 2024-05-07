@@ -31,7 +31,7 @@ export default function RootLayout({
 }) {
   const { setCourses, courses } = useCoursesStore();
   const {user,userCourses,adminCourses,coursesProgress, setUser,setUserCourses,setAdminCourses,setCourseProgress}=useUserStore();
-  const {setUserRequestsCourse}=useUserRequestCourseStore()
+  const {setAllMyRequestToCourses}=useUserRequestCourseStore()
 
   const [isLoading, setIsLoading] = useState(true);
   const { setIsSmallScreen,isSmallScreen } = useAppState();
@@ -47,8 +47,9 @@ export default function RootLayout({
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
   const getCoursesByIds = (corusesFromDb:CourseData[],ids: string[]) => {
-    console.log(corusesFromDb)
+    // console.log(corusesFromDb)
     return ids ? corusesFromDb.filter((course) => ids.includes(course.id)) : [];
 }
 
@@ -61,8 +62,9 @@ export default function RootLayout({
       setUser(response.data.user)
       setCourses(response.data.courses)
       const userCoursesFromDb=getCoursesByIds(response.data.courses,response.data.userCoursesIds)
-      console.log(userCoursesFromDb)
+      // console.log(userCoursesFromDb)
       setUserCourses(userCoursesFromDb)
+      setAllMyRequestToCourses(response.data.userAllRequestsCourse)
       console.log(1)
       console.log("userCourses:",userCourses)
       setIsLoading(false)
@@ -111,3 +113,7 @@ export default function RootLayout({
 </html>
   );
 }
+function setAllMyRequestToCourses(userAllRequestsCourse: any) {
+  throw new Error("Function not implemented.");
+}
+
