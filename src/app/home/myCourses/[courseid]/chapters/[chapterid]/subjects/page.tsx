@@ -24,7 +24,7 @@ const SubjectList: React.FC<SubjectListProps>= (props:SubjectListProps) => {
   return (
     <div className='flex flex-col'>
       {subjectsToPresent?.map((subject: SubjectData) => (
-        <Subject subject={subject} chapterid={chapterId} courseid={courseId}/>
+        <Subject subject={subject} chapterid={chapterId} courseid={courseId} key={subject.id}/>
       ))}
     </div>
   );

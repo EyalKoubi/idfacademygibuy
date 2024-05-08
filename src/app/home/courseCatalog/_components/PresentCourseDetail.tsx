@@ -125,7 +125,7 @@ const registerCourse=async ()=> {
       <span>{presentCourseDetailTexts.chaptersOfCourse}</span>
       <div className="flex flex-col">
         {chaptersToPresent?.map((chapter: ChapterData) => (
-          <Chapter chapter={chapter} courseid={course.id} isRegister={isRegister} setRegistererror={setRegistererror} />
+          <Chapter chapter={chapter} courseid={course.id} isRegister={isRegister} setRegistererror={setRegistererror} key={chapter.id}/>
         ))}
         <ErrorMessage message={registererror}/>
       </div>

@@ -6,6 +6,7 @@ type CoursesActions = {
   setAllMyRequestToCourses:(allMyRequestToCourses:string[])=>void;
   addUserRequestsCourse:(user:any,course:CourseData)=>void;
   removeRequestUserCourse:(user:any,course:CourseData)=>void;
+  removeFromAllRequestUser:(course:CourseData)=>void;
 };
 
 const useUserRequestCourseStore = create<UserRequestCourseState & CoursesActions>((set) => ({
@@ -30,7 +31,12 @@ const useUserRequestCourseStore = create<UserRequestCourseState & CoursesActions
         item.user !== user || item.course !== course
     ),
 })),
- 
+  removeFromAllRequestUser: (course: CourseData) => set((state) => ({
+  ...state,
+  allMyRequestToCourses: state.allMyRequestToCourses.filter(item =>
+      item !== course.id 
+  ),
+})),
 }));
 
 

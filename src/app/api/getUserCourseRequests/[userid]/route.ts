@@ -4,7 +4,7 @@ import { db } from "../../../../db/database"; // adjust the import according to 
 import { NextRequest, NextResponse } from "next/server";
 import { ContentData, CourseData } from "@/app/types";
 import {fetchData} from "@/app/_controllers/DataController"
-import { getUserCourseRequests, getUserCoursesIds } from "@/app/_controllers/CourseUserController";
+import { getUserCoursesRequestsForAdmin, getUserCoursesIds } from "@/app/_controllers/CourseUserController";
 interface getUserCourseRequestsProps{
   params:{
       userid:string;
@@ -16,7 +16,7 @@ export async function GET(req: NextRequest, context: getUserCourseRequestsProps)
   try{
     const { userid} = context.params;
     const adminCourseIds=await getUserCoursesIds(userid,1)
-    const userCourseRequests = await getUserCourseRequests(userid,adminCourseIds);
+    const userCourseRequests = await getUserCoursesRequestsForAdmin(userid,adminCourseIds);
     console.log(userCourseRequests);
     return NextResponse.json(userCourseRequests);
   } catch (error) {

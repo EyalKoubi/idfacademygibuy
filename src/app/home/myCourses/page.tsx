@@ -2,7 +2,7 @@
 import useUserStore from "@/app/_contexts/userContext";
 import CourseCard from "@/app/home/_component/courseCard";
 
-const myCourses = () => {
+const MyCourses = () => {
   const {userCourses}=useUserStore();
   return <>
     {userCourses.map((course,index)=>{
@@ -11,4 +11,4 @@ const myCourses = () => {
   </>;
 };
 
-export default myCourses;
+export default MyCourses;

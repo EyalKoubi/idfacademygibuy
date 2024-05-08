@@ -10,7 +10,7 @@ import { Badge, Button, Checkbox, Mask, Table } from 'react-daisyui';
 const Page = () => {
     const [pendingRegistrations, setPendingRegistrations] = useState<User[]>([]);
     const [selectedCourse, setSelectedCourse] = useState<{[userId: string]: string}>({});
-    const {userRequestsCourses,removeRequestUserCourse}=useUserRequestCourseStore();
+    const {userRequestsCourses,removeRequestUserCourse,removeFromAllRequestUser}=useUserRequestCourseStore();
     const {user,userCourses,addUserCourse,addNewCourseProcess}=useUserStore();
 
     const answerRequestCourse =async (userCurrent:any,course:CourseData,answerType:string) => {
@@ -21,10 +21,12 @@ const Page = () => {
         const response =await axios.post(`/api/answerRequestCourse`,formData)
         console.log(response.data)
                 removeRequestUserCourse(userCurrent,course)
-                addNewCourseProcess(course)
-                if(userCurrent.id===user.id&&answerType==="Accept")//if we approve request to my self
+                removeFromAllRequestUser(course)
+                if(userCurrent.id===user.id&&answerType==="Accept"){
+                    addNewCourseProcess(course)
                     addUserCourse(course)
-                    console.log(userCourses)
+                }
+                  console.log(userCourses)
           
     };
 

@@ -162,9 +162,6 @@ export async function addTextContent(title:string,editorValue: string, subjectId
     console.log(title,editorValue,subjectId)
     ContentTextSchema.parse({title,comments:editorValue}) 
 
-
-   
-   
     const newContent = await db
     .insertInto("Content")
     .values({title, file_name: "", comments:editorValue,estimated_time_seconds:120 })

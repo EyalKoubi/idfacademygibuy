@@ -44,7 +44,7 @@ const Navbar: React.FC<NavbarProps> = ({ userType }) => {
     {!isSmallScreen && (
   <div className="flex justify-center mx-4 gap-10 items-center flex-grow">
     {menu.slice().reverse().map(({ id, href, rowInfo, icon }) => {
-      return <RowInMenu href={href} rowInfo={rowInfo} icon={icon} isSideBar={false} />;
+      return <RowInMenu href={href} rowInfo={rowInfo} icon={icon} isSideBar={false} key={id} />;
     })}
   </div>
 )}
