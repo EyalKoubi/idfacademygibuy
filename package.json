@@ -6,7 +6,7 @@
     "migrate": "npx ts-node  -r dotenv/config  migrate.ts",
     "dev": "npm run migrate && concurrently \"next dev\" \"docker-compose up\"",
     "build": "next build",
-    "start": "next start",
+    "start": "npm run migrate && next start",
     "lint": "next lint"
   },
   "dependencies": {
