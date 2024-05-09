@@ -8,20 +8,20 @@ import {
 } from "kysely";
 
 export interface Account {
-  id: GeneratedAlways<string>;
+  id: string;
   userId: string;
-  type: string;
+  type: "oidc" | "oauth" | "email";
   provider: string;
   providerAccountId: string;
-  refresh_token: string | null;
-  access_token: string | null;
-  expires_at: number | null;
-  token_type: string | null;
-  scope: string | null;
-  id_token: string | null;
-  session_state: string | null;
+  refresh_token?: string;
+  access_token?: string;
+  expires_at?: number;
+  token_type?: Lowercase<string>;
+  scope?: string;
+  id_token?: string;
+  session_state?: string;
+  [key: string]: string | number | undefined; // index signature
 }
-
 export interface Session {
   id: GeneratedAlways<string>;
   userId: string;
@@ -30,7 +30,7 @@ export interface Session {
 }
 
 export interface User {
-  id: GeneratedAlways<string>;
+  id: string;
   name: string | null;
   email: string;
   emailVerified: Date | null;
@@ -45,10 +45,10 @@ export interface VerificationToken {
 
 export interface ContentTable {
   id: GeneratedAlways<string>;
-  title:string;
+  title: string;
   file_name: string;
   comments: string;
-  estimated_time_seconds:number|undefined;
+  estimated_time_seconds: number | undefined;
 }
 
 export interface ContentSubjectTable {
@@ -80,10 +80,10 @@ export interface ChapterCourseTable {
   chapterId: string;
   courseId: string;
 }
-export interface UserCoursesTable{
-  userId:string;
+export interface UserCoursesTable {
+  userId: string;
   courseId: string;
-  role:number;
+  role: number;
 }
 
 export interface CourseTable {
@@ -95,38 +95,38 @@ export interface CourseTable {
   description_sub_title: string;
   description: string;
   rate: number;
-  num_rates:number;
+  num_rates: number;
 }
 
 export interface UserRequestsCourseTable {
-  userId:string;
+  userId: string;
   courseId: string;
 }
 
 export interface UserCourseProgressTable {
-  userId: string;   
-  courseId: string;                  
-  lastChapterId: string|null;      
-  lastSubjectId: string|null;
-  firstUnwatchedContentId:string|null ;    
-  contentProgress: string; 
-  already_vote:boolean;
+  userId: string;
+  courseId: string;
+  lastChapterId: string | null;
+  lastSubjectId: string | null;
+  firstUnwatchedContentId: string | null;
+  contentProgress: string;
+  already_vote: boolean;
 }
 export interface Database {
-  Account: Account; 
-  Session: Session; 
-  User: User; 
-  VerificationToken: VerificationToken; 
-  Course: CourseTable; 
-  Content: ContentTable; 
-  ContentSubject: ContentSubjectTable; 
-  Subject: SubjectTable; 
-  SubjectChapter: SubjectChapterTable; 
+  Account: Account;
+  Session: Session;
+  User: User;
+  VerificationToken: VerificationToken;
+  Course: CourseTable;
+  Content: ContentTable;
+  ContentSubject: ContentSubjectTable;
+  Subject: SubjectTable;
+  SubjectChapter: SubjectChapterTable;
   Chapter: ChapterTable;
-  ChapterCourse: ChapterCourseTable; 
-  UserCourses:UserCoursesTable;
-  UserRequestsCourse:UserRequestsCourseTable;
-  UserCourseProgress:UserCourseProgressTable;
+  ChapterCourse: ChapterCourseTable;
+  UserCourses: UserCoursesTable;
+  UserRequestsCourse: UserRequestsCourseTable;
+  UserCourseProgress: UserCourseProgressTable;
 }
 
 export type SelectContent = Selectable<ContentTable>;
@@ -176,5 +176,3 @@ export type UserRequestsCourseUpdate = Updateable<UserCourseProgressTable>;
 export type SelectUserRequestsCourse = Selectable<UserCoursesTable>;
 export type NewUserRequestsCourse = Insertable<UserCoursesTable>;
 export type UserCourseProgressUpdate = Updateable<UserCoursesTable>;
-
-

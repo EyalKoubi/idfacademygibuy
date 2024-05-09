@@ -10,8 +10,8 @@ import { User } from "next-auth";
 import useUserStore from "../_contexts/userContext";
 import useUserRequestCourseStore from "../_contexts/requestsCoursesContext";
 import { Loading } from "react-daisyui";
-import Illustration from "@/app/assets/Education-illustration.svg"
-import Image from "next/image"; 
+import Illustration from "@/app/assets/Education-illustration.svg";
+import Image from "next/image";
 import useAppState from "../_contexts/globalContext";
 import { CourseData } from "../types";
 
@@ -30,11 +30,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const { setCourses, courses } = useCoursesStore();
-  const {user,userCourses,adminCourses,coursesProgress, setUser,setUserCourses,setAdminCourses,setCourseProgress}=useUserStore();
-  const {setAllMyRequestToCourses}=useUserRequestCourseStore()
+  const {
+    user,
+    userCourses,
+    adminCourses,
+    coursesProgress,
+    setUser,
+    setUserCourses,
+    setAdminCourses,
+    setSpecificCourseProgress,
+  } = useUserStore();
+  const { setAllMyRequestToCourses } = useUserRequestCourseStore();
 
   const [isLoading, setIsLoading] = useState(true);
-  const { setIsSmallScreen,isSmallScreen } = useAppState();
+  const { setIsSmallScreen, isSmallScreen } = useAppState();
 
   useEffect(() => {
     const handleResize = () => {
@@ -48,72 +57,73 @@ export default function RootLayout({
     };
   }, []);
 
-  const getCoursesByIds = (corusesFromDb:CourseData[],ids: string[]) => {
+  const getCoursesByIds = (corusesFromDb: CourseData[], ids: string[]) => {
     // console.log(corusesFromDb)
     return ids ? corusesFromDb.filter((course) => ids.includes(course.id)) : [];
-}
+  };
 
-  const getData=async()=>{
-    const response=await axios.get("/api/getData/")
-    if(response.data.message){
-      console.log("error to fetch data")
-    }
-    else{
-      setUser(response.data.user)
-      setCourses(response.data.courses)
-      const userCoursesFromDb=getCoursesByIds(response.data.courses,response.data.userCoursesIds)
+  const getData = async () => {
+    const response = await axios.get("/api/getData/");
+    if (response.data.message) {
+      console.log("error to fetch data");
+    } else {
+      setUser(response.data.user);
+      setCourses(response.data.courses);
+      const userCoursesFromDb = getCoursesByIds(
+        response.data.courses,
+        response.data.userCoursesIds
+      );
       // console.log(userCoursesFromDb)
-      setUserCourses(userCoursesFromDb)
-      setAllMyRequestToCourses(response.data.userAllRequestsCourse)
-      console.log(1)
-      console.log("userCourses:",userCourses)
-      setIsLoading(false)
+      setUserCourses(userCoursesFromDb);
+      //setCoursesProgress(response.data.)
+      setAllMyRequestToCourses(response.data.userAllRequestsCourse);
+      console.log(1);
+      console.log("userCourses:", userCourses);
+      setIsLoading(false);
 
-      console.log("data from db :",response.data)
+      console.log("data from db :", response.data);
     }
-  }
+  };
   useEffect(() => {
     getData();
   }, []);
-  
 
   return (
-<html>
-  <body className={inter.className}>
-    <div className="relative">
-      <main className="min-h-screen bg-gradient-to-b from-sky-100 to-transparent">
-        {isLoading ? (
-          <div className="flex flex-col justify-between items-center min-w-full">
-            <div className="m-8">
-              <Loading size="lg" />
-            </div>
-            <Image src={Illustration} alt={""} />
-          </div>
-        ) : (
-          <div className="flex flex-col justify-between items-center gap-10 w-full">
-              <div className="absolute top-0 h-full max-w-64"></div>
-            {user && <Navbar userType={Users.Admin} />}
-            <div className="flex flex-col">
-              < >
-                {/* Main Content */}
-                {children}
-              </>
-              {user &&isSmallScreen&& (
-                <div className="absolute top-32 right-0 h-full max-w-64">
-                  {/* Sidebar */}
-                  <Sidebar userType={Users.Admin} />
+    <html>
+      <body className={inter.className}>
+        <div className="relative">
+          <main className="min-h-screen bg-gradient-to-b from-sky-100 to-transparent">
+            {isLoading ? (
+              <div className="flex flex-col justify-between items-center min-w-full">
+                <div className="m-8">
+                  <Loading size="lg" />
                 </div>
-              )}
-            </div>
-          </div>
-        )}
-      </main>
-    </div>
-  </body>
-</html>
+                <Image src={Illustration} alt={""} />
+              </div>
+            ) : (
+              <div className="flex flex-col justify-between items-center gap-10 w-full">
+                <div className="absolute top-0 h-full max-w-64"></div>
+                {user && <Navbar userType={Users.Admin} />}
+                <div className="flex flex-col">
+                  <>
+                    {/* Main Content */}
+                    {children}
+                  </>
+                  {user && isSmallScreen && (
+                    <div className="absolute top-32 right-0 h-full max-w-64">
+                      {/* Sidebar */}
+                      <Sidebar userType={Users.Admin} />
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </main>
+        </div>
+      </body>
+    </html>
   );
 }
 function setAllMyRequestToCourses(userAllRequestsCourse: any) {
   throw new Error("Function not implemented.");
 }
-
