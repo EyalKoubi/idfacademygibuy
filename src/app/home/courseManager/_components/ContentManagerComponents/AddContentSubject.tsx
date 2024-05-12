@@ -34,11 +34,16 @@ const AddContentForm: React.FC<AddContentFormProps> = ({
     setIsTextContent(!isTextContent);
     setEditorState(EditorState.createEmpty());
     setEditorValue("");
-    setContentData({ ...contentData,title:"", comments: "",estimated_time_seconds:2 });
+    setContentData({
+      ...contentData,
+      title: "",
+      comments: "",
+      estimated_time_seconds: 2,
+    });
     setFile(null);
   };
 
-  const handleEditorChange = (newEditorValue:string) => {
+  const handleEditorChange = (newEditorValue: string) => {
     setEditorValue(newEditorValue);
   };
 
@@ -47,18 +52,14 @@ const AddContentForm: React.FC<AddContentFormProps> = ({
       ...contentData,
       comments: isTextContent ? editorValue : "",
     });
-    console.log(editorValue)
   }, [editorValue, isTextContent]);
 
   return (
     <div className="flex flex-col">
       <div>
-    <Toggle
-    checked={isTextContent}
-    onChange={handleToggle}
-    />
-    <div>  
-      <input
+        <Toggle checked={isTextContent} onChange={handleToggle} />
+        <div>
+          <input
             type="text"
             placeholder={editTexts.title}
             value={contentData.title}
@@ -68,14 +69,14 @@ const AddContentForm: React.FC<AddContentFormProps> = ({
             className="p-2 w-full border rounded-md shadow-sm mb-4"
           />
         </div>
-    </div>
+      </div>
       {isTextContent ? (
         <div>
-        <ReactQuill
-          value={editorValue}
-          onChange={handleEditorChange}
-          modules={{ toolbar: true }}
-        />
+          <ReactQuill
+            value={editorValue}
+            onChange={handleEditorChange}
+            modules={{ toolbar: true }}
+          />
         </div>
       ) : (
         <div>
@@ -89,7 +90,7 @@ const AddContentForm: React.FC<AddContentFormProps> = ({
             }}
             className="p-2 border rounded-md shadow-sm"
           />
-         
+
           <input
             type="text"
             placeholder={editTexts.comments}

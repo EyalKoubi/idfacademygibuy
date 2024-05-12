@@ -39,6 +39,7 @@ export default function RootLayout({
     setUserCourses,
     setAdminCourses,
     setSpecificCourseProgress,
+    setCoursesProgress,
   } = useUserStore();
   const { setAllMyRequestToCourses } = useUserRequestCourseStore();
 
@@ -58,7 +59,6 @@ export default function RootLayout({
   }, []);
 
   const getCoursesByIds = (corusesFromDb: CourseData[], ids: string[]) => {
-    // console.log(corusesFromDb)
     return ids ? corusesFromDb.filter((course) => ids.includes(course.id)) : [];
   };
 
@@ -75,10 +75,8 @@ export default function RootLayout({
       );
       // console.log(userCoursesFromDb)
       setUserCourses(userCoursesFromDb);
-      //setCoursesProgress(response.data.)
+      setCoursesProgress(response.data.userCourseProgress);
       setAllMyRequestToCourses(response.data.userAllRequestsCourse);
-      console.log(1);
-      console.log("userCourses:", userCourses);
       setIsLoading(false);
 
       console.log("data from db :", response.data);

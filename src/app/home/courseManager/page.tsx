@@ -5,13 +5,10 @@ import useCoursesStore from "../../_contexts/courseContext";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/app/_contexts/userContext";
 
-const CourseManager= () => {
+const CourseManager = () => {
   const { setCourses, courses } = useCoursesStore();
   const router = useRouter();
-  const {adminCourses}=useUserStore();
-  useEffect(() => {
-    console.log("🚀 ~ file: page.tsx:34 ~ CourseManager ~ courses:", courses);
-  }, [courses]);
+  const { adminCourses } = useUserStore();
 
   const courseChoiceHandle = (courseId: string) => {
     router.push(`/home/courseManager/${courseId}`);

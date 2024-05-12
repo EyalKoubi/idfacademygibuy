@@ -10,24 +10,29 @@ import UpdateChapterForm from "./UpdateChapter";
 import ErrorMessage from "@/app/home/_component/ErrorMessage";
 
 interface ChapterProps {
-  chapter: ChapterData,
-  courseId: string,
+  chapter: ChapterData;
+  courseId: string;
   chapterIndex: number;
 }
 
-const Chapter: React.FC<ChapterProps> = ({ chapter, courseId, chapterIndex }) => {
-  const { updateChapter, deleteChapter, addSubject, courses } = useCoursesStore();
+const Chapter: React.FC<ChapterProps> = ({
+  chapter,
+  courseId,
+  chapterIndex,
+}) => {
+  const { updateChapter, deleteChapter, addSubject, courses } =
+    useCoursesStore();
   const [isUpdateChapter, setIsUpdateChapter] = useState(false);
   const [chapterName, setChapterName] = useState(chapter.name);
   const [chapterBrief, setChapterBrief] = useState(chapter.brief);
   const [isSelectedChapter, setIsSelectedChapter] = useState(false);
   const [isAddingSubject, setIsAddingSubject] = useState(false);
-  const [addSubjectError, setAddSubjectError] = useState('');
-  const [renameChapterError, setRenameChapterError] = useState('');
-  const [loading,setLoading]=useState(false)
+  const [addSubjectError, setAddSubjectError] = useState("");
+  const [renameChapterError, setRenameChapterError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleUpdateChapter = async () => {
-    setLoading(true)
+    setLoading(true);
     const formData = new FormData();
     const updatedChapter = {
       id: chapter.id,
@@ -39,30 +44,28 @@ const Chapter: React.FC<ChapterProps> = ({ chapter, courseId, chapterIndex }) =>
     const response = await axios.post("/api/editChapter", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    console.log(response.data)
     if (response.data?.message) {
       setRenameChapterError(response.data?.message);
     } else {
       updateChapter(updatedChapter, courseId);
       setIsUpdateChapter(false);
     }
-    setLoading(false)
+    setLoading(false);
   };
 
   const handleDeleteChapter = async () => {
-    setLoading(true)
+    setLoading(true);
     const formData = new FormData();
     formData.append("chapterId", chapter.id);
-    const response=await axios.post("/api/deleteChapter", formData, {
+    const response = await axios.post("/api/deleteChapter", formData, {
       headers: { "Content-Type": "multipart/form-data" },
     });
-    if(response.data.message){
-      setRenameChapterError(response.data.message)
+    if (response.data.message) {
+      setRenameChapterError(response.data.message);
+    } else {
+      deleteChapter(chapter, courseId);
     }
-    else{
-    deleteChapter(chapter, courseId);
-    }
-    setLoading(false)
+    setLoading(false);
   };
 
   return (
@@ -124,10 +127,7 @@ const Chapter: React.FC<ChapterProps> = ({ chapter, courseId, chapterIndex }) =>
                   setIsAddingSubject={setIsAddingSubject}
                   setAddSubjectError={setAddSubjectError}
                 />
-                {addSubjectError && (
-                  <ErrorMessage message={addSubjectError}/>
-          
-                )}
+                {addSubjectError && <ErrorMessage message={addSubjectError} />}
               </div>
             ) : (
               <button

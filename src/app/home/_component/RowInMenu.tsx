@@ -25,50 +25,39 @@ const RowInMenu: React.FC<RowInMenu> = ({ rowInfo, href, icon, isSideBar }) => {
     setUserCourses,
     setAdminCourses,
     setSpecificCourseProgress,
+    setCoursesProgress,
   } = useUserStore();
   const { setUserRequestsCourse } = useUserRequestCourseStore();
   const { courses } = useCoursesStore();
   const router = useRouter();
   const getCoursesByIds = (ids: string[]) => {
-    console.log(ids);
-    console.log(courses);
     return ids ? courses.filter((course) => ids.includes(course.id)) : [];
   };
   const requestHandlerUserCourses = async (
     formData: FormData,
     rowInfo: string
   ) => {
-    console.log("reach to user requests");
-    console.log("the row info is ", rowInfo);
     const userType: string = rowInfo === NavBarText.myCourses ? "4" : "1";
-    console.log(userType);
+
     formData.append("userType", userType);
     // const requestString="/api/getUserCourseRequests/"+user.id+"|"+userType
-    console.log("the herf is ", href);
     const response = await axios.get(
       "/api/getUserCourses/" + user.id + "|" + userType
     );
     if (response.data.message) {
       console.log("error to fetch data");
     } else {
-      console.log(userType);
-      console.log(response.data);
       const ids = response.data.coursesIds;
 
       const coursesFromDb = await getCoursesByIds(ids);
 
       if (userType === "4") {
-        console.log("the data of courses user:", response.data);
         setUserCourses(coursesFromDb);
-        setSpecificCourseProgress(response.data.coursesProgress);
-        console.log("the user courses are:", userCourses);
+        setCoursesProgress(response.data.coursesProgress);
       }
       if (userType === "1") {
-        console.log("the data of courses admin:", response.data);
-        console.log(coursesFromDb);
         setAdminCourses(coursesFromDb);
       }
-      console.log("the user courses are:", userCourses);
       router.push(href);
     }
   };
@@ -92,9 +81,6 @@ const RowInMenu: React.FC<RowInMenu> = ({ rowInfo, href, icon, isSideBar }) => {
   };
 
   const clickHandeller = () => {
-    console.log(rowInfo);
-    console.log("reach to handler ");
-    //if (!isMenuButtonPressed) return; //for do if its icons menu its will be clickable
     let formData = new FormData();
     formData.append("userId", user.id);
     switch (rowInfo) {

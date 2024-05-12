@@ -41,18 +41,15 @@ const PresentCourseDetails: React.FC<PresentCourseDetailsProps> = ({
     )
   );
   useEffect(() => {
-    console.log(coursesProgress);
     setCurrProgress(
       coursesProgress.find(
         (courseProgress) => courseProgress.courseId === course.id
       )
     );
-    console.log("already vote ", currProggress?.already_vote);
   }, [course]);
 
   const handleRatingChange = (newRating: number) => {
     setRating(newRating);
-    console.log(rating);
   };
   // console.log("already vote ",currProggress?.already_vote)
   const submitRating = async () => {
@@ -64,7 +61,6 @@ const PresentCourseDetails: React.FC<PresentCourseDetailsProps> = ({
       const response = await axios.post("/api/addCourseRate", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(response.data);
       if (response.data?.id) {
         editCourse(response.data);
         let newProggress = currProggress;
@@ -84,8 +80,6 @@ const PresentCourseDetails: React.FC<PresentCourseDetailsProps> = ({
   //const course= courses.find((course)=>course.id===courseid)
   const chaptersToPresent = course ? course.chapters : [];
   useEffect(() => {
-    console.log(course);
-    console.log(userCourses);
     setIsRegister(
       userCourses.some((userCourse) => userCourse.id === course?.id)
     );

@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import useCoursesStore from '@/app/_contexts/courseContext';
-import Chapter from '../ChapterManagerComponents/Chapter';
-import EditCourse from './EditCourse';
-import ErrorMessage from '../../../_component/ErrorMessage';
-import AddChapter from '../ChapterManagerComponents/AddChapter';
-import { CourseData } from '@/app/types';
-import { GeneralTexts, editTexts } from '@/HebrewStrings/Texts';
-import useUserStore from '@/app/_contexts/userContext';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import useCoursesStore from "@/app/_contexts/courseContext";
+import Chapter from "../ChapterManagerComponents/Chapter";
+import EditCourse from "./EditCourse";
+import ErrorMessage from "../../../_component/ErrorMessage";
+import AddChapter from "../ChapterManagerComponents/AddChapter";
+import { CourseData } from "@/app/types";
+import { GeneralTexts, editTexts } from "@/HebrewStrings/Texts";
+import useUserStore from "@/app/_contexts/userContext";
 
 interface CourseProps {
   course: CourseData;
@@ -15,52 +15,51 @@ interface CourseProps {
 
 const Course = ({ course }: CourseProps) => {
   const { deleteCourse, editCourse, addChapter } = useCoursesStore();
-  const {userCourses,deleteCourseFromUser}=useUserStore();
+  const { userCourses, deleteCourseFromUser } = useUserStore();
   const [isEditCourse, setIsEditCourse] = useState(false);
   const [isSelectedCourse, setIsSelectedCourse] = useState(false);
   const [isAddChapterPressed, setIsAddChapterPressed] = useState(false);
   const [newChapterName, setNewChapterName] = useState("");
   const [newChapterBrief, setNewChapterBrief] = useState("");
-  const [addChapterError, setAddChapterError] = useState('');
-  const [editCourseError, setEditCourseError] = useState('');
+  const [addChapterError, setAddChapterError] = useState("");
+  const [editCourseError, setEditCourseError] = useState("");
 
   useEffect(() => {
     return () => {
-      setAddChapterError('');
-      setEditCourseError('');
+      setAddChapterError("");
+      setEditCourseError("");
     };
   }, [course]);
 
   const handleDeleteCourse = async () => {
-    setEditCourseError('');
+    setEditCourseError("");
     try {
       const formData = new FormData();
       formData.append("courseId", course.id);
-      const courseImageId=course.img_id?.id
-      if(courseImageId){
-        formData.append("courseImageId",courseImageId);
+      const courseImageId = course.img_id?.id;
+      if (courseImageId) {
+        formData.append("courseImageId", courseImageId);
       }
       await axios.post("/api/deleteCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
       deleteCourse(course);
-      deleteCourseFromUser(course)
+      deleteCourseFromUser(course);
     } catch (error) {
-      console.error('Error deleting course:', error);
+      console.error("Error deleting course:", error);
     }
   };
 
-  const handleEditCourse = async (newcourse:CourseData) => {
-    setEditCourseError('');
+  const handleEditCourse = async (newcourse: CourseData) => {
+    setEditCourseError("");
     try {
       const formData = new FormData();
-     const newcourseStringify= JSON.stringify(newcourse)
- 
+      const newcourseStringify = JSON.stringify(newcourse);
+
       formData.append("courseEdited", newcourseStringify);
       const response = await axios.post("/api/editCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      console.log(response.data)
       if (response.data?.message) {
         setEditCourseError(response.data.message);
       } else {
@@ -68,20 +67,23 @@ const Course = ({ course }: CourseProps) => {
         setIsEditCourse(false);
       }
     } catch (error) {
-      setEditCourseError('Error occurred while renaming the course.');
-      console.error('Error renaming course:', error);
+      setEditCourseError("Error occurred while renaming the course.");
+      console.error("Error renaming course:", error);
     }
   };
 
   const handleAddChapter = async () => {
-    setAddChapterError('');
+    setAddChapterError("");
     try {
       const formData = new FormData();
-      formData.append("courseAddChapter", JSON.stringify({
-        id: course.id,
-        name: newChapterName,
-        brief: newChapterBrief,
-      }));
+      formData.append(
+        "courseAddChapter",
+        JSON.stringify({
+          id: course.id,
+          name: newChapterName,
+          brief: newChapterBrief,
+        })
+      );
       const response = await axios.post("/api/addChapter", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
@@ -94,15 +96,14 @@ const Course = ({ course }: CourseProps) => {
           brief: response.data.brief,
           subjects: [],
         });
-        setAddChapterError('');
+        setAddChapterError("");
         setIsAddChapterPressed(false);
       }
     } catch (error) {
-      setAddChapterError('An error occurred while adding the chapter.');
-      console.error('Error adding chapter:', error);
+      setAddChapterError("An error occurred while adding the chapter.");
+      console.error("Error adding chapter:", error);
     }
   };
-
 
   return (
     <div className="p-4 bg-white rounded shadow-lg">
@@ -134,7 +135,7 @@ const Course = ({ course }: CourseProps) => {
 
       {isEditCourse && (
         <>
-          <EditCourse course={course}  handleEditCourse={handleEditCourse}/>
+          <EditCourse course={course} handleEditCourse={handleEditCourse} />
           <ErrorMessage message={editCourseError} />
         </>
       )}

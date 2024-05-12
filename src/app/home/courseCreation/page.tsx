@@ -57,7 +57,7 @@ const AddCoursePage: React.FC = () => {
           const file = new File([blob], "default-image-course.png", {
             type: "image/png",
           });
-          console.log(file);
+
           setFileData(file);
         }
       };
@@ -73,7 +73,6 @@ const AddCoursePage: React.FC = () => {
   };
 
   const handleEditorChange = (value: string) => {
-    console.log(value);
     setEditorValue(value);
     setCourseData({ ...courseData, description: value }); // Update the description field in courseData
   };
@@ -96,14 +95,12 @@ const AddCoursePage: React.FC = () => {
       };
 
       let formData = new FormData();
-      console.log(courseData.name);
       formData.append("course", JSON.stringify(courseToServer));
       formData.append("userId", user.id);
       formData.append("comments", courseData.name);
       formData.append("fileTitle", courseData.name);
       formData.append("file", fileData, fileData.name);
 
-      console.log(fileData);
       const response = await axios.post("/api/addCourse", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });

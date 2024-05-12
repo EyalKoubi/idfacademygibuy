@@ -7,36 +7,37 @@ import useUserStore from "../_contexts/userContext";
 import { findFirstUnwatched } from "@/utils/progressUtils";
 import { CourseData, UserCourseProgress } from "../types";
 import { useRouter } from "next/navigation";
-import Illustration from "@/app/assets/Education-illustration.svg"
+import Illustration from "@/app/assets/Education-illustration.svg";
 import Image from "next/image"; // Assuming you have imported the Image component correctly
 import PopularCourses from "./_component/popularCourses";
 import SearchCourseHomePage from "./_component/searchCourseHomePage";
 
-
-
 const HomePage = () => {
-  
   const { setCourses, courses } = useCoursesStore();
-  const {user,userCourses,coursesProgress, setUser,setUserCourses,setAdminCourses}=useUserStore();
+  const {
+    user,
+    userCourses,
+    coursesProgress,
+    setUser,
+    setUserCourses,
+    setAdminCourses,
+  } = useUserStore();
   // const router = useRouter();
-  useEffect(()=>{
-    console.log(coursesProgress)
-  },[])
 
   function getHebrewGreeting(): string {
     const currentHour = new Date().getHours();
 
     if (currentHour < 12) {
-        return HomeTexts.goodMorning; 
+      return HomeTexts.goodMorning;
     } else if (currentHour < 18) {
-        return HomeTexts.goodAfterNoon; 
+      return HomeTexts.goodAfterNoon;
     } else {
-      return HomeTexts.goodEvening;  
+      return HomeTexts.goodEvening;
     }
   }
 
   return (
-  < >
+    <>
       <div className="flex flex-col items-center gap-5">
         <h1 className="text-black text-6xl font-bold font-assistant">
           !התחילו ללמוד אצלנו היום
@@ -46,11 +47,11 @@ const HomePage = () => {
         </h2>
       </div>
       <div className="my-3 flex justify-center">
-        <SearchCourseHomePage/>
-     </div>
+        <SearchCourseHomePage />
+      </div>
       <Image src={Illustration} alt={""} />
-      <PopularCourses/>
-   </>
+      <PopularCourses />
+    </>
   );
 };
 
